@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://c36j5jvgrb4sv"]
+
+[ext_resource type="Script" uid="uid://b21mhaxjkjlnh" path="res://RoomManager.gd" id="1_67wb0"]
+
+[node name="RoomManager" type="Node"]
+script = ExtResource("1_67wb0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="FadeRect" type="ColorRect" parent="CanvasLayer"]
+offset_right = 768.0
+offset_bottom = 768.0
