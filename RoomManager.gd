@@ -19,10 +19,10 @@ func is_room_at(pos: Vector2i) -> bool:
 		return true
 	return false
 
-var room_save_data:= {}
+var room_savedata:= {}
 
-func save_data(room_path: String, data: Dictionary):
-	room_save_data[room_path] = data
+func store_savedata(room_path: String, data: Dictionary):
+	room_savedata[room_path] = data
 
 func _ready():
 	fade_rect.size = get_viewport().size
@@ -32,12 +32,12 @@ func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2
 	await fade_out(direction)
 	get_tree().current_scene.free()
 	var room_path = get_room_at(new_coords)
-	var new_room = load(room_path).instantiate() as Level
+	var new_room = load(room_path).instantiate() as RoomTemplate
 	
-	if room_save_data.has(room_path): 
-		new_room.save_data = room_save_data[room_path]
+	if room_savedata.has(room_path): 
+		new_room.receive_savedata(room_savedata[room_path])
 	
-	new_room.room_coords = new_coords
+	new_room.map_coords = new_coords
 	get_tree().root.add_child(new_room)
 	get_tree().current_scene = new_room
 	new_room.player_enter(direction, player_pos, player_vel, old_coords)

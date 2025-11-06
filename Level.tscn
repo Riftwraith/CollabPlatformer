@@ -182,10 +182,12 @@ tile_map_data = PackedByteArray("AAAKAAQAAAAGAAYAAAAFAAQAAAABAAYAAAADAAYAAAAEAAk
 tile_set = SubResource("TileSet_wkftn")
 
 [node name="RoomBoundaries" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="Left" type="Area2D" parent="RoomBoundaries"]
 collision_layer = 0
 collision_mask = 2
+metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Left"]
 rotation = 1.5707964
@@ -194,6 +196,7 @@ shape = SubResource("WorldBoundaryShape2D_2nifc")
 [node name="Right" type="Area2D" parent="RoomBoundaries"]
 collision_layer = 0
 collision_mask = 2
+metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Right"]
 rotation = -1.5707964
@@ -202,6 +205,7 @@ shape = SubResource("WorldBoundaryShape2D_2nifc")
 [node name="Up" type="Area2D" parent="RoomBoundaries"]
 collision_layer = 0
 collision_mask = 2
+metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Up"]
 rotation = 3.1415927
