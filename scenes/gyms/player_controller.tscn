@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=4 uid="uid://c8a80dokmsju"]
+[gd_scene load_steps=11 format=4 uid="uid://c8a80dokmsju"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level.gd" id="1_8bc4m"]
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_ba6c5"]
+[ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/platforms.png" id="3_ba6c5"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_ljwso"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="4_jbsyo"]
 [ext_resource type="Script" path="res://scripts/DebugPoint.gd" id="5_8bc4m"]
@@ -154,9 +155,61 @@ texture = ExtResource("2_ba6c5")
 2:4/size_in_atlas = Vector2i(3, 3)
 2:4/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ljwso"]
+texture = ExtResource("3_ba6c5")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+0:0/0/physics_layer_0/polygon_0/one_way = true
+0:0/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+1:0/0/physics_layer_0/polygon_0/one_way = true
+1:0/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+2:0/0/physics_layer_0/polygon_0/one_way = true
+2:0/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+0:1/0/physics_layer_0/polygon_0/one_way = true
+0:1/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+1:1/0/physics_layer_0/polygon_0/one_way = true
+1:1/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+2:1/0/physics_layer_0/polygon_0/one_way = true
+2:1/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+0:2/0/physics_layer_0/polygon_0/one_way = true
+0:2/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+1:2/0/physics_layer_0/polygon_0/one_way = true
+1:2/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+2:2/0/physics_layer_0/polygon_0/one_way = true
+2:2/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+0:3/0/physics_layer_0/polygon_0/one_way = true
+0:3/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+1:3/0/physics_layer_0/polygon_0/one_way = true
+1:3/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 0, -8, 0)
+2:3/0/physics_layer_0/polygon_0/one_way = true
+2:3/0/physics_layer_0/polygon_0/one_way_margin = 0.25
+
 [sub_resource type="TileSet" id="TileSet_wkftn"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_2nifc")
+sources/1 = SubResource("TileSetAtlasSource_ljwso")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
@@ -166,13 +219,15 @@ script = ExtResource("1_8bc4m")
 [node name="CollisionTiles" type="TileMapLayer" parent="."]
 use_parent_material = true
 scale = Vector2(3, 3)
-tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAANAAMAAQABAAAAAAAOAAMAAQACAAAAAAALAAQAAQABAAAAAAAMAAQAAQACAAAAAAANAAQAAQACAAAAAAAPAAMAAQACAAAAAAA=")
 tile_set = SubResource("TileSet_wkftn")
 
 [node name="Player" parent="." instance=ExtResource("3_ljwso")]
 position = Vector2(374, 175)
 collision_layer = 2
-jump_height = 150
+run_speed = 260.0
+air_speed = 260.0
+jump_height = 100
 
 [node name="DebugTeleporter" type="Node" parent="Player" node_paths=PackedStringArray("teleport_locations")]
 script = ExtResource("4_jbsyo")

@@ -48,7 +48,7 @@ func _read_inputs() -> Vector2:
 	if Input.is_action_just_pressed("jump"):
 		_queue_jump()
 	if Input.is_action_just_released("jump"):
-		if jumping_up:
+		if jumping_up and velocity.y <= 0:
 			velocity.y = 0.5 * velocity.y #limit jump height
 			jumping_up = false
 	if Input.is_action_just_pressed("interact"):
@@ -150,10 +150,6 @@ func _physics_process(delta):
 			_jump()
 		if gravity_enabled:
 			velocity.y += gravity * delta
-	
-	#if player falling, can't release jump to reduce velocity.y
-	if jumping_up && velocity.y >= 0:
-		jumping_up = false
 
 	#this function adds velocity * delta to position & automatically handles collision
 	move_and_slide()
