@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=33 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Texture2D" uid="uid://crcmayofwey47" path="res://sprites/knight.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://Player.gd" id="1_onrkg"]
@@ -161,7 +161,7 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 3.0,
 "texture": SubResource("AtlasTexture_dw050")
 }, {
 "duration": 1.0,
@@ -228,6 +228,9 @@ animations = [{
 radius = 14.5
 height = 42.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_i3pqv"]
+radius = 72.691124
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 5
 script = ExtResource("1_onrkg")
@@ -235,7 +238,7 @@ script = ExtResource("1_onrkg")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_2hs0m")
-animation = &"fall"
+animation = &"respawn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 15)
@@ -262,3 +265,10 @@ one_shot = true
 
 [node name="Jump" type="AudioStreamPlayer" parent="Sounds"]
 stream = ExtResource("3_i3pqv")
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+shape = SubResource("CircleShape2D_i3pqv")

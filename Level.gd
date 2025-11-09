@@ -94,6 +94,7 @@ func _set_child_processing(t_f: bool): #false: pauses everything in room, true: 
 
 func _respawn_player(pos):
 	player.position = pos
+	player.respawn()
 
 func _player_in_bounds():
 	if player.position.x > 0 and player.position.x < room_bounds.x and player.position.y > 0 and player.position.y < room_bounds.y:
