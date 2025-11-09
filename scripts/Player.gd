@@ -1,6 +1,7 @@
 extends CharacterBody2D
 class_name Player
 
+
 @export var run_speed: float = 150
 @export var air_speed: float = 150
 @export var jump_height: int = 98 #in pixels
@@ -12,6 +13,7 @@ class_name Player
 @export var gravity_enabled: bool = true
 
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var anim_initial_scale: Vector2 = anim_sprite.scale
 @onready var jump_queue_timer: Timer = $JumpQueueTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var front_ray: RayCast2D = $FloorRayCasts/FrontRay
@@ -71,8 +73,41 @@ func _jump() -> bool:
 	coyote_timer.stop()
 	velocity.y = -1 * jump_speed
 	jumping_up = true
+	
+	# start jump tween
+	var tween = create_tween()
+	var h_squash = 0.875
+	var v_squash = 1.25
+	var v_offset = (1.0 - v_squash) * anim_sprite.sprite_frames.get_frame_texture("jump",0).get_height()
+	var squash_in = 0.10
+	var squash_out= 0.20
+	tween.tween_property(anim_sprite, "scale:x", anim_initial_scale.x * h_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.x * v_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "position:y", v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(anim_sprite, "scale:x", anim_initial_scale.x, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.y, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	return true
 
+func on_land():
+	# start land tween
+	var tween = create_tween()
+	var h_squash = 1.2
+	var v_squash = 0.8
+	var v_offset = (1.0 - v_squash) * anim_sprite.sprite_frames.get_frame_texture("jump",0).get_height()
+	var squash_in = 0.025
+	var squash_out = 0.05
+	tween.bind_node(anim_sprite)
+	tween.tween_property(anim_sprite, "scale:y", anim_initial_scale.y * v_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "scale:x", anim_initial_scale.x * h_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "position:y", v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(anim_sprite, "scale:y", anim_initial_scale.y, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "scale:x", anim_initial_scale.x, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	
+	#tween.tween_property(anim_sprite, "position:y", anim_initial_scale.y * v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	#tween.tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	pass
 
 func _process(_delta: float):
 	if abs(velocity.x) > 0:
@@ -133,9 +168,15 @@ func _set_movement_anim():
 	if velocity.y > 0:
 		anim_sprite.animation = "fall"
 
+var prev_grounded = false
 func _physics_process(delta):
 	# handle all character movement in physics
 	var move_vec = _read_inputs() 
+	
+	var curr_grounded = is_on_floor()
+	if curr_grounded && !prev_grounded:
+		on_land()
+	prev_grounded = curr_grounded
 
 	if is_on_floor():
 		#ground movement
