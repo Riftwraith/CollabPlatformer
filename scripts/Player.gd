@@ -61,12 +61,17 @@ func _queue_jump():
 	#can press jump key when just about to land 
 	jump_queue_timer.start(jump_queue_time)
 
-func _jump():
-	if not jump_queue_timer.is_stopped():
-		jump_queue_timer.stop()
-		coyote_timer.stop()
-		velocity.y = -1 * jump_speed
-		jumping_up = true
+# returns true if a jump was successfully done
+# false if the jump failed (eg. jump cooldown not exceeded)
+func _jump() -> bool:
+	if jump_queue_timer.is_stopped():
+		return false
+	
+	jump_queue_timer.stop()
+	coyote_timer.stop()
+	velocity.y = -1 * jump_speed
+	jumping_up = true
+	return true
 
 
 func _process(_delta: float):
@@ -97,7 +102,7 @@ func _get_closest_interactable() -> Interactable:
 	var closest: Interactable = null
 	var closestDist: float = 0
 	for object in ($InteractArea.get_overlapping_areas() + $InteractArea.get_overlapping_bodies()):
-		var interactable = object as Interactable
+		var interactable: Interactable = object as Interactable
 		if !interactable: continue
 		
 		var newDist = global_position.distance_squared_to(object.global_position)
@@ -130,7 +135,6 @@ func _set_movement_anim():
 
 func _physics_process(delta):
 	# handle all character movement in physics
-	
 	var move_vec = _read_inputs() 
 
 	if is_on_floor():

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_ba6c5"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_ljwso"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="4_jbsyo"]
-[ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="5_8bc4m"]
+[ext_resource type="Script" path="res://scripts/DebugPoint.gd" id="5_8bc4m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2nifc"]
 texture = ExtResource("2_ba6c5")
@@ -160,7 +160,7 @@ sources/0 = SubResource("TileSetAtlasSource_2nifc")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
-[node name="Level" type="Node2D"]
+[node name="PlayerControllerGym" type="Node2D"]
 script = ExtResource("1_8bc4m")
 
 [node name="CollisionTiles" type="TileMapLayer" parent="."]

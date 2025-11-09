@@ -3,6 +3,7 @@ class_name DebugTeleporter
 
 # todo: automatically get list of debug points?
 @export var teleport_locations: Array[DebugPoint]
+
 var parent: Node2D
 
 var prevKey: Key = KEY_NONE
@@ -10,6 +11,8 @@ var prevKey: Key = KEY_NONE
 func _teleport_to(debugPoint: DebugPoint) -> void:
 	print_debug("teleporting to ", debugPoint.global_position)
 	parent.global_position = debugPoint.global_position
+	if parent.has_method("respawn"):
+		parent.respawn()
 	pass
 
 # Called when the node enters the scene tree for the first time.
