@@ -12,4 +12,4 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Input.is_key_pressed(Key_CTRL):
 		if Input.is_anything_pressed():
-	pass
+			pass
