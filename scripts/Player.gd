@@ -8,29 +8,39 @@ class_name Player
 @export var coyote_time: float = 0.1
 @export var jump_queue_time: float = 0.1
 
-@export var control_enabled = true
-@export var gravity_enabled = true
+@export var control_enabled: bool = true
+@export var gravity_enabled: bool = true
 
-@onready var anim_sprite = $AnimatedSprite2D
-var anim_busy = false #lock animation (eg for respawning)
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var jump_queue_timer: Timer = $JumpQueueTimer
+@onready var coyote_timer: Timer = $CoyoteTimer
+@onready var front_ray: RayCast2D = $FloorRayCasts/FrontRay
+@onready var back_ray: RayCast2D = $FloorRayCasts/BackRay
+
+var anim_busy: bool = false #lock animation (eg for respawning)
 
 var jump_speed: float
-var jumping_up = false #flag if releasing "jump" should reduce velocity.y
+var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
 
-var current_focus = null #current interactable object
+var current_focus: Interactable = null #current interactable object
 
 func _ready():
 	jump_speed = sqrt(2*jump_height*gravity)
 	anim_sprite.play()
 
-func is_on_safe_ground():
-	if not is_on_floor(): return false
-	if $FloorRayCasts/FrontRay.is_colliding() and $FloorRayCasts/BackRay.is_colliding():
-		return true
-	return false
+var is_on_safe_ground: bool:
+	get:
+		if not is_on_floor():
+			return false
+		if front_ray.is_colliding() and back_ray.is_colliding():
+			return true
+		return false
 
 func _read_inputs() -> Vector2:
 	var move_vec = Vector2.ZERO
+	if !control_enabled:
+		return move_vec
+		
 	if Input.is_action_pressed("left"):
 		move_vec += Vector2.LEFT
 	if Input.is_action_pressed("right"):
@@ -49,48 +59,30 @@ func _read_inputs() -> Vector2:
 
 func _queue_jump():
 	#can press jump key when just about to land 
-	$JumpQueueTimer.start(jump_queue_time)
+	jump_queue_timer.start(jump_queue_time)
 
-func _execute_jump():
-	$JumpQueueTimer.stop()
-	$CoyoteTimer.stop()
-	velocity.y = -1 * jump_speed
-	jumping_up = true
+func _jump():
+	if not jump_queue_timer.is_stopped():
+		jump_queue_timer.stop()
+		coyote_timer.stop()
+		velocity.y = -1 * jump_speed
+		jumping_up = true
 
 
-func _process(delta):
-	var move_vec = Vector2.ZERO
-	if control_enabled: 
-		move_vec = _read_inputs() 
-
-	if is_on_floor():
-		#ground movement
-		velocity.x = move_vec.x * run_speed 
-		if not $JumpQueueTimer.is_stopped():
-			_execute_jump()
-		$CoyoteTimer.start(coyote_time)
-	else:
-		#air movement
-		velocity.x = move_vec.x * air_speed 
-		#If you walk off a ledge, you can still jump within a certain window
-		if not $CoyoteTimer.is_stopped() and not $JumpQueueTimer.is_stopped():
-			_execute_jump()
-		if gravity_enabled:
-			velocity.y += gravity * delta
-	#if player falling, can't release jump to reduce velocity.y
-	if jumping_up:
-		if velocity.y >= 0:
-			jumping_up = false
+func _process(_delta: float):
+	if abs(velocity.x) > 0:
+		anim_sprite.flip_h = (velocity.x < 0)
+	
+	if not anim_busy:
+		_set_movement_anim()
 	
 	#focus on interactable objects (eg for highlighting them)
 	var focus = _get_closest_interactable() #may be null
 	if focus != current_focus:
-		if is_instance_valid(current_focus):
-			if current_focus.has_method("end_focus"):
-				current_focus.end_focus(self)
-		if is_instance_valid(focus):
-			if focus.has_method("start_focus"):
-				focus.start_focus(self)
+		if current_focus:
+			current_focus.end_focus(self)
+		if focus:
+			focus.start_focus(self)
 	current_focus = focus
 
 
@@ -101,14 +93,17 @@ func _flash_white():
 	tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1,), 0.15)
 	tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.20)
 
-func _get_closest_interactable():
-	var closest = null
+func _get_closest_interactable() -> Interactable:
+	var closest: Interactable = null
+	var closestDist: float = 0
 	for object in ($InteractArea.get_overlapping_areas() + $InteractArea.get_overlapping_bodies()):
-		if not object.has_method("interact"): continue
-		if closest == null:
+		var interactable = object as Interactable
+		if !interactable: continue
+		
+		var newDist = global_position.distance_squared_to(object.global_position)
+		if closest == null or newDist < closestDist:
 			closest = object
-		elif (object.global_position - global_position) < (closest.global_position - global_position):
-			closest = object
+			closestDist = global_position.distance_squared_to(closest.global_position)
 	return closest
 
 func respawn():
@@ -134,16 +129,32 @@ func _set_movement_anim():
 		anim_sprite.animation = "fall"
 
 func _physics_process(delta):
-	if abs(velocity.x) > 0:
-		anim_sprite.flip_h = (velocity.x < 0)
+	# handle all character movement in physics
 	
-	if not anim_busy:
-		_set_movement_anim()
+	var move_vec = _read_inputs() 
+
+	if is_on_floor():
+		#ground movement
+		velocity.x = move_vec.x * run_speed 
+		_jump()
+		coyote_timer.start(coyote_time)
+	else:
+		#air movement
+		velocity.x = move_vec.x * air_speed 
+		#If you walk off a ledge, you can still jump within a certain window
+		if !coyote_timer.is_stopped():
+			_jump()
+		if gravity_enabled:
+			velocity.y += gravity * delta
+	
+	#if player falling, can't release jump to reduce velocity.y
+	if jumping_up && velocity.y >= 0:
+		jumping_up = false
 
 	#this function adds velocity * delta to position & automatically handles collision
 	move_and_slide()
 	
-	# Very janky push physics for rigidbody2d 
+	# Very janky push physics for rigidbody2d
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()

@@ -172,6 +172,7 @@ tile_set = SubResource("TileSet_wkftn")
 [node name="Player" parent="." instance=ExtResource("3_ljwso")]
 position = Vector2(374, 175)
 collision_layer = 2
+jump_height = 150
 
 [node name="DebugTeleporter" type="Node" parent="Player" node_paths=PackedStringArray("teleport_locations")]
 script = ExtResource("4_jbsyo")

@@ -234,6 +234,8 @@ radius = 72.691124
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 5
 script = ExtResource("1_onrkg")
+run_speed = 300.0
+air_speed = 300.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
