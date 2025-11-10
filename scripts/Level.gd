@@ -103,5 +103,5 @@ func _player_in_bounds():
 
 func _process(_delta):
 	#check if player on ground & within bounds: if so, save position
-	if _player_in_bounds() and player.is_on_safe_ground():
+	if _player_in_bounds() and player.is_on_safe_ground:
 		last_safe_player_position = player.position
