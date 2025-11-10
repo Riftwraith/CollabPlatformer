@@ -1,7 +1,7 @@
 [gd_scene load_steps=33 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Texture2D" uid="uid://crcmayofwey47" path="res://sprites/knight.png" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://Player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
 [ext_resource type="AudioStream" uid="uid://basri1vkllti4" path="res://sounds/jump.wav" id="3_i3pqv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jm5j8"]

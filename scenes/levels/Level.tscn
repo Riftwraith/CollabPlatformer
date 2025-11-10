@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=4 uid="uid://exe8wmfxkmwy"]
 
-[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://Level.gd" id="1_2nifc"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://player.tscn" id="1_bexhn"]
-[ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_t7iv1"]
-[ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://Interactable.gd" id="4_q4iis"]
-[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="4_wkftn"]
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level.gd" id="1_jvuwd"]
+[ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_5n3p8"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_a3ws7"]
+[ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="4_iv3rn"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="5_litjp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2nifc"]
-texture = ExtResource("2_t7iv1")
+texture = ExtResource("2_5n3p8")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
@@ -167,7 +167,7 @@ radius = 18.027756
 size = Vector2(128.00003, 129)
 
 [node name="Level" type="Node2D"]
-script = ExtResource("1_2nifc")
+script = ExtResource("1_jvuwd")
 
 [node name="CollisionTiles" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -175,7 +175,7 @@ scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAADAAYAAAABAAAAAAAEAAYAAAAAAAEAAAAFAAYAAAABAAAAAAAGAAYAAAAAAAEAAAAJAAUAAAAAAAAAAAAIAAYAAAABAAAAAAAHAAYAAAABAAEAAAAJAAYAAAAAAAEAAAAKAAYAAAABAAEAAAALAAYAAAAAAAEAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAKAAMAAAAHAAAAAAALAAMAAAAHAAAAAAAMAAMAAAAHAAAAAAADAAIAAAAHAAAAAAAEAAIAAAAHAAAAAAAFAAIAAAAHAAAAAAAGAAIAAAAHAAAAAAAJAAQAAAADAAgAAAAJAAMAAAADAAcAAAAJAAIAAAACAAQAAAD/////AAAGAAEAAAAAAP//AAAGAAEAAAABAP//AAAGAAEAAAACAP//AAAGAAEAAAADAP//AAAGAAEAAAAEAP//AAAGAAEAAAAFAP//AAAGAAEAAAAGAP//AAAGAAEAAAAJAP//AAAGAAEAAAAKAP//AAAGAAEAAAALAP//AAAGAAEAAAAMAP//AAAGAAEAAAANAP//AAAGAAEAAAAOAP//AAAGAAEAAAAPAP//AAAGAAEAAAAQAP//AAAGAAEAAAAQAAAAAAAGAAEAAAAQAAEAAAAGAAEAAAAQAAIAAAAGAAEAAAAQAAMAAAAGAAEAAAAQAAQAAAAGAAEAAAAQAAUAAAAGAAEAAAAQAAYAAAAGAAEAAAAQAAcAAAAGAAEAAAAQAAgAAAAGAAEAAAD//wAAAAAGAAEAAAD//wEAAAAGAAEAAAD//wIAAAAGAAEAAAD//wMAAAAGAAEAAAD//wQAAAAGAAEAAAD//wUAAAAGAAEAAAD//wYAAAAGAAEAAAD//wcAAAAGAAEAAAD//wgAAAAGAAEAAAD//wkAAAAGAAEAAAD//woAAAAGAAEAAAD//wsAAAAGAAEAAAD//wwAAAAGAAEAAAD//w0AAAAGAAEAAAD//w4AAAAGAAEAAAD//xAAAAAGAAEAAAAAABAAAAAGAAEAAAABABAAAAAGAAEAAAACABAAAAAGAAEAAAADABAAAAAGAAEAAAAEABAAAAAGAAEAAAAFABAAAAAGAAEAAAAGABAAAAAGAAEAAAAHABAAAAAGAAEAAAAIABAAAAAGAAEAAAAJABAAAAAGAAEAAAALABAAAAAGAAEAAAAMABAAAAAGAAEAAAANABAAAAAGAAEAAAAOABAAAAAGAAEAAAAPABAAAAAGAAEAAAAQABAAAAAGAAEAAAAQAAkAAAAGAAEAAAAQAAoAAAAGAAEAAAAQAAsAAAAGAAEAAAAQAAwAAAAGAAEAAAAQAA0AAAAGAAEAAAAQAA4AAAAGAAEAAAAJAA8AAAAAAAEAAAALAA8AAAAAAAEAAAAHAAgAAAAGAAIAAAAHAAkAAAAGAAIAAAAHAAoAAAAGAAIAAAAHAAsAAAAGAAIAAAAHAAwAAAAGAAIAAAAGAAgAAAAGAAIAAAAGAAwAAAAGAAIAAAAIAAwAAAAGAAIAAAD+/w4AAAAGAAEAAAD9/w4AAAAGAAEAAAD9/w8AAAAGAAEAAAD9/xAAAAAGAAEAAAD+/xAAAAAGAAEAAAAJABEAAAAGAAEAAAAJABIAAAAGAAEAAAAKABIAAAAGAAEAAAALABIAAAAGAAEAAAALABEAAAAGAAEAAAARABAAAAAGAAEAAAASABAAAAAGAAEAAAARAA4AAAAGAAEAAAASAA4AAAAGAAEAAAASAA8AAAAGAAEAAAAGAP7/AAAGAAEAAAAGAP3/AAAGAAEAAAAHAP3/AAAGAAEAAAAIAP3/AAAGAAEAAAAJAP3/AAAGAAEAAAAJAP7/AAAGAAEAAAAEAA8AAAAAAAEAAAAOAA0AAAAAAAEAAAAPAA0AAAAAAAEAAAANAA0AAAAAAAEAAAALAAsAAAAAAAEAAAAKAAsAAAAAAAEAAAAKAAoAAAAAAAEAAAAJAAoAAAAAAAEAAAAJAAkAAAAAAAEAAAAIAAkAAAAAAAEAAAAIAAgAAAAAAAEAAAAEAAoAAAAAAAEAAAADAAoAAAAAAAEAAAACAAoAAAAAAAEAAAABAAkAAAAAAAEAAAAAAAcAAAAAAAEAAAACAAYAAAAAAAEAAAA=")
 tile_set = SubResource("TileSet_wkftn")
 
-[node name="Player" parent="." instance=ExtResource("1_bexhn")]
+[node name="Player" parent="." instance=ExtResource("3_a3ws7")]
 position = Vector2(374, 175)
 collision_layer = 2
 
@@ -226,11 +226,11 @@ shape = SubResource("WorldBoundaryShape2D_2nifc")
 position = Vector2(179.18378, 195.35513)
 collision_layer = 12
 collision_mask = 7
-script = ExtResource("4_q4iis")
+script = ExtResource("4_iv3rn")
 
 [node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
 scale = Vector2(0.28125, 0.2734375)
-texture = ExtResource("4_wkftn")
+texture = ExtResource("5_litjp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
 shape = SubResource("CircleShape2D_q4iis")
@@ -244,7 +244,7 @@ metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
 position = Vector2(-2.3469849, -0.6500244)
-texture = ExtResource("4_wkftn")
+texture = ExtResource("5_litjp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(-2.3469849, -0.15002441)

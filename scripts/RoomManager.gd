@@ -4,11 +4,11 @@ extends Node
 @onready var fade_rect: ColorRect = $CanvasLayer/FadeRect
 
 var rooms:= {
-	Vector2i(0, 0): "res://Level.tscn",
-	Vector2i(0, 1): "res://level2.tscn",
-	Vector2i(1, 0): "res://level2.tscn",
-	Vector2i(0, -1): "res://level2.tscn",
-	Vector2i(-1, 0): "res://level2.tscn",
+	Vector2i(0, 0): "res://scenes/levels/Level.tscn",
+	Vector2i(0, 1): "res://scenes/levels/level2.tscn",
+	Vector2i(1, 0): "res://scenes/levels/level2.tscn",
+	Vector2i(0, -1): "res://scenes/levels/level2.tscn",
+	Vector2i(-1, 0): "res://scenes/levels/level2.tscn",
 }
 
 func get_room_at(pos: Vector2i) -> String:

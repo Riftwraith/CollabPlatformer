@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=4 uid="uid://cwwu4rl5lhgfg"]
 
-[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://Level.gd" id="1_6q4t8"]
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level.gd" id="1_6q4t8"]
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_8tcn8"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://player.tscn" id="3_r6vdu"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_r6vdu"]
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="4_8tcn8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2nifc"]
