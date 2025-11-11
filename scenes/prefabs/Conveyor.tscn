@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3sm0hsss3mue"]
+
+[ext_resource type="Script" uid="uid://btit38th40nca" path="res://scripts/Conveyer.gd" id="1_j85s4"]
+
+[node name="Conveyor" type="Path2D"]
+script = ExtResource("1_j85s4")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
+position = Vector2(-1, 2)
+rotation = 2.1164513

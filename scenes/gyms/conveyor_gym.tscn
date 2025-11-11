@@ -1,0 +1,122 @@
+[gd_scene load_steps=11 format=4 uid="uid://b1byr4g1xbvoi"]
+
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_ly1pc"]
+[ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_esa8x"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_1gint"]
+[ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="4_lusdx"]
+[ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="5_bbxpk"]
+[ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="6_u0s2v"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="7_esa8x"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
+
+[sub_resource type="Curve2D" id="Curve2D_esa8x"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -1, -1, 0, 0, 0, 0, 482, -7)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lusdx"]
+size = Vector2(126.999985, 20)
+
+[node name="PlayerControllerGym" type="Node2D"]
+script = ExtResource("1_ly1pc")
+
+[node name="CollisionTiles" type="TileMapLayer" parent="."]
+use_parent_material = true
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAANAAMAAQABAAAAAAAOAAMAAQACAAAAAAALAAQAAQABAAAAAAAMAAQAAQACAAAAAAANAAQAAQACAAAAAAAPAAMAAQACAAAAAAA=")
+tile_set = ExtResource("2_esa8x")
+
+[node name="Player" parent="." instance=ExtResource("3_1gint")]
+position = Vector2(374, 175)
+collision_layer = 2
+run_speed = 260.0
+air_speed = 260.0
+
+[node name="DebugTeleporter" type="Node" parent="Player" node_paths=PackedStringArray("teleport_locations")]
+script = ExtResource("4_lusdx")
+teleport_locations = [NodePath("../../DebugPoints/DebugPoint"), NodePath("../../DebugPoints/DebugPoint2"), NodePath("../../DebugPoints/DebugPoint3")]
+metadata/_custom_type_script = "uid://b8s22g74qlh6j"
+
+[node name="ForegroundTiles" type="TileMapLayer" parent="."]
+use_parent_material = true
+scale = Vector2(3, 3)
+tile_set = ExtResource("2_esa8x")
+
+[node name="RoomBoundaries" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Left" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Left"]
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Right" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Right"]
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Up" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Up"]
+rotation = 3.1415927
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Down" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="DebugPoints" type="Node" parent="."]
+
+[node name="DebugPoint" type="Node2D" parent="DebugPoints"]
+position = Vector2(66, 612)
+script = ExtResource("5_bbxpk")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint2" type="Node2D" parent="DebugPoints"]
+position = Vector2(41, 360)
+script = ExtResource("5_bbxpk")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint3" type="Node2D" parent="DebugPoints"]
+position = Vector2(46, 175)
+script = ExtResource("5_bbxpk")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="Conveyor" parent="." instance=ExtResource("6_u0s2v")]
+position = Vector2(441.59506, 22.983475)
+curve = SubResource("Curve2D_esa8x")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Conveyor"]
+position = Vector2(-178.51239, 97.520645)
+gravity_scale = 0.0
+freeze = true
+freeze_mode = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Conveyor/RigidBody2D"]
+scale = Vector2(1, 0.2)
+texture = ExtResource("7_esa8x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyor/RigidBody2D"]
+position = Vector2(0.41732788, 0)
+shape = SubResource("RectangleShape2D_lusdx")
+
+[connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
+[connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
+[connection signal="body_entered" from="RoomBoundaries/Up" to="." method="_player_left_screen"]
+[connection signal="body_entered" from="RoomBoundaries/Down" to="." method="_player_left_screen"]
