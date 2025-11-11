@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=4 uid="uid://exe8wmfxkmwy"]
 
-[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level.gd" id="1_jvuwd"]
+[ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_5n3p8"]
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_5n3p8"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_a3ws7"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_a3ws7"]
@@ -167,8 +167,8 @@ radius = 18.027756
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4iis"]
 size = Vector2(128.00003, 129)
 
-[node name="Level" type="Node2D"]
-script = ExtResource("1_jvuwd")
+[node name="Room0" type="Node2D"]
+script = ExtResource("1_5n3p8")
 
 [node name="CollisionTiles" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -224,7 +224,7 @@ collision_mask = 2
 shape = SubResource("WorldBoundaryShape2D_2nifc")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2(179.18378, 195.35513)
+position = Vector2(86.983475, 197.23965)
 collision_layer = 12
 collision_mask = 7
 script = ExtResource("4_iv3rn")

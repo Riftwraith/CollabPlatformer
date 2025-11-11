@@ -28,6 +28,8 @@ var jump_speed: float
 var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
 
 var current_focus: Interactable = null #current interactable object
+var prev_grounded = false
+
 
 func _ready():
 	jump_speed = sqrt(2*jump_height*gravity)
@@ -171,7 +173,7 @@ func _set_movement_anim():
 	if velocity.y > 0:
 		anim_sprite.animation = "fall"
 
-var prev_grounded = false
+
 func _physics_process(delta):
 	# handle all character movement in physics
 	var move_vec = _read_inputs() 

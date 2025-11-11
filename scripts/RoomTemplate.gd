@@ -2,7 +2,7 @@ extends Node2D
 class_name RoomTemplate
 
 #Position on global map
-@export var map_coords: Vector2i = Vector2i(0, 0)
+var map_coords: Vector2i = Vector2i(0, 0)
 #If player exceeds these bounds, room transition
 @export var room_bounds: Vector2 =  Vector2(768, 768)
 #How player can leave room before transition
@@ -20,11 +20,12 @@ var last_safe_player_position:= 0.5 * map_coords
 var savedata:= {}
 var savedata_updated := false
 
-func _load_savedata(): #apply savedata to objects in room (eg remove enemies that were previously killed)
+func load_savedata(_data: Dictionary): #apply savedata to objects in room (eg remove enemies that were previously killed)
 	pass
 
-func _create_savedata(): #store everything to be remembered in savedata dictionary
-	pass
+func create_savedata() -> Dictionary: #store everything to be remembered in savedata dictionary
+	var data = {}
+	return data
 
 func receive_savedata(data: Dictionary): #overwrite savedata (called by RoomManager when room loaded)
 	savedata = data
@@ -38,7 +39,7 @@ func _ready():
 	$RoomBoundaries/Down.position = room_bounds + Vector2(0, exit_leeway)
 	
 	if savedata_updated:
-		_load_savedata()
+		load_savedata(savedata)
 
 func _player_left_screen(_body): #receives signal from boundary areas when the player enters them
 	if player.position.x < 0:
@@ -79,20 +80,20 @@ func _on_player_exit(direction: Vector2i): #move to neighbouring room if possibl
 	var new_map_coords = map_coords + direction 
 	if RoomManager.is_room_at(new_map_coords):
 		RoomManager.transition_to(map_coords, new_map_coords, direction, player.position, player.velocity)
-		_create_savedata()
+		savedata = create_savedata()
 		RoomManager.store_savedata(scene_file_path, savedata)
 		_set_child_processing(false) #pause everything
 		player.hide()
 	else:
 		#reset player position
-		_respawn_player(last_safe_player_position)
+		respawn_player(last_safe_player_position)
 
 func _set_child_processing(t_f: bool): #false: pauses everything in room, true: resumes
 	for child in get_children():
 		child.set_process(t_f)
 		child.set_physics_process(t_f)
 
-func _respawn_player(pos):
+func respawn_player(pos):
 	player.position = pos
 	player.respawn()
 
