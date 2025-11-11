@@ -8,6 +8,8 @@ class_name Player
 @export var gravity: float = 900
 @export var coyote_time: float = 0.1
 @export var jump_queue_time: float = 0.1
+@export var hang_time: float = 0.075
+@export var jump_peak_threshold = 50
 
 @export var control_enabled: bool = true
 @export var gravity_enabled: bool = true
@@ -16,6 +18,7 @@ class_name Player
 @onready var anim_initial_scale: Vector2 = anim_sprite.scale
 @onready var jump_queue_timer: Timer = $JumpQueueTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
+@onready var hang_timer: Timer = $HangTimer
 @onready var front_ray: RayCast2D = $FloorRayCasts/FrontRay
 @onready var back_ray: RayCast2D = $FloorRayCasts/BackRay
 
@@ -190,7 +193,10 @@ func _physics_process(delta):
 		if !coyote_timer.is_stopped():
 			_jump()
 		if gravity_enabled:
-			velocity.y += gravity * delta
+			var effective_gravity = gravity
+			if jumping_up && abs(velocity.y) < jump_peak_threshold:
+				effective_gravity *= 0.5
+			velocity.y += effective_gravity * delta
 
 	#this function adds velocity * delta to position & automatically handles collision
 	move_and_slide()
