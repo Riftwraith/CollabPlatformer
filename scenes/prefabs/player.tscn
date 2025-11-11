@@ -232,10 +232,11 @@ height = 42.0
 radius = 72.691124
 
 [node name="Player" type="CharacterBody2D"]
-collision_mask = 5
+collision_mask = 21
 script = ExtResource("1_onrkg")
-run_speed = 300.0
-air_speed = 300.0
+run_speed = 250.0
+air_speed = 250.0
+jump_height = 100
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)

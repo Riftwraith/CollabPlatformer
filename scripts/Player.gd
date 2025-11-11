@@ -8,6 +8,7 @@ class_name Player
 @export var gravity: float = 900
 @export var coyote_time: float = 0.1
 @export var jump_queue_time: float = 0.1
+@export var drop_timeout: float = 0.25
 
 @export var control_enabled: bool = true
 @export var gravity_enabled: bool = true
@@ -47,8 +48,13 @@ func _read_inputs() -> Vector2:
 		move_vec += Vector2.LEFT
 	if Input.is_action_pressed("right"):
 		move_vec += Vector2.RIGHT
+		
+	
 	if Input.is_action_just_pressed("jump"):
-		_queue_jump()
+		if Input.is_action_pressed("down"):
+			_drop_from_platform()
+		else:
+			_queue_jump()
 	if Input.is_action_just_released("jump"):
 		if jumping_up and velocity.y <= 0:
 			velocity.y = 0.5 * velocity.y #limit jump height
@@ -88,6 +94,13 @@ func _jump() -> bool:
 	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.y, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	return true
+
+# try to drop from the platform
+func _drop_from_platform():
+	if is_on_floor():
+		collision_mask = collision_mask ^ (1 << 4)
+		var timeout = get_tree().create_timer(drop_timeout, true, true)
+		timeout.timeout.connect(func(): collision_mask = collision_mask | (1 << 4))
 
 func on_land():
 	# start land tween
