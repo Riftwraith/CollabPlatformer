@@ -22,7 +22,6 @@ position = Vector2(374, 175)
 collision_layer = 2
 run_speed = 260.0
 air_speed = 260.0
-jump_height = 100
 
 [node name="DebugTeleporter" type="Node" parent="Player" node_paths=PackedStringArray("teleport_locations")]
 script = ExtResource("4_jbsyo")

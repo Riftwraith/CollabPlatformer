@@ -100,10 +100,11 @@ func _jump() -> bool:
 
 # try to drop from the platform
 func _drop_from_platform():
+	const one_way_collision_mask = 1 << 4
 	if is_on_floor():
-		collision_mask = collision_mask ^ (1 << 4)
+		collision_mask ^= one_way_collision_mask
 		var timeout = get_tree().create_timer(drop_timeout, true, true)
-		timeout.timeout.connect(func(): collision_mask = collision_mask | (1 << 4))
+		timeout.timeout.connect(func(): collision_mask |= one_way_collision_mask)
 
 func on_land():
 	# start land tween
