@@ -1,11 +1,15 @@
 extends CollisionObject2D
 class_name Interactable
 
-func interact(player: Player):
-	print(str(player.name) + " interacted with " + str(self.name))
+signal focus_start 
+signal focus_end
+signal interacted
 
-func start_focus(player: Player):
-	print(str(self.name) + " ready to interact")
+func interact(_player: Player):
+	interacted.emit()
 
-func end_focus(player: Player):
-	print(str(self.name) + " no longer ready to interact") 
+func start_focus(_player: Player):
+	focus_start.emit()
+
+func end_focus(_player: Player):
+	focus_end.emit()

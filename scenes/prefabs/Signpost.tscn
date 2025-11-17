@@ -1,0 +1,80 @@
+[gd_scene load_steps=8 format=3 uid="uid://75ru184f1rlh"]
+
+[ext_resource type="Script" uid="uid://be72eq5m1a2af" path="res://scenes/prefabs/Signpost.gd" id="1_k42gy"]
+[ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_7nedd"]
+[ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="3_b6n01"]
+[ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="4_7nedd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5sbda"]
+size = Vector2(42, 25)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b6n01"]
+font = ExtResource("4_7nedd")
+
+[sub_resource type="LabelSettings" id="LabelSettings_7nedd"]
+font = ExtResource("4_7nedd")
+
+[node name="Signpost" type="Node2D"]
+script = ExtResource("1_k42gy")
+text = "Hello! This is a sign"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(3, 3)
+texture = ExtResource("2_7nedd")
+region_enabled = true
+region_rect = Rect2(128, 48, 17, 16)
+
+[node name="Interactable" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_b6n01")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+position = Vector2(-2, -4.5)
+shape = SubResource("RectangleShape2D_5sbda")
+
+[node name="TextPanel" type="Panel" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -86.0
+offset_right = 79.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="TextPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Test Text mofing text"
+label_settings = SubResource("LabelSettings_b6n01")
+autowrap_mode = 3
+text_overrun_behavior = 1
+
+[node name="FocusLabel" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -44.0
+offset_right = 42.0
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "x: Read"
+label_settings = SubResource("LabelSettings_7nedd")
+horizontal_alignment = 1
+
+[connection signal="focus_end" from="Interactable" to="." method="_on_focus_end"]
+[connection signal="focus_start" from="Interactable" to="." method="_on_focus_start"]
+[connection signal="interacted" from="Interactable" to="." method="_on_interact"]
