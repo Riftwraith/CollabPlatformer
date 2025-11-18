@@ -177,15 +177,21 @@ func respawn():
 
 func _set_movement_anim():
 	anim_sprite.play()
-	if abs(velocity.x) > 0:
-		anim_sprite.animation = "run"
-	else:
-		anim_sprite.animation = "idle"
 	
-	if velocity.y < 0:
-		anim_sprite.animation = "jump"
-	if velocity.y > 0:
-		anim_sprite.animation = "fall"
+	if not is_on_floor():
+		#fall/jump
+		if velocity.y < 0:
+			anim_sprite.animation = "jump"
+		if velocity.y > 0:
+			anim_sprite.animation = "fall"
+	else:
+		#ground anims"
+		if abs(velocity.x) > 0:
+			anim_sprite.animation = "run"
+		else:
+			anim_sprite.animation = "idle"
+	
+
 
 
 func _physics_process(delta):
