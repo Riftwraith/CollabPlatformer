@@ -24,6 +24,7 @@ class_name Player
 @onready var back_ray: RayCast2D = $FloorRayCasts/BackRay
 
 var anim_busy: bool = false #lock animation (eg for respawning)
+var dying: bool = false
 
 var jump_speed: float
 var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
@@ -31,6 +32,7 @@ var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
 var current_focus: Interactable = null #current interactable object
 var prev_grounded = false
 
+signal died
 
 func _ready():
 	jump_speed = sqrt(2*jump_height*gravity)
@@ -38,7 +40,7 @@ func _ready():
 
 var is_on_safe_ground: bool:
 	get:
-		if not is_on_floor():
+		if not is_on_floor() or dying:
 			return false
 		if front_ray.is_colliding() and back_ray.is_colliding():
 			return true
@@ -126,7 +128,17 @@ func on_land():
 	
 	#tween.tween_property(anim_sprite, "position:y", anim_initial_scale.y * v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
 	#tween.tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-	pass
+
+func die(knockback_vec: Vector2):
+	anim_sprite.animation = "die"
+	anim_sprite.play()
+	_flash_white(1)
+	velocity = knockback_vec
+	anim_busy = true
+	control_enabled = false
+	dying = true
+	await anim_sprite.animation_finished
+	died.emit()
 
 func _process(_delta: float):
 	if abs(velocity.x) > 0:
@@ -145,12 +157,11 @@ func _process(_delta: float):
 	current_focus = focus
 
 
-func _flash_white():
+func _flash_white(n: int):
 	var tween = create_tween()
-	tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1), 0.05)
-	tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.10)
-	tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1,), 0.15)
-	tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.20)
+	for i in range(n):
+		tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1), 0.10 *n + 0.05)
+		tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.10 *n + 0.10)
 
 func _get_closest_interactable() -> Interactable:
 	var closest: Interactable = null
@@ -167,10 +178,12 @@ func _get_closest_interactable() -> Interactable:
 
 func respawn():
 	velocity = Vector2.ZERO
+	dying = false
 	control_enabled = false
 	anim_busy = true
 	anim_sprite.animation = "respawn"
-	_flash_white()
+	anim_sprite.play()
+	_flash_white(2)
 	await anim_sprite.animation_finished
 	control_enabled = true
 	anim_busy = false
@@ -205,12 +218,14 @@ func _physics_process(delta):
 
 	if is_on_floor():
 		#ground movement
-		velocity.x = move_vec.x * run_speed 
+		if control_enabled:
+			velocity.x = move_vec.x * run_speed 
 		_jump()
 		coyote_timer.start(coyote_time)
 	else:
 		#air movement
-		velocity.x = move_vec.x * air_speed 
+		if control_enabled:
+			velocity.x = move_vec.x * air_speed 
 		#If you walk off a ledge, you can still jump within a certain window
 		if !coyote_timer.is_stopped():
 			_jump()

@@ -1,8 +1,32 @@
-[gd_scene load_steps=33 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=39 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/tellyface_spritesheet.png" id="2_n0leu"]
 [ext_resource type="AudioStream" uid="uid://basri1vkllti4" path="res://sounds/jump.wav" id="3_i3pqv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0leu"]
+atlas = ExtResource("2_n0leu")
+region = Rect2(0, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0t1n1"]
+atlas = ExtResource("2_n0leu")
+region = Rect2(32, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xne2s"]
+atlas = ExtResource("2_n0leu")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6mkeb"]
+atlas = ExtResource("2_n0leu")
+region = Rect2(96, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5m2n"]
+atlas = ExtResource("2_n0leu")
+region = Rect2(128, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydol4"]
+atlas = ExtResource("2_n0leu")
+region = Rect2(160, 160, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8cdkg"]
 atlas = ExtResource("2_n0leu")
@@ -110,6 +134,29 @@ region = Rect2(224, 32, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_2hs0m"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0leu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0t1n1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xne2s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6mkeb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5m2n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydol4")
+}],
+"loop": false,
+"name": &"die",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8cdkg")
@@ -231,7 +278,9 @@ jump_height = 100
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_2hs0m")
-animation = &"respawn"
+animation = &"die"
+frame = 5
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 15)

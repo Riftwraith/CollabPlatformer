@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=4 uid="uid://bwoes2mblt87m"]
+[gd_scene load_steps=7 format=4 uid="uid://bwoes2mblt87m"]
 
 [ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_3d5ku"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_g18pg"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_8luox"]
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="3_g18pg"]
+[ext_resource type="PackedScene" uid="uid://dvupf6afw222s" path="res://scenes/prefabs/Spikes.tscn" id="4_8luox"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
@@ -37,6 +38,12 @@ text = "Signpost1 text"
 
 [node name="Signpost2" parent="Objects" instance=ExtResource("3_g18pg")]
 position = Vector2(288, 287)
+
+[node name="Spikes" parent="Objects" instance=ExtResource("4_8luox")]
+position = Vector2(1, 286)
+
+[node name="Spikes2" parent="Objects" instance=ExtResource("4_8luox")]
+position = Vector2(433, 286)
 
 [node name="Player" parent="." instance=ExtResource("3_8luox")]
 position = Vector2(246, 585)

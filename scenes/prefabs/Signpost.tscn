@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://75ru184f1rlh"]
 
-[ext_resource type="Script" uid="uid://be72eq5m1a2af" path="res://scenes/prefabs/Signpost.gd" id="1_k42gy"]
+[ext_resource type="Script" uid="uid://be72eq5m1a2af" path="res://scripts/Signpost.gd" id="1_k42gy"]
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_7nedd"]
 [ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="3_b6n01"]
 [ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="4_7nedd"]

@@ -12,6 +12,11 @@ var map_coords: Vector2i = Vector2i(0, 0)
 
 
 @onready var player = $Player
+@onready var right_boundary = $RoomBoundaries/Right
+@onready var left_boundary = $RoomBoundaries/Left
+@onready var up_boundary = $RoomBoundaries/Up
+@onready var down_boundary = $RoomBoundaries/Down
+
 
 var last_safe_player_position:= 0.5 * map_coords
 
@@ -33,13 +38,18 @@ func receive_savedata(data: Dictionary): #overwrite savedata (called by RoomMana
 
 func _ready():
 	#Set boundary areas to correct positions
-	$RoomBoundaries/Left.position = Vector2(-1 * exit_leeway, 0)
-	$RoomBoundaries/Right.position = room_bounds + Vector2(exit_leeway, 0)
-	$RoomBoundaries/Up.position = Vector2(0, -1 * exit_leeway)
-	$RoomBoundaries/Down.position = room_bounds + Vector2(0, exit_leeway)
+	left_boundary.position = Vector2(-1 * exit_leeway, 0)
+	right_boundary.position = room_bounds + Vector2(exit_leeway, 0)
+	up_boundary.position = Vector2(0, -1 * exit_leeway)
+	down_boundary.position = room_bounds + Vector2(0, exit_leeway)
+	
+	player.died.connect(_player_died)
 	
 	if savedata_updated:
 		load_savedata(savedata)
+
+func _player_died():
+	respawn_player(last_safe_player_position)
 
 func _player_left_screen(_body): #receives signal from boundary areas when the player enters them
 	if player.position.x < 0:
@@ -106,3 +116,5 @@ func _process(_delta):
 	#check if player on ground & within bounds: if so, save position
 	if _player_in_bounds() and player.is_on_safe_ground:
 		last_safe_player_position = player.position
+	else: 
+		pass

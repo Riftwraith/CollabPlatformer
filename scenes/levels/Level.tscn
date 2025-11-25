@@ -251,6 +251,8 @@ texture = ExtResource("5_litjp")
 position = Vector2(-2.3469849, -0.15002441)
 shape = SubResource("RectangleShape2D_q4iis")
 
+[node name="SafePlayerTimer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Up" to="." method="_player_left_screen"]
