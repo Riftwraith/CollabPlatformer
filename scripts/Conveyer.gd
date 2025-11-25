@@ -10,6 +10,7 @@ extends Path2D
 @export var wait_time: float = 2
 
 var t: float = 0.0
+var parent: Node2D
 
 var freq: float = 0.0
 var dir_forwards = true
@@ -26,13 +27,11 @@ func _create_display_sprite():
 func _ready():
 	if Engine.is_editor_hint():
 		return
+	sprite_layer.queue_free()
 	#Reparent all children to the follower
-	for child in get_children():
-		if child == follower: continue
-		remove_child(child)
-		follower.add_child(child)
-		child.position = Vector2.ZERO
+	parent = get_parent()	
 	freq = TAU / travel_time
+
 
 func _start_moving():
 	t = 0.0
@@ -70,5 +69,10 @@ func _physics_process(delta):
 				follower.progress_ratio = progress_ratio
 			else:
 				follower.progress_ratio = 1.0 - progress_ratio
+			
+			var dis = follower.global_position - parent.global_position
+			parent.position += dis
+			position -= dis
+			
 			if progress_ratio >= 1.0:
 				_stop_moving()

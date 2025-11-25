@@ -15,9 +15,9 @@ size = Vector2(90, 21)
 
 [sub_resource type="Curve2D" id="Curve2D_esa8x"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 193.91733, -48.50412, 0, 0, 0, 0, 241.91733, 23.49588, 0, 0, 0, 0, 437.91733, -68.50412)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, -147.53088, 0.6830134, 147.53088, -0.6830134, 175.0284, -74.81093, 0, 0, 0, 0, 464.02838, 30.189072)
 }
-point_count = 4
+point_count = 3
 
 [node name="PlayerControllerGym" type="Node2D"]
 script = ExtResource("1_ly1pc")
@@ -99,7 +99,7 @@ script = ExtResource("5_bbxpk")
 metadata/_custom_type_script = "uid://tq3f6llby3r"
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2(263.08267, 120.50412)
+position = Vector2(73.9716, 124.81093)
 collision_layer = 16
 collision_mask = 0
 gravity_scale = 0.0
