@@ -12,19 +12,17 @@ class_name Player
 @export var hang_time: float = 0.075
 @export var jump_peak_threshold = 50
 
-@export var control_enabled: bool = true
-@export var gravity_enabled: bool = true
-
+@onready var hurtbox: Area2D = $Hurtbox
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var anim_initial_scale: Vector2 = anim_sprite.scale
 @onready var jump_queue_timer: Timer = $JumpQueueTimer
 @onready var coyote_timer: Timer = $CoyoteTimer
-@onready var hang_timer: Timer = $HangTimer
 @onready var front_ray: RayCast2D = $FloorRayCasts/FrontRay
 @onready var back_ray: RayCast2D = $FloorRayCasts/BackRay
 
+var control_enabled: bool = true
+var _gravity_enabled: bool = true
 var anim_busy: bool = false #lock animation (eg for respawning)
-var dying: bool = false
 
 var jump_speed: float
 var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
@@ -34,13 +32,16 @@ var prev_grounded = false
 
 signal died
 
+func _on_hurtbox_enter(collider: Node2D):
+	die(Vector2.ZERO)
+
 func _ready():
 	jump_speed = sqrt(2*jump_height*gravity)
 	anim_sprite.play()
 
 var is_on_safe_ground: bool:
 	get:
-		if not is_on_floor() or dying:
+		if not is_on_floor():
 			return false
 		if front_ray.is_colliding() and back_ray.is_colliding():
 			return true
@@ -129,14 +130,16 @@ func on_land():
 	#tween.tween_property(anim_sprite, "position:y", anim_initial_scale.y * v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
 	#tween.tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 
-func die(knockback_vec: Vector2):
+func die(knockback_velocity: Vector2):
+	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
+	_gravity_enabled = false
+	
 	anim_sprite.animation = "die"
 	anim_sprite.play()
 	_flash_white(1)
-	velocity = knockback_vec
+	velocity = knockback_velocity
 	anim_busy = true
 	control_enabled = false
-	dying = true
 	await anim_sprite.animation_finished
 	died.emit()
 
@@ -178,7 +181,8 @@ func _get_closest_interactable() -> Interactable:
 
 func respawn():
 	velocity = Vector2.ZERO
-	dying = false
+	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
+	_gravity_enabled = true
 	control_enabled = false
 	anim_busy = true
 	anim_sprite.animation = "respawn"
@@ -205,8 +209,6 @@ func _set_movement_anim():
 			anim_sprite.animation = "idle"
 	
 
-
-
 func _physics_process(delta):
 	# handle all character movement in physics
 	var move_vec = _read_inputs() 
@@ -229,7 +231,7 @@ func _physics_process(delta):
 		#If you walk off a ledge, you can still jump within a certain window
 		if !coyote_timer.is_stopped():
 			_jump()
-		if gravity_enabled:
+		if _gravity_enabled:
 			var effective_gravity = gravity
 			if jumping_up && abs(velocity.y) < jump_peak_threshold:
 				effective_gravity *= 0.5
@@ -243,8 +245,19 @@ func _physics_process(delta):
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
 		
+		var collision_pos = collision.get_position()
+		var tilemap = collider as TileMapLayer
+		if tilemap:
+			var tile_coord = tilemap.local_to_map(tilemap.to_local(collision_pos))
+			var tile_data = tilemap.get_cell_tile_data(tile_coord)
+			pass	
+		
 		if collider is RigidBody2D: #pushable
 			var coll_speed = (collision.get_travel() + collision.get_remainder()).length() / delta
 			var push_dir = -1 * collision.get_normal()
 			var push_strength = 0.01 * coll_speed
 			collider.apply_impulse(push_dir * push_strength, collision.get_position() - collider.global_position)
+
+
+func _on_hurtbox_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.
