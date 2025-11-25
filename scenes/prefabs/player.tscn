@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=40 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/tellyface_spritesheet.png" id="2_n0leu"]
@@ -268,6 +268,10 @@ height = 42.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_i3pqv"]
 radius = 72.691124
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n0leu"]
+radius = 14.0
+height = 42.0
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 21
 script = ExtResource("1_onrkg")
@@ -295,6 +299,13 @@ position = Vector2(20, 0)
 [node name="BackRay" type="RayCast2D" parent="FloorRayCasts"]
 position = Vector2(-20, 0)
 
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+shape = SubResource("CircleShape2D_i3pqv")
+
 [node name="CoyoteTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
@@ -308,9 +319,12 @@ one_shot = true
 [node name="Jump" type="AudioStreamPlayer" parent="Sounds"]
 stream = ExtResource("3_i3pqv")
 
-[node name="InteractArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 8
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 32
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
-shape = SubResource("CircleShape2D_i3pqv")
+[node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 15)
+shape = SubResource("CapsuleShape2D_n0leu")
+
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_enter"]

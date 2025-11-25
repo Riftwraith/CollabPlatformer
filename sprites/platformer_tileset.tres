@@ -151,6 +151,14 @@ texture = ExtResource("1_0lxgd")
 11:1/0 = 0
 2:4/size_in_atlas = Vector2i(3, 3)
 2:4/0 = 0
+10:3/0 = 0
+10:3/0/physics_layer_2/polygon_0/points = PackedVector2Array(-8, 2, 8, 2, 8, 8, -8, 8)
+11:3/0 = 0
+11:3/0/physics_layer_2/polygon_0/points = PackedVector2Array(-8, 2, 8, 2, 8, 8, -8, 8)
+12:3/0 = 0
+12:3/0/physics_layer_2/polygon_0/points = PackedVector2Array(-8, 2, 8, 2, 8, 8, -8, 8)
+13:3/0 = 0
+13:3/0/physics_layer_2/polygon_0/points = PackedVector2Array(-8, 2, 8, 2, 8, 8, -8, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ljwso"]
 texture = ExtResource("2_c25lo")
@@ -587,6 +595,8 @@ texture = ExtResource("3_c25lo")
 physics_layer_0/collision_layer = 1
 physics_layer_1/collision_layer = 16
 physics_layer_1/collision_mask = 16
+physics_layer_2/collision_layer = 32
+physics_layer_2/collision_mask = 32
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "grass_dirt"
 terrain_set_0/terrain_0/color = Color(1, 0.01999998, 0.68966675, 1)
