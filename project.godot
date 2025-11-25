@@ -72,7 +72,8 @@ interact={
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Pushable"
 2d_physics/layer_4="Interactable"
-2d_physics/layer_5="Hazard"
+2d_physics/layer_5="Half Platforms"
+2d_physics/layer_6="Hazard"
 
 [rendering]
 
