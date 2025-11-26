@@ -1,9 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3sm0hsss3mue"]
+[gd_scene load_steps=3 format=3 uid="uid://d3sm0hsss3mue"]
 
 [ext_resource type="Script" uid="uid://btit38th40nca" path="res://scripts/Conveyer.gd" id="1_j85s4"]
 
+[sub_resource type="Curve" id="Curve_j85s4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [node name="Conveyor" type="Path2D"]
 script = ExtResource("1_j85s4")
+easing_curve = SubResource("Curve_j85s4")
 
 [node name="DisplaySprites" type="Node2D" parent="."]
 

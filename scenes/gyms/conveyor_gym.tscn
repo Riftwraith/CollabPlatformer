@@ -8,16 +8,16 @@
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/platforms.png" id="6_esa8x"]
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="6_u0s2v"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
+[sub_resource type="Curve2D" id="Curve2D_esa8x"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 241, 0)
+}
+point_count = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lusdx"]
 size = Vector2(90, 21)
 
-[sub_resource type="Curve2D" id="Curve2D_esa8x"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, -147.53088, 0.6830134, 147.53088, -0.6830134, 175.0284, -74.81093, 0, 0, 0, 0, 464.02838, 30.189072)
-}
-point_count = 3
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
 [node name="PlayerControllerGym" type="Node2D"]
 script = ExtResource("1_ly1pc")
@@ -27,6 +27,31 @@ use_parent_material = true
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAADAA4AAAAAAAAAAAAEAA4AAAAAAAAAAAAFAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAHAA4AAAAAAAAAAAAIAA4AAAAAAAAAAAAJAA4AAAAAAAAAAAAKAA4AAAAAAAAAAAALAA4AAAAAAAAAAAAMAA4AAAAAAAAAAAANAA4AAAAAAAAAAAAOAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAANAAMAAQABAAAAAAAOAAMAAQACAAAAAAALAAQAAQABAAAAAAAMAAQAAQACAAAAAAANAAQAAQACAAAAAAAPAAMAAQACAAAAAAA=")
 tile_set = ExtResource("2_esa8x")
+
+[node name="Conveyor" parent="." node_paths=PackedStringArray("display_sprite") instance=ExtResource("6_u0s2v")]
+position = Vector2(335, 168)
+curve = SubResource("Curve2D_esa8x")
+display_sprite = NodePath("RigidBody2D/Sprite2D")
+travel_time = 1.0
+wait_time = 0.0
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Conveyor"]
+collision_layer = 16
+collision_mask = 0
+gravity_scale = 0.0
+freeze = true
+freeze_mode = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Conveyor/RigidBody2D"]
+scale = Vector2(3, 3)
+texture = ExtResource("6_esa8x")
+region_enabled = true
+region_rect = Rect2(16, 0, 32, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Conveyor/RigidBody2D"]
+position = Vector2(-0.08267212, -11.00412)
+shape = SubResource("RectangleShape2D_lusdx")
+one_way_collision = true
 
 [node name="Player" parent="." instance=ExtResource("3_1gint")]
 position = Vector2(374, 175)
@@ -97,29 +122,6 @@ metadata/_custom_type_script = "uid://tq3f6llby3r"
 position = Vector2(46, 175)
 script = ExtResource("5_bbxpk")
 metadata/_custom_type_script = "uid://tq3f6llby3r"
-
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2(73.9716, 124.81093)
-collision_layer = 16
-collision_mask = 0
-gravity_scale = 0.0
-freeze = true
-freeze_mode = 1
-
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
-scale = Vector2(3, 3)
-texture = ExtResource("6_esa8x")
-region_enabled = true
-region_rect = Rect2(16, 0, 32, 16)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-position = Vector2(-0.08267212, -11.00412)
-shape = SubResource("RectangleShape2D_lusdx")
-one_way_collision = true
-
-[node name="Conveyor" parent="RigidBody2D" node_paths=PackedStringArray("display_sprite") instance=ExtResource("6_u0s2v")]
-curve = SubResource("Curve2D_esa8x")
-display_sprite = NodePath("../Sprite2D")
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
