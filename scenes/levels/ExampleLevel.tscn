@@ -14,7 +14,7 @@ _data = {
 point_count = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4nl1t"]
-size = Vector2(90, 21)
+size = Vector2(96.000015, 24)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
@@ -72,7 +72,7 @@ region_enabled = true
 region_rect = Rect2(16, 48, 32, 16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatforms/Conveyor/RigidBody2D"]
-position = Vector2(-0.08267212, -11.00412)
+position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_4nl1t")
 one_way_collision = true
 
