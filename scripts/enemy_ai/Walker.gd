@@ -26,6 +26,8 @@ enum AIMode {
 
 # private state
 @onready var _prev_direction = direction
+var _enabled: bool = false
+var _initialized: bool = false
 var _horizontal_velocity: float:
 	get:
 		match direction:
@@ -48,6 +50,9 @@ func _ready() -> void:
 		_setup_fall_signals()
 
 func _physics_process(delta: float) -> void:
+	if !_enabled:
+		return
+		
 	_update_ai()
 	if is_on_floor():
 		velocity.x = _horizontal_velocity
@@ -56,6 +61,11 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
+	_first_proc()
+	
+	if !_enabled:
+		return
+		
 	if _prev_direction != direction:
 		_update_graphics()
 		
@@ -65,6 +75,13 @@ func _process(_delta: float) -> void:
 
 #region Private Functions
 
+func _first_proc() -> void:
+	if _initialized:
+		return
+	_setup_player_signals()
+	_enabled = true
+	_initialized = true
+	
 func _update_ai() -> void:
 	match ai_mode:
 		AIMode.Fall, AIMode.AvoidFalling:
@@ -76,9 +93,31 @@ func _update_graphics() -> void:
 
 func _setup_fall_signals() -> void:
 	for dir in Direction.values():
-		sensors[dir].body_exited.connect(func(collider):
+		sensors[dir].body_exited.connect(func(_collider):
 			if dir == direction and is_on_floor():
 				turn())
+
+func _setup_player_signals() -> void:
+	# search for room
+	var node = get_parent()
+	while node:
+		if node as RoomTemplate:
+			break
+		node = node.get_parent()
+
+	if !node:
+		push_warning("Could not find RoomTemplate!")
+		return
+		
+	var room: RoomTemplate = node as RoomTemplate
+	var player: Player = room.player
+	player.death_begin.connect(_on_player_death)
+	player.spawn_end.connect(_on_player_spawn)
+
+func _on_player_death() -> void:
+	_enabled = false
 	
+func _on_player_spawn() -> void:
+	_enabled = true
 
 #endregion

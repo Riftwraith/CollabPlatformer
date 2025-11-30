@@ -29,11 +29,15 @@ var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
 var current_focus: Interactable = null #current interactable object
 var prev_grounded = false
 
-signal died
+signal death_begin
+signal death_end
+signal spawn_begin
+signal spawn_end
 
 func _ready():
 	jump_speed = sqrt(2*jump_height*gravity_controller.gravity)
 	anim_sprite.play()
+	respawn()
 
 var is_on_safe_ground: bool:
 	get:
@@ -136,8 +140,11 @@ func die(knockback_velocity: Vector2):
 	velocity = knockback_velocity
 	anim_busy = true
 	control_enabled = false
+	death_begin.emit()
+	
 	await anim_sprite.animation_finished
-	died.emit()
+	
+	death_end.emit()
 
 func _process(_delta: float):
 	if abs(velocity.x) > 0:
@@ -184,9 +191,13 @@ func respawn():
 	anim_sprite.animation = "respawn"
 	anim_sprite.play()
 	_flash_white(2)
+	spawn_begin.emit()
+	
 	await anim_sprite.animation_finished
+	
 	control_enabled = true
 	anim_busy = false
+	spawn_end.emit()
 
 func _set_movement_anim():
 	anim_sprite.play()
@@ -255,4 +266,7 @@ func _physics_process(delta):
 			collider.apply_impulse(push_dir * push_strength, collision.get_position() - collider.global_position)
 
 func _on_hurtbox_enter(_collider: Node2D):
+	die(Vector2.ZERO)
+
+func _on_hurtbox_enter_area2D(_collider: Area2D):
 	die(Vector2.ZERO)

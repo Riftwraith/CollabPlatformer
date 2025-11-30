@@ -74,6 +74,7 @@ interact={
 2d_physics/layer_4="Interactable"
 2d_physics/layer_5="Half Platforms"
 2d_physics/layer_6="Hazard"
+2d_physics/layer_7="Enemy"
 
 [rendering]
 
