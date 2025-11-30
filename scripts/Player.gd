@@ -5,7 +5,6 @@ class_name Player
 @export var run_speed: float = 150
 @export var air_speed: float = 150
 @export var jump_height: int = 98 #in pixels
-@export var gravity: float = 900
 @export var coyote_time: float = 0.1
 @export var jump_queue_time: float = 0.1
 @export var drop_timeout: float = 0.25
@@ -19,9 +18,9 @@ class_name Player
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var front_ray: RayCast2D = $FloorRayCasts/FrontRay
 @onready var back_ray: RayCast2D = $FloorRayCasts/BackRay
+@onready var gravity_controller: GravityController = $GravityController
 
 var control_enabled: bool = true
-var _gravity_enabled: bool = true
 var anim_busy: bool = false #lock animation (eg for respawning)
 
 var jump_speed: float
@@ -30,14 +29,15 @@ var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
 var current_focus: Interactable = null #current interactable object
 var prev_grounded = false
 
-signal died
-
-func _on_hurtbox_enter(collider: Node2D):
-	die(Vector2.ZERO)
+signal death_begin
+signal death_end
+signal spawn_begin
+signal spawn_end
 
 func _ready():
-	jump_speed = sqrt(2*jump_height*gravity)
+	jump_speed = sqrt(2*jump_height*gravity_controller.gravity)
 	anim_sprite.play()
+	respawn()
 
 var is_on_safe_ground: bool:
 	get:
@@ -132,7 +132,7 @@ func on_land():
 
 func die(knockback_velocity: Vector2):
 	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
-	_gravity_enabled = false
+	gravity_controller.enabled = false
 	
 	anim_sprite.animation = "die"
 	anim_sprite.play()
@@ -140,8 +140,11 @@ func die(knockback_velocity: Vector2):
 	velocity = knockback_velocity
 	anim_busy = true
 	control_enabled = false
+	death_begin.emit()
+	
 	await anim_sprite.animation_finished
-	died.emit()
+	
+	death_end.emit()
 
 func _process(_delta: float):
 	if abs(velocity.x) > 0:
@@ -182,15 +185,19 @@ func _get_closest_interactable() -> Interactable:
 func respawn():
 	velocity = Vector2.ZERO
 	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
-	_gravity_enabled = true
+	gravity_controller.enabled = true
 	control_enabled = false
 	anim_busy = true
 	anim_sprite.animation = "respawn"
 	anim_sprite.play()
 	_flash_white(2)
+	spawn_begin.emit()
+	
 	await anim_sprite.animation_finished
+	
 	control_enabled = true
 	anim_busy = false
+	spawn_end.emit()
 
 func _set_movement_anim():
 	anim_sprite.play()
@@ -231,16 +238,16 @@ func _physics_process(delta):
 		#If you walk off a ledge, you can still jump within a certain window
 		if !coyote_timer.is_stopped():
 			_jump()
-		if _gravity_enabled:
-			var effective_gravity = gravity
-			if jumping_up && abs(velocity.y) < jump_peak_threshold:
-				effective_gravity *= 0.5
-			velocity.y += effective_gravity * delta
-
-	#this function adds velocity * delta to position & automatically handles collision
+			
+		if jumping_up && abs(velocity.y) < jump_peak_threshold:
+			gravity_controller.gravity_scale = 0.5
+		else: 
+			gravity_controller.gravity_scale = 1.0
+	
+	gravity_controller.apply_gravity(delta)
 	move_and_slide()
 	
-	# Very janky push physics for rigidbody2d
+	# Handle collisions
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		var collider = collision.get_collider()
@@ -249,7 +256,7 @@ func _physics_process(delta):
 		var tilemap = collider as TileMapLayer
 		if tilemap:
 			var tile_coord = tilemap.local_to_map(tilemap.to_local(collision_pos))
-			var tile_data = tilemap.get_cell_tile_data(tile_coord)
+			var _tile_data = tilemap.get_cell_tile_data(tile_coord)
 			pass	
 		
 		if collider is RigidBody2D: #pushable
@@ -258,6 +265,8 @@ func _physics_process(delta):
 			var push_strength = 0.01 * coll_speed
 			collider.apply_impulse(push_dir * push_strength, collision.get_position() - collider.global_position)
 
+func _on_hurtbox_enter(_collider: Node2D):
+	die(Vector2.ZERO)
 
-func _on_hurtbox_body_entered(body: Node2D) -> void:
-	pass # Replace with function body.
+func _on_hurtbox_enter_area2D(_collider: Area2D):
+	die(Vector2.ZERO)

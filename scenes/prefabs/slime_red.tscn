@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3 uid="uid://7k613xbni0a1"]
+
+[ext_resource type="Script" uid="uid://4fnuutjckmhh" path="res://scripts/enemy_ai/Walker.gd" id="1_cse4b"]
+[ext_resource type="SpriteFrames" uid="uid://latl50wbeu2o" path="res://sprites/slime_green.tres" id="2_4onhl"]
+[ext_resource type="PackedScene" uid="uid://ceb0sd0ykfkvm" path="res://scenes/prefabs/GravityController.tscn" id="3_btt63"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ekwi3"]
+radius = 15.0
+height = 38.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf3kh"]
+size = Vector2(4, 4)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cq24f"]
+radius = 18.0
+height = 40.0
+
+[node name="slime_green" type="CharacterBody2D"]
+collision_layer = 64
+collision_mask = 81
+script = ExtResource("1_cse4b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -20)
+shape = SubResource("CapsuleShape2D_ekwi3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -36)
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("2_4onhl")
+animation = &"walk"
+frame_progress = 0.9992463
+
+[node name="GravityController" parent="." instance=ExtResource("3_btt63")]
+position = Vector2(-23, 2)
+
+[node name="RightFloorSensor" type="Area2D" parent="."]
+position = Vector2(23, 2)
+collision_layer = 0
+collision_mask = 17
+
+[node name="Shape" type="CollisionShape2D" parent="RightFloorSensor"]
+shape = SubResource("RectangleShape2D_cf3kh")
+
+[node name="LeftFloorSensor" type="Area2D" parent="."]
+position = Vector2(-23, 2)
+collision_layer = 0
+collision_mask = 17
+
+[node name="Shape" type="CollisionShape2D" parent="LeftFloorSensor"]
+shape = SubResource("RectangleShape2D_cf3kh")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -22)
+shape = SubResource("CapsuleShape2D_cq24f")
+debug_color = Color(0.9968905, 0, 0.18687403, 0.41960785)
