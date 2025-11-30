@@ -10,8 +10,7 @@ var map_coords: Vector2i = Vector2i(0, 0)
 #Time before player gets control when entering room
 @export var enter_override_time: float = 0.3
 
-
-@onready var player = $Player
+@onready var player: Player = $Player
 @onready var right_boundary = $RoomBoundaries/Right
 @onready var left_boundary = $RoomBoundaries/Left
 @onready var up_boundary = $RoomBoundaries/Up
@@ -43,7 +42,7 @@ func _ready():
 	up_boundary.position = Vector2(0, -1 * exit_leeway)
 	down_boundary.position = room_bounds + Vector2(0, exit_leeway)
 	
-	player.died.connect(_player_died)
+	player.death_end.connect(_player_died)
 	
 	if savedata_updated:
 		load_savedata(savedata)

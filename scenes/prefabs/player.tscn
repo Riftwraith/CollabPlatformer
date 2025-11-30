@@ -1,8 +1,9 @@
-[gd_scene load_steps=40 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=41 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/tellyface_spritesheet.png" id="2_n0leu"]
 [ext_resource type="AudioStream" uid="uid://basri1vkllti4" path="res://sounds/jump.wav" id="3_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://ceb0sd0ykfkvm" path="res://scenes/prefabs/GravityController.tscn" id="4_8cdkg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0leu"]
 atlas = ExtResource("2_n0leu")
@@ -320,11 +321,14 @@ one_shot = true
 stream = ExtResource("3_i3pqv")
 
 [node name="Hurtbox" type="Area2D" parent="."]
-collision_layer = 32
+collision_layer = 2
 collision_mask = 32
 
 [node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 15)
 shape = SubResource("CapsuleShape2D_n0leu")
 
+[node name="GravityController" parent="." instance=ExtResource("4_8cdkg")]
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_enter_area2D"]
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_enter"]

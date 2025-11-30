@@ -1,0 +1,6 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://blth00wkpblge"]
+
+[ext_resource type="Script" uid="uid://diwr4lgusb5rn" path="res://scripts/PhysicsConfig.gd" id="1_xusv8"]
+
+[resource]
+script = ExtResource("1_xusv8")
