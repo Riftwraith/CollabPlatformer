@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cij74mo168lav"]
+[gd_scene load_steps=6 format=3 uid="uid://cij74mo168lav"]
 
 [ext_resource type="Script" uid="uid://4fnuutjckmhh" path="res://scripts/enemy_ai/Walker.gd" id="1_2rhmh"]
 [ext_resource type="SpriteFrames" uid="uid://latl50wbeu2o" path="res://sprites/slime_green.tres" id="1_cf3kh"]
+[ext_resource type="PackedScene" uid="uid://ceb0sd0ykfkvm" path="res://scenes/prefabs/GravityController.tscn" id="3_cq24f"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ekwi3"]
 radius = 15.0
@@ -23,6 +24,9 @@ scale = Vector2(3, 3)
 sprite_frames = ExtResource("1_cf3kh")
 animation = &"walk"
 frame_progress = 0.9992463
+
+[node name="GravityController" parent="." instance=ExtResource("3_cq24f")]
+position = Vector2(-23, 2)
 
 [node name="RightFloorSensor" type="Area2D" parent="."]
 position = Vector2(23, 2)
