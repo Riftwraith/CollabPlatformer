@@ -125,7 +125,8 @@ func _physics_process(delta):
 			
 #endregion
 
-#region Private functions 
+#region Private functions
+#region Game Logic
 func _read_inputs() -> Vector2:
 	var move_vec = Vector2.ZERO
 	if !control_enabled:
@@ -238,15 +239,7 @@ func _die(knockback_velocity: Vector2):
 
 #endregion
 
-
-
 #region Feedback Animations
-
-func _flash_white(n: int):
-	var tween = create_tween()
-	for i in range(n):
-		tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1), 0.10 *n + 0.05)
-		tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.10 *n + 0.10)
 
 func _set_movement_anim():
 	anim_sprite.play()
@@ -263,6 +256,13 @@ func _set_movement_anim():
 			anim_sprite.animation = "run"
 		else:
 			anim_sprite.animation = "idle"
+			
+func _flash_white(n: int):
+	var tween = create_tween()
+	for i in range(n):
+		tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1), 0.10 *n + 0.05)
+		tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.10 *n + 0.10)
+
 
 # squash scales are in local space
 # squash durations are in seconds
@@ -281,6 +281,8 @@ func _squash_and_stretch(horizontal_squash: float, vertical_squash: float, squas
 	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	return tween
 	
+#endregion
+
 #endregion
 
 #region Signals
