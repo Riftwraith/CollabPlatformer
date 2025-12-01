@@ -34,11 +34,6 @@ signal death_end
 signal spawn_begin
 signal spawn_end
 
-func _ready():
-	jump_speed = sqrt(2*jump_height*gravity_controller.gravity)
-	anim_sprite.play()
-	respawn()
-
 var is_on_safe_ground: bool:
 	get:
 		if not is_on_floor():
@@ -47,6 +42,90 @@ var is_on_safe_ground: bool:
 			return true
 		return false
 
+#region Public functions
+func respawn():
+	velocity = Vector2.ZERO
+	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
+	gravity_controller.enabled = true
+	control_enabled = false
+	anim_busy = true
+	anim_sprite.animation = "respawn"
+	anim_sprite.play()
+	_flash_white(2)
+	spawn_begin.emit()
+	
+	await anim_sprite.animation_finished
+	
+	control_enabled = true
+	anim_busy = false
+	spawn_end.emit()
+#endregion
+
+
+#region Godot Functions
+func _ready():
+	jump_speed = sqrt(2*jump_height*gravity_controller.gravity)
+	anim_sprite.play()
+	respawn()
+
+func _process(_delta: float):
+	if abs(velocity.x) > 0:
+		anim_sprite.flip_h = (velocity.x < 0)
+	
+	if not anim_busy:
+		_set_movement_anim()
+	
+	#focus on interactable objects (eg for highlighting them)
+	var focus: Interactable = _get_closest_interactable() #may be null
+	if focus != current_focus:
+		if current_focus:
+			current_focus.end_focus(self)
+		if focus:
+			focus.start_focus(self)
+	current_focus = focus
+
+func _physics_process(delta):
+	# handle all character movement in physics
+	var move_vec = _read_inputs() 
+	
+	var curr_grounded = is_on_floor()
+	if curr_grounded && !prev_grounded:
+		# start land tween	
+		_squash_and_stretch(
+			1.2,   # hsquash
+			0.8,   # vsquash
+			0.025, # squash_in
+			0.05,  # squash_out
+		)
+	prev_grounded = curr_grounded
+
+	if is_on_floor():
+		#ground movement
+		if control_enabled:
+			velocity.x = move_vec.x * run_speed 
+		_jump()
+		coyote_timer.start(coyote_time)
+	else:
+		#air movement
+		if control_enabled:
+			velocity.x = move_vec.x * air_speed 
+		#If you walk off a ledge, you can still jump within a certain window
+		if !coyote_timer.is_stopped():
+			_jump()
+			
+		if jumping_up && abs(velocity.y) < jump_peak_threshold:
+			gravity_controller.gravity_scale = 0.5
+		else: 
+			gravity_controller.gravity_scale = 1.0
+	
+	gravity_controller.apply_gravity(delta)
+	move_and_slide()
+	
+	_handle_collisions(delta)
+			
+#endregion
+
+#region Private functions 
 func _read_inputs() -> Vector2:
 	var move_vec = Vector2.ZERO
 	if !control_enabled:
@@ -72,10 +151,33 @@ func _read_inputs() -> Vector2:
 		if interactable != null:
 			interactable.interact(self)
 	return move_vec
+	
+func _handle_collisions(delta: float) -> void:
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		var collision_pos = collision.get_position()
+		var tilemap = collider as TileMapLayer
+		if tilemap:
+			var tile_coord = tilemap.local_to_map(tilemap.to_local(collision_pos))
+			var _tile_data: TileData = tilemap.get_cell_tile_data(tile_coord)
+			pass	
+		
+		if collider is RigidBody2D: #pushable
+			var coll_speed = (collision.get_travel() + collision.get_remainder()).length() / delta
+			var push_dir = -1 * collision.get_normal()
+			var push_strength = 0.01 * coll_speed
+			collider.apply_impulse(push_dir * push_strength, collision.get_position() - collider.global_position)
 
 func _queue_jump():
 	#can press jump key when just about to land 
 	jump_queue_timer.start(jump_queue_time)
+
+enum AnchorDirection {
+	Top,
+	Bottom,
+}
 
 # returns true if a jump was successfully done
 # false if the jump failed (eg. jump cooldown not exceeded)
@@ -89,18 +191,12 @@ func _jump() -> bool:
 	jumping_up = true
 	
 	# start jump tween
-	var tween = create_tween()
-	var h_squash = 0.875
-	var v_squash = 1.25
-	var v_offset = (1.0 - v_squash) * anim_sprite.sprite_frames.get_frame_texture("jump",0).get_height()
-	var squash_in = 0.10
-	var squash_out= 0.20
-	tween.tween_property(anim_sprite, "scale:x", anim_initial_scale.x * h_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.x * v_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "position:y", v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	tween.tween_property(anim_sprite, "scale:x", anim_initial_scale.x, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.y, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	_squash_and_stretch(
+		0.875, # hsquash
+		1.25,  # vsquash
+		0.10,  # squash_in
+		0.20,  # squash_out
+	)
 	return true
 
 # try to drop from the platform
@@ -111,64 +207,7 @@ func _drop_from_platform():
 		var timeout = get_tree().create_timer(drop_timeout, true, true)
 		timeout.timeout.connect(func(): collision_mask |= one_way_collision_mask)
 
-func on_land():
-	# start land tween
-	var tween = create_tween()
-	var h_squash = 1.2
-	var v_squash = 0.8
-	var v_offset = (1.0 - v_squash) * anim_sprite.sprite_frames.get_frame_texture("jump",0).get_height()
-	var squash_in = 0.025
-	var squash_out = 0.05
-	tween.bind_node(anim_sprite)
-	tween.tween_property(anim_sprite, "scale:y", anim_initial_scale.y * v_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "scale:x", anim_initial_scale.x * h_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "position:y", v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	tween.tween_property(anim_sprite, "scale:y", anim_initial_scale.y, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "scale:x", anim_initial_scale.x, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	
-	#tween.tween_property(anim_sprite, "position:y", anim_initial_scale.y * v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	#tween.tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-
-func die(knockback_velocity: Vector2):
-	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
-	gravity_controller.enabled = false
-	
-	anim_sprite.animation = "die"
-	anim_sprite.play()
-	_flash_white(1)
-	velocity = knockback_velocity
-	anim_busy = true
-	control_enabled = false
-	death_begin.emit()
-	
-	await anim_sprite.animation_finished
-	
-	death_end.emit()
-
-func _process(_delta: float):
-	if abs(velocity.x) > 0:
-		anim_sprite.flip_h = (velocity.x < 0)
-	
-	if not anim_busy:
-		_set_movement_anim()
-	
-	#focus on interactable objects (eg for highlighting them)
-	var focus = _get_closest_interactable() #may be null
-	if focus != current_focus:
-		if current_focus:
-			current_focus.end_focus(self)
-		if focus:
-			focus.start_focus(self)
-	current_focus = focus
-
-
-func _flash_white(n: int):
-	var tween = create_tween()
-	for i in range(n):
-		tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1), 0.10 *n + 0.05)
-		tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.10 *n + 0.10)
-
 func _get_closest_interactable() -> Interactable:
 	var closest: Interactable = null
 	var closestDist: float = 0
@@ -181,23 +220,33 @@ func _get_closest_interactable() -> Interactable:
 			closest = object
 			closestDist = global_position.distance_squared_to(closest.global_position)
 	return closest
-
-func respawn():
-	velocity = Vector2.ZERO
-	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE
-	gravity_controller.enabled = true
-	control_enabled = false
+	
+func _die(knockback_velocity: Vector2):
+	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
+	gravity_controller.enabled = false
+	
+	anim_sprite.play("die")
+	_flash_white(1)
+	velocity = knockback_velocity
 	anim_busy = true
-	anim_sprite.animation = "respawn"
-	anim_sprite.play()
-	_flash_white(2)
-	spawn_begin.emit()
+	control_enabled = false
+	death_begin.emit()
 	
 	await anim_sprite.animation_finished
 	
-	control_enabled = true
-	anim_busy = false
-	spawn_end.emit()
+	death_end.emit()
+
+#endregion
+
+
+
+#region Feedback Animations
+
+func _flash_white(n: int):
+	var tween = create_tween()
+	for i in range(n):
+		tween.tween_property(anim_sprite, "modulate", Color(2, 2, 2, 1), 0.10 *n + 0.05)
+		tween.tween_property(anim_sprite, "modulate", Color(1, 1, 1, 1,), 0.10 *n + 0.10)
 
 func _set_movement_anim():
 	anim_sprite.play()
@@ -214,59 +263,31 @@ func _set_movement_anim():
 			anim_sprite.animation = "run"
 		else:
 			anim_sprite.animation = "idle"
-	
 
-func _physics_process(delta):
-	# handle all character movement in physics
-	var move_vec = _read_inputs() 
+# squash scales are in local space
+# squash durations are in seconds
+func _squash_and_stretch(horizontal_squash: float, vertical_squash: float, squash_in_dur: float, squash_out_dur: float) -> Tween:
+	var tween = create_tween()
+	var h_squash = horizontal_squash
+	var v_squash = vertical_squash
+	var v_offset = (1.0 - v_squash) * anim_sprite.sprite_frames.get_frame_texture("jump",0).get_height()
+	var squash_in = squash_in_dur
+	var squash_out = squash_out_dur
+	tween.tween_property(anim_sprite, "scale:x", anim_initial_scale.x * h_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.x * v_squash, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "position:y", v_offset, squash_in).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(anim_sprite, "scale:x", anim_initial_scale.x, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "scale:y", anim_initial_scale.y, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(anim_sprite, "position:y", 0, squash_out).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	return tween
 	
-	var curr_grounded = is_on_floor()
-	if curr_grounded && !prev_grounded:
-		on_land()
-	prev_grounded = curr_grounded
+#endregion
 
-	if is_on_floor():
-		#ground movement
-		if control_enabled:
-			velocity.x = move_vec.x * run_speed 
-		_jump()
-		coyote_timer.start(coyote_time)
-	else:
-		#air movement
-		if control_enabled:
-			velocity.x = move_vec.x * air_speed 
-		#If you walk off a ledge, you can still jump within a certain window
-		if !coyote_timer.is_stopped():
-			_jump()
-			
-		if jumping_up && abs(velocity.y) < jump_peak_threshold:
-			gravity_controller.gravity_scale = 0.5
-		else: 
-			gravity_controller.gravity_scale = 1.0
-	
-	gravity_controller.apply_gravity(delta)
-	move_and_slide()
-	
-	# Handle collisions
-	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
-		
-		var collision_pos = collision.get_position()
-		var tilemap = collider as TileMapLayer
-		if tilemap:
-			var tile_coord = tilemap.local_to_map(tilemap.to_local(collision_pos))
-			var _tile_data = tilemap.get_cell_tile_data(tile_coord)
-			pass	
-		
-		if collider is RigidBody2D: #pushable
-			var coll_speed = (collision.get_travel() + collision.get_remainder()).length() / delta
-			var push_dir = -1 * collision.get_normal()
-			var push_strength = 0.01 * coll_speed
-			collider.apply_impulse(push_dir * push_strength, collision.get_position() - collider.global_position)
-
+#region Signals
 func _on_hurtbox_enter(_collider: Node2D):
-	die(Vector2.ZERO)
+	_die(Vector2.ZERO)
 
 func _on_hurtbox_enter_area2D(_collider: Area2D):
-	die(Vector2.ZERO)
+	_die(Vector2.ZERO)
+
+#endregion
