@@ -106,7 +106,7 @@ one_way_collision = true
 metadata/_edit_lock_ = true
 
 [node name="Player" parent="." instance=ExtResource("3_0weml")]
-position = Vector2(352.4696, 572.6414)
+position = Vector2(381, 524)
 collision_layer = 2
 run_speed = 260.0
 air_speed = 260.0
