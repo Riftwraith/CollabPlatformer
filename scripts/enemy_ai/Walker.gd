@@ -63,11 +63,9 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	_first_proc()
 	
+	_update_graphics()
 	if !_enabled:
 		return
-		
-	if _prev_direction != direction:
-		_update_graphics()
 		
 	_prev_direction = direction
 
@@ -90,6 +88,13 @@ func _update_ai() -> void:
 
 func _update_graphics() -> void:
 	sprite.flip_h = direction != Direction.Right
+	if !_enabled:
+		sprite.stop()
+		return
+		
+	if velocity.x != 0:
+		sprite.play("walk")
+	
 
 func _setup_fall_signals() -> void:
 	for dir in Direction.values():

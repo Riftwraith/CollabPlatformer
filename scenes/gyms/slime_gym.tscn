@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://cqprps27blrwt"]
+[gd_scene load_steps=7 format=4 uid="uid://cqprps27blrwt"]
 
 [ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_3445o"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_h8rci"]
 [ext_resource type="PackedScene" uid="uid://cij74mo168lav" path="res://scenes/prefabs/slime_green.tscn" id="4_q8lf3"]
+[ext_resource type="PackedScene" uid="uid://7k613xbni0a1" path="res://scenes/prefabs/slime_purple.tscn" id="5_5qruf"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="6_juv4i"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
@@ -40,10 +41,6 @@ position = Vector2(50, 389)
 position = Vector2(638, -115)
 initial_direction = 1
 
-[node name="slime_green3" parent="Enemies" instance=ExtResource("4_q8lf3")]
-position = Vector2(169, -205)
-ai_mode = 1
-
 [node name="slime_green4" parent="Enemies" instance=ExtResource("4_q8lf3")]
 position = Vector2(553, 42)
 
@@ -54,10 +51,6 @@ initial_direction = 1
 [node name="slime_green6" parent="Enemies" instance=ExtResource("4_q8lf3")]
 position = Vector2(609, 323)
 initial_direction = 1
-
-[node name="slime_green7" parent="Enemies" instance=ExtResource("4_q8lf3")]
-position = Vector2(509, -250)
-ai_mode = 1
 
 [node name="Player" parent="." instance=ExtResource("6_juv4i")]
 position = Vector2(489, 581)
@@ -99,6 +92,13 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
 shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="slime_green" parent="." instance=ExtResource("5_5qruf")]
+position = Vector2(231, 178)
+
+[node name="slime_green2" parent="." instance=ExtResource("5_5qruf")]
+position = Vector2(574, 141)
+initial_direction = 1
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
