@@ -1,0 +1,254 @@
+[gd_scene load_steps=19 format=4 uid="uid://70sai727hpy7"]
+
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_32v3e"]
+[ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_sjalr"]
+[ext_resource type="Texture2D" uid="uid://cjhwtc8dmirvh" path="res://sprites/skyline.png" id="3_0cpc7"]
+[ext_resource type="Texture2D" uid="uid://c8thf8uilwgcn" path="res://sprites/tree.png" id="4_0sl33"]
+[ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="5_sn4bb"]
+[ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="6_25f7m"]
+[ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/platforms.png" id="7_n3p5x"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="8_ef6q7"]
+[ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="9_02owh"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="10_381ld"]
+[ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="11_x10f8"]
+[ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/checkpoint_area.tscn" id="12_cqtw8"]
+
+[sub_resource type="Curve2D" id="Curve2D_b713g"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 240)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5d6x8"]
+size = Vector2(96.000015, 24)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wfb5j"]
+size = Vector2(23.381844, 150.00002)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_32v3e"]
+size = Vector2(130, 51.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fvnuo"]
+size = Vector2(26.943695, 86)
+
+[node name="ExampleBlockout" type="Node2D"]
+script = ExtResource("1_32v3e")
+
+[node name="Sky" type="TileMapLayer" parent="."]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAAAAMAAAAAAAkAAAAAAAQAAAAAAAoAAAABAAMAAAAAAAkAAAABAAQAAAAAAAoAAAACAAIAAAAAAAkAAAACAAMAAAAAAAkAAAACAAQAAAAAAAoAAAADAAIAAAAAAAkAAAADAAMAAAAAAAkAAAADAAQAAAAAAAoAAAAEAAIAAAAAAAkAAAAEAAMAAAAAAAoAAAAEAAQAAAAAAAsAAAAFAAIAAAAAAAkAAAAFAAMAAAAAAAkAAAAFAAQAAAAAAAoAAAAGAAIAAAAAAAkAAAAGAAMAAAAAAAoAAAAGAAQAAAAAAAsAAAAHAAIAAAAAAAkAAAAHAAMAAAAAAAoAAAAHAAQAAAAAAAsAAAAIAAIAAAAAAAkAAAAIAAMAAAAAAAoAAAAIAAQAAAAAAAsAAAAJAAIAAAAAAAkAAAAJAAMAAAAAAAkAAAAJAAQAAAAAAAoAAAAKAAIAAAAAAAkAAAAKAAMAAAAAAAkAAAAKAAQAAAAAAAoAAAALAAIAAAAAAAkAAAALAAMAAAAAAAkAAAALAAQAAAAAAAoAAAAMAAIAAAAAAAkAAAAMAAMAAAAAAAkAAAAMAAQAAAAAAAoAAAANAAIAAAAAAAkAAAANAAMAAAAAAAkAAAANAAQAAAAAAAoAAAAOAAIAAAAAAAkAAAAOAAMAAAAAAAkAAAAOAAQAAAAAAAoAAAAPAAIAAAAAAAkAAAAPAAMAAAAAAAkAAAAPAAQAAAAAAAoAAAAAAAcAAAAAAAwAAAAAAAgAAAAAAA0AAAAAAAkAAAAAAA0AAAABAAcAAAAAAAwAAAABAAgAAAAAAA0AAAABAAkAAAAAAA0AAAACAAcAAAAAAAsAAAACAAgAAAAAAAwAAAACAAkAAAAAAA0AAAADAAcAAAAAAAsAAAADAAgAAAAAAAwAAAADAAkAAAAAAA0AAAAEAAcAAAAAAAsAAAAEAAgAAAAAAAwAAAAEAAkAAAAAAA0AAAAFAAcAAAAAAAwAAAAFAAgAAAAAAA0AAAAFAAkAAAAAAA0AAAAGAAcAAAAAAA0AAAAGAAgAAAAAAA0AAAAGAAkAAAAAAA0AAAAHAAcAAAAAAA0AAAAHAAgAAAAAAA0AAAAHAAkAAAAAAA0AAAAIAAcAAAAAAAwAAAAIAAgAAAAAAA0AAAAIAAkAAAAAAA0AAAAJAAcAAAAAAAwAAAAJAAgAAAAAAA0AAAAJAAkAAAAAAA0AAAAKAAcAAAAAAA0AAAAKAAgAAAAAAA0AAAAKAAkAAAAAAA0AAAALAAcAAAAAAAwAAAALAAgAAAAAAA0AAAALAAkAAAAAAA0AAAAMAAcAAAAAAAwAAAAMAAgAAAAAAA0AAAAMAAkAAAAAAA0AAAANAAcAAAAAAAwAAAANAAgAAAAAAA0AAAANAAkAAAAAAA0AAAAOAAcAAAAAAAwAAAAOAAgAAAAAAA0AAAAOAAkAAAAAAA0AAAAPAAcAAAAAAA0AAAAPAAgAAAAAAA0AAAAPAAkAAAAAAA0AAAAAAAYAAAAAAAsAAAABAAYAAAAAAAsAAAACAAYAAAAAAAsAAAADAAYAAAAAAAsAAAAEAAYAAAAAAAsAAAAFAAYAAAAAAAsAAAAGAAYAAAAAAAwAAAAHAAYAAAAAAAwAAAAIAAYAAAAAAAsAAAAJAAYAAAAAAAsAAAAKAAYAAAAAAAwAAAALAAYAAAAAAAsAAAAMAAYAAAAAAAsAAAANAAYAAAAAAAsAAAAOAAYAAAAAAAsAAAAPAAYAAAAAAAwAAAAAAAAAAAAAAAkAAAAAAAEAAAAAAAkAAAABAAAAAAAAAAkAAAABAAEAAAAAAAkAAAACAAAAAAAAAAkAAAACAAEAAAAAAAkAAAADAAAAAAAAAAkAAAADAAEAAAAAAAkAAAAEAAAAAAAAAAkAAAAEAAEAAAAAAAkAAAAFAAAAAAAAAAkAAAAFAAEAAAAAAAkAAAAGAAAAAAAAAAkAAAAGAAEAAAAAAAkAAAAHAAAAAAAAAAkAAAAHAAEAAAAAAAkAAAAIAAAAAAAAAAkAAAAIAAEAAAAAAAkAAAAJAAAAAAAAAAkAAAAJAAEAAAAAAAkAAAAKAAAAAAAAAAkAAAAKAAEAAAAAAAkAAAALAAAAAAAAAAkAAAALAAEAAAAAAAkAAAAMAAAAAAAAAAkAAAAMAAEAAAAAAAkAAAANAAAAAAAAAAkAAAANAAEAAAAAAAkAAAAOAAAAAAAAAAkAAAAOAAEAAAAAAAkAAAAPAAAAAAAAAAkAAAAPAAEAAAAAAAkAAAAAAAIAAAAAAAkAAAABAAIAAAAAAAkAAAAAAAUAAAAAAAsAAAABAAUAAAAAAAsAAAACAAUAAAAAAAsAAAADAAUAAAAAAAsAAAAEAAUAAAAAAAsAAAAFAAUAAAAAAAsAAAAGAAUAAAAAAAsAAAAHAAUAAAAAAAsAAAAIAAUAAAAAAAsAAAAJAAUAAAAAAAsAAAAKAAUAAAAAAAsAAAALAAUAAAAAAAsAAAAMAAUAAAAAAAsAAAANAAUAAAAAAAsAAAAOAAUAAAAAAAsAAAAPAAUAAAAAAAsAAAAAAAoAAAAAAA0AAAAAAAsAAAAAAA0AAAAAAAwAAAAAAA0AAAAAAA0AAAAAAA0AAAAAAA4AAAAAAA0AAAABAAoAAAAAAA0AAAABAAsAAAAAAA0AAAABAAwAAAAAAA0AAAABAA0AAAAAAA0AAAABAA4AAAAAAA0AAAACAAoAAAAAAA0AAAACAAsAAAAAAA0AAAACAAwAAAAAAA0AAAACAA0AAAAAAA0AAAACAA4AAAAAAA0AAAADAAoAAAAAAA0AAAADAAsAAAAAAA0AAAADAAwAAAAAAA0AAAADAA0AAAAAAA0AAAADAA4AAAAAAA0AAAAEAAoAAAAAAA0AAAAEAAsAAAAAAA0AAAAEAAwAAAAAAA0AAAAEAA0AAAAAAA0AAAAEAA4AAAAAAA0AAAAFAAoAAAAAAA0AAAAFAAsAAAAAAA0AAAAFAAwAAAAAAA0AAAAFAA0AAAAAAA0AAAAFAA4AAAAAAA0AAAAGAAoAAAAAAA0AAAAGAAsAAAAAAA0AAAAGAAwAAAAAAA0AAAAGAA0AAAAAAA0AAAAGAA4AAAAAAA0AAAAHAAoAAAAAAA0AAAAHAAsAAAAAAA0AAAAHAAwAAAAAAA0AAAAHAA0AAAAAAA0AAAAHAA4AAAAAAA0AAAAIAAoAAAAAAA0AAAAIAAsAAAAAAA0AAAAIAAwAAAAAAA0AAAAIAA0AAAAAAA0AAAAIAA4AAAAAAA0AAAAJAAoAAAAAAA0AAAAJAAsAAAAAAA0AAAAJAAwAAAAAAA0AAAAJAA0AAAAAAA0AAAAJAA4AAAAAAA0AAAAKAAoAAAAAAA0AAAAKAAsAAAAAAA0AAAAKAAwAAAAAAA0AAAAKAA0AAAAAAA0AAAAKAA4AAAAAAA0AAAALAAoAAAAAAA0AAAALAAsAAAAAAA0AAAALAAwAAAAAAA0AAAALAA0AAAAAAA0AAAALAA4AAAAAAA0AAAAMAAoAAAAAAA0AAAAMAAsAAAAAAA0AAAAMAAwAAAAAAA0AAAAMAA0AAAAAAA0AAAAMAA4AAAAAAA0AAAANAAoAAAAAAA0AAAANAAsAAAAAAA0AAAANAAwAAAAAAA0AAAANAA0AAAAAAA0AAAANAA4AAAAAAA0AAAAOAAoAAAAAAA0AAAAOAAsAAAAAAA0AAAAOAAwAAAAAAA0AAAAOAA0AAAAAAA0AAAAOAA4AAAAAAA0AAAAPAAoAAAAAAA0AAAAPAAsAAAAAAA0AAAAPAAwAAAAAAA0AAAAPAA0AAAAAAA0AAAAPAA4AAAAAAA0AAAA=")
+tile_set = ExtResource("2_sjalr")
+
+[node name="Skyline" type="Sprite2D" parent="."]
+position = Vector2(0, 80)
+scale = Vector2(3, 3)
+texture = ExtResource("3_0cpc7")
+centered = false
+
+[node name="Background" type="TileMapLayer" parent="."]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAKAAwAAAAKAAkAAAALAAwAAAAKAAkAAAALAAsAAAAJAAkAAAALAAoAAAAKAAkAAAAMAAoAAAAJAAkAAAAMAAsAAAAKAAkAAAAMAAwAAAAKAAkAAAANAAwAAAAKAAkAAAAOAAsAAAAKAAkAAAAOAAoAAAAKAAkAAAANAAoAAAAJAAkAAAANAAsAAAAJAAkAAAAOAAwAAAAKAAkAAAAMAA0AAAAIAAoAAAANAA0AAAAIAAoAAAAOAA0AAAAIAAoAAAAQAA4AAAAIAAoAAAAPAA4AAAAJAAoAAAAOAA4AAAAIAAoAAAANAA4AAAAIAAoAAAAMAA4AAAAIAAoAAAALAA4AAAAIAAoAAAAKAA4AAAAIAAoAAAAJAA4AAAAKAAoAAAAIAA4AAAAKAAoAAAAHAA4AAAAIAAoAAAAHAA8AAAAKAAoAAAAIAA8AAAAIAAoAAAAJAA8AAAAKAAoAAAAKAA8AAAAKAAoAAAALAA8AAAAKAAoAAAAMAA8AAAAKAAoAAAANAA8AAAAKAAoAAAAOAA8AAAAKAAoAAAAQAA8AAAAKAAoAAAAQAA0AAAAJAAoAAAALAA0AAAAKAAoAAAAPAA0AAAAJAAoAAAAIABAAAAAJAAoAAAAHABAAAAAJAAoAAAAJABAAAAAKAAoAAAAKABAAAAAJAAoAAAABAAoAAAAJAAYAAAAJAAMAAAAJAAYAAAAJAAEAAAAJAAYAAAADAAwAAAALAAYAAAADAAoAAAALAAYAAAADAAgAAAALAAYAAAADAAYAAAALAAYAAAABAAgAAAAJAAYAAAACAAUAAAAJAAgAAAACAAQAAAAKAAgAAAABAAEAAAAMAAkAAAABAAIAAAANAAgAAAABAAMAAAAPAAgAAAABAAQAAAAPAAkAAAABAAUAAAANAAoAAAACAAMAAAAMAAgAAFACAAIAAAALAAgAAAACAAEAAAAKAAgAAAADAAEAAAAJAAgAAFAEAAEAAAAOAAkAAAAEAAIAAAALAAgAAAAEAAMAAAANAAoAAFACAAYAAAANAAoAAFAFAAMAAAAMAAkAAAAFAAQAAAANAAoAAAAFAAIAAAAOAAgAAAAFAAEAAAAOAAgAAAADAAIAAAAOAAgAAAAKAAsAAAAJAAkAAAAPAAwAAAAJAAkAAAALAAgAAAAJAAYAAAALAAYAAAAJAAYAAAALAAQAAAAJAAYAAAADAAQAAAAJAAgAAAADAAMAAAAJAAgAAAAEAAQAAAAJAAgAAAABAAwAAAAJAAYAAAA=")
+tile_set = ExtResource("2_sjalr")
+
+[node name="CollisionTiles" type="TileMapLayer" parent="."]
+use_parent_material = true
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAAAAAABAASAAIAAAAAAAEABAAXAAIAAAAAAAIABAAXAAIAAAAAAAMABAAXAAIAAAAAAAQABAAXAAIAAAAAAAUABAAXAAIAAAAAAAYABAASAAMAAAAAAA8ABAAJAAIAAAAAAA4ABAAJAAIAAAAAAA0ABAAJAAIAAAAAAAwABAAJAAIAAAAAAAsABAAGAAEAAAAAAAoABAALAAIAAAAAAAkABAALAAAAAAABAA8ABAAJAAIAAAACAA8ABAAJAAIAAAADAA8ABAAJAAIAAAAEAA8ABAAJAAIAAAAFAA8ABAAJAAIAAAAGAA8ABAALAAIAAAAJAA8ABAAIAAAAAAAKAA8ABAAKAAAAAAALAA8ABAAKAAAAAAAMAA8ABAAKAAAAAAANAA8ABAAKAAAAAAAOAA8ABAAKAAAAAAAPAA8ABAAKAAAAAAAPAAkAAAAOAAQAAAAPAAoAAAAOAAYAAAAPAAsAAAAOAAYAAAAPAA0ABQABAAAAAAAPAAwAAAAOAAcAAAABAAAABAAVAAMAAAACAAAABAAVAAMAAAADAAAABAAVAAMAAAAEAAAABAAVAAMAAAAFAAAABAARAAIAAAAGAAAABAAXAAIAAAAJAAAABAAUAAMAAAAKAAAABAAVAAMAAAALAAAABAARAAIAAAABAAYABAAOAAMAAAACAAYABAAPAAMAAAADAAIABAAMAAAAAAADAAMABAAMAAEAAAADAAQABAANAAIAAAAEAAQABAAOAAMAAAAFAAQABAAPAAMAAAAFAAEABAAUAAMAAAAGAAEABAAXAAMAAAAMAAAABAAVAAIAAAALAAEABAAUAAEAAAALAAIABAAUAAEAAAALAAMABAAUAAMAAAAMAAMABAAVAAMAAAAMAAIABAAVAAIAAAAMAAEABAAVAAIAAAAOAAkAAAAMAAQAAAANAAkAAAANAAQAAAAMAAkAAAAMAAQAAAALAAkAAAANAAQAAAAKAAkAAAAKAAQAAAAGAA4ABAALAAIAAAAFAA4ABAAJAAIAAAAEAA4ABAAJAAIAAAADAA4ABAAJAAIAAAACAA4ABAAJAAIAAAABAA4ABAAJAAIAAAABAA0ABAAJAAIAAAACAA0ABAAGAAEAAAADAA0ABAAKAAAAAAAEAA0ABAAKAAAAAAAFAA0ABAAKAAAAAAAGAA0ABAAGAAAAAAAHAA0ABAACAAMAAAAIAA0ABAACAAMAAAALAA0ABQABAAAAAAAMAA0ABQACAAAAAAAKAAoAAAAOAAYAAAAOAA0ABQADAAAAAAAKAAsAAAALAAUAAAABAAsABAAKAAAAAAACAAsABAALAAAAAAACAAwABAALAAIAAAABAAwABAAJAAIAAAAEAAMAAAANAAMAAAACAAIAAQABAAUAAAABAAQAAQADAAUAAAANAA0AAQAAAAYAAAAIAA8AAQAAAAAAAAAHAAQAAQADAAUAAAAIAAEAAQADAAUAAAAHAAEAAQACAAUAAAAKAAMAAQACAAUAAAAJAAMAAQABAAUAAAAGAAQAAQACAAUAAAABAAUAAAANAAMAAAD/////BAAUAAAAAAD//wAABAAUAAEAAAD//wEABAAUAAEAAAD//wMABAAUAAEAAAD//wIABAAUAAEAAAD//wQABAAUAAEAAAD//wUABAAUAAEAAAD//wYABAAUAAMAAAAAAP//BAAWAAAAAAACAP//BAAWAAAAAAABAP//BAAWAAAAAAADAP//BAAWAAAAAAAEAP//BAAWAAAAAAAFAP//BAAWAAAAAAAGAP//BAAXAAAAAAAJAP//BAAUAAAAAAAKAP//BAAWAAAAAAALAP//BAAWAAAAAAAMAP//BAAWAAAAAAANAP//BAAXAAAAAAANAAAABAAXAAIAAAANAAEABAAXAAIAAAANAAIABAAXAAIAAAANAAMABAAXAAMAAAD//wkABAAIAAAAAAD//woABAAIAAEAAAD//wsABAAIAAEAAAD//wwABAAIAAEAAAD//w0ABAAIAAEAAAD//w4ABAAIAAEAAAD//w8ABAAIAAEAAAD//xAABAAIAAMAAAAAABAABAAJAAMAAAABABAABAAJAAMAAAACABAABAAJAAMAAAADABAABAAJAAMAAAAEABAABAAJAAMAAAAFABAABAAJAAMAAAAGABAABAALAAMAAAAJABAABAAIAAMAAAAKABAABAAJAAMAAAANABAABAAJAAMAAAAMABAABAAJAAMAAAALABAABAAJAAMAAAAOABAABAAJAAMAAAAPABAABAAJAAMAAAAQABAABAALAAMAAAAQAA8ABAALAAAAAAAQAA0ABQACAAAAAAAQAAwABAAAAAIAAAAQAAsABAAAAAEAAAAQAAoABAAAAAEAAAAQAAkABAAAAAAAAAAKAA0ABQAAAAAAAAAJAA0ABAACAAMAAAADAAwAAAAKAAMAAAA=")
+tile_set = ExtResource("2_sjalr")
+
+[node name="Foreground" type="TileMapLayer" parent="."]
+scale = Vector2(3, 3)
+tile_set = ExtResource("2_sjalr")
+
+[node name="Decoration" type="Node2D" parent="."]
+
+[node name="TreeSprite" type="Sprite2D" parent="Decoration"]
+position = Vector2(232, 477)
+scale = Vector2(3, 3)
+texture = ExtResource("4_0sl33")
+centered = false
+
+[node name="BushSprite" type="Sprite2D" parent="Decoration"]
+position = Vector2(172, 579)
+scale = Vector2(3, 3)
+texture = ExtResource("5_sn4bb")
+centered = false
+region_enabled = true
+region_rect = Rect2(16, 64, 16, 16)
+
+[node name="BushSprite2" type="Sprite2D" parent="Decoration"]
+position = Vector2(68, 483.00003)
+scale = Vector2(3, 3)
+texture = ExtResource("5_sn4bb")
+centered = false
+region_enabled = true
+region_rect = Rect2(16, 64, 16, 16)
+
+[node name="Objects" type="Node2D" parent="."]
+
+[node name="Conveyor" parent="Objects" node_paths=PackedStringArray("display_sprite") instance=ExtResource("6_25f7m")]
+position = Vector2(192, 312)
+curve = SubResource("Curve2D_b713g")
+display_sprite = NodePath("RigidBody2D/Sprite2D")
+travel_time = 2.0
+wait_time = 0.5
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Objects/Conveyor"]
+collision_layer = 16
+collision_mask = 2
+gravity_scale = 0.0
+freeze = true
+freeze_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Objects/Conveyor/RigidBody2D"]
+scale = Vector2(3, 3)
+texture = ExtResource("7_n3p5x")
+region_enabled = true
+region_rect = Rect2(16, 64, 32, 16)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Objects/Conveyor/RigidBody2D"]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape2D_5d6x8")
+one_way_collision = true
+metadata/_edit_lock_ = true
+
+[node name="Player" parent="." instance=ExtResource("8_ef6q7")]
+position = Vector2(381, 524)
+run_speed = 260.0
+air_speed = 260.0
+
+[node name="DebugTeleporter" type="Node" parent="Player" node_paths=PackedStringArray("teleport_locations")]
+script = ExtResource("9_02owh")
+teleport_locations = [NodePath("../../DebugPoints/DebugPoint"), NodePath("../../DebugPoints/DebugPoint2"), NodePath("../../DebugPoints/DebugPoint3")]
+metadata/_custom_type_script = "uid://b8s22g74qlh6j"
+
+[node name="ForegroundTiles" type="TileMapLayer" parent="."]
+use_parent_material = true
+scale = Vector2(3, 3)
+tile_set = ExtResource("2_sjalr")
+
+[node name="RoomBoundaries" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Left" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Left"]
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Right" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Right"]
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Up" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Up"]
+rotation = 3.1415927
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Down" type="Area2D" parent="RoomBoundaries"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
+shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Collectables" type="Node2D" parent="."]
+
+[node name="Collectable" parent="Collectables" instance=ExtResource("10_381ld")]
+position = Vector2(331.55524, 163.24869)
+
+[node name="DebugPoints" type="Node" parent="."]
+
+[node name="DebugPoint" type="Node2D" parent="DebugPoints"]
+position = Vector2(91.929504, 244.22995)
+script = ExtResource("11_x10f8")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint2" type="Node2D" parent="DebugPoints"]
+position = Vector2(712.1756, 393.30197)
+script = ExtResource("11_x10f8")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint3" type="Node2D" parent="DebugPoints"]
+position = Vector2(485.90552, 124.43994)
+script = ExtResource("11_x10f8")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="CheckpointArea" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(462.7637, 561.1557)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea"]
+position = Vector2(-449.45462, -188.1557)
+shape = SubResource("RectangleShape2D_wfb5j")
+debug_color = Color(0.63666904, 0.5256932, 0.090491615, 0.41960785)
+
+[node name="CheckpointArea3" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(740.3009, 390.68536)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea3"]
+position = Vector2(5.6990967, 282.31464)
+shape = SubResource("RectangleShape2D_wfb5j")
+debug_color = Color(0.63666904, 0.5256932, 0.090491615, 0.41960785)
+
+[node name="CheckpointArea4" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(740.3009, 390.68536)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea4"]
+position = Vector2(7.6990967, -22.685364)
+shape = SubResource("RectangleShape2D_wfb5j")
+debug_color = Color(0.63666904, 0.5256932, 0.090491615, 0.41960785)
+
+[node name="CheckpointArea5" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(740.3009, 390.68536)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea5"]
+position = Vector2(-324.3009, 302.81464)
+shape = SubResource("RectangleShape2D_32v3e")
+debug_color = Color(0.63666904, 0.5256932, 0.090491615, 0.41960785)
+
+[node name="CheckpointArea6" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(740.3009, 390.68536)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea6"]
+position = Vector2(-360.3009, -387.43536)
+shape = SubResource("RectangleShape2D_32v3e")
+debug_color = Color(0.63666904, 0.5256932, 0.090491615, 0.41960785)
+
+[node name="CheckpointArea7" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(740.3009, 390.68536)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea7"]
+position = Vector2(-363.3009, 214.31464)
+shape = SubResource("RectangleShape2D_32v3e")
+debug_color = Color(0.63666904, 0.5256932, 0.090491615, 0.41960785)
+
+[node name="CheckpointArea2" parent="Checkpoints" instance=ExtResource("12_cqtw8")]
+position = Vector2(169.9437, 66.02364)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea2"]
+position = Vector2(-3.4718475, 3.9763565)
+shape = SubResource("RectangleShape2D_fvnuo")
+debug_color = Color(0.65091634, 0.51597965, 0.17585784, 0.41960785)
+
+[connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
+[connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
+[connection signal="body_entered" from="RoomBoundaries/Up" to="." method="_player_left_screen"]
+[connection signal="body_entered" from="RoomBoundaries/Down" to="." method="_player_left_screen"]

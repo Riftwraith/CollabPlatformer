@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://b1byr4g1xbvoi"]
+[gd_scene load_steps=12 format=4 uid="uid://b1byr4g1xbvoi"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_ly1pc"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_esa8x"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="5_bbxpk"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/platforms.png" id="6_esa8x"]
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="6_u0s2v"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="8_1gint"]
 
 [sub_resource type="Curve2D" id="Curve2D_esa8x"]
 _data = {
@@ -123,6 +124,11 @@ script = ExtResource("5_bbxpk")
 metadata/_custom_type_script = "uid://tq3f6llby3r"
 
 [node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="Collectables" type="Node2D" parent="."]
+
+[node name="Collectable" parent="Collectables" instance=ExtResource("8_1gint")]
+position = Vector2(331.55524, 163.24869)
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

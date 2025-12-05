@@ -16,8 +16,6 @@ var map_coords: Vector2i = Vector2i(0, 0)
 @onready var up_boundary = $RoomBoundaries/Up
 @onready var down_boundary = $RoomBoundaries/Down
 
-@onready var checkpoint_layer = $Checkpoints #All checkpoints are Area2Ds tied to this 
-
 var last_safe_player_position:= 0.5 * map_coords
 
 #Dictionary that contains anything that needs to be remembered when the room is exited and re-entered
@@ -47,9 +45,15 @@ func _ready():
 	down_boundary.position = room_bounds + Vector2(0, exit_leeway)
 	
 	#Load all checkpoint areas
-	for checkpoint in checkpoint_layer.get_children():# as Array[CheckpointArea]:
+	for checkpoint in get_tree().get_nodes_in_group("checkpoint_areas") as Array[CheckpointArea]:
 		checkpoint.entered.connect(_on_checkpoint_entered)
 	
+	for collectable in get_tree().get_nodes_in_group("collectables") as Array[Collectable]:
+		if scene_file_path in RoomManager.rooms_with_obtained_collectables:
+			collectable.queue_free()
+		else:
+			collectable.obtained.connect(_on_collectable_obtained)
+
 	player.death_end.connect(_player_died)
 	
 	if savedata_updated:
@@ -57,6 +61,9 @@ func _ready():
 
 func _on_checkpoint_entered(checkpoint: CheckpointArea, _body): 
 	current_checkpoint = checkpoint
+
+func _on_collectable_obtained(_collectable: Collectable, _body):
+	RoomManager.record_obtained_collectable(scene_file_path)
 
 func _player_died():
 	respawn_player(current_respawn_point)
@@ -94,6 +101,7 @@ func player_enter( #called when player enters the room from a different room
 	player.control_enabled = false
 	await get_tree().create_timer(enter_override_time).timeout
 	player.control_enabled = true
+
 
 
 func _on_player_exit(direction: Vector2i): #move to neighbouring room if possible, otherwise respawn player

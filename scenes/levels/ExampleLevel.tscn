@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://bwoes2mblt87m"]
+[gd_scene load_steps=13 format=4 uid="uid://bwoes2mblt87m"]
 
 [ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_3d5ku"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_g18pg"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="3_g18pg"]
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="4_ekwi3"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/platforms.png" id="5_siqlb"]
+[ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/checkpoint_area.tscn" id="7_m2jqj"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="7_siqlb"]
 
 [sub_resource type="Curve2D" id="Curve2D_m2jqj"]
 _data = {
@@ -18,8 +20,8 @@ size = Vector2(96.000015, 24)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekwi3"]
-size = Vector2(336, 324)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uydk0"]
+size = Vector2(48, 222)
 
 [node name="Room0" type="Node2D"]
 script = ExtResource("1_3d5ku")
@@ -79,9 +81,11 @@ position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_4nl1t")
 one_way_collision = true
 
+[node name="Collectable" parent="MovingPlatforms/Conveyor/RigidBody2D" instance=ExtResource("7_siqlb")]
+position = Vector2(-0.2942505, -69.852875)
+
 [node name="Player" parent="." instance=ExtResource("3_8luox")]
 position = Vector2(246, 585)
-collision_layer = 2
 
 [node name="RoomBoundaries" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
@@ -122,15 +126,13 @@ shape = SubResource("WorldBoundaryShape2D_2nifc")
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
-[node name="Checkpoint0" type="Area2D" parent="Checkpoints"]
-position = Vector2(614.29034, 501.16214)
-collision_layer = 0
-collision_mask = 2
+[node name="CheckpointArea" parent="Checkpoints" instance=ExtResource("7_m2jqj")]
+position = Vector2(480, 264)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint0"]
-position = Vector2(33.709656, -3.16214)
-shape = SubResource("RectangleShape2D_ekwi3")
-debug_color = Color(0.63204, 0.69, 0.25530002, 0.41960785)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea"]
+position = Vector2(252, 84)
+shape = SubResource("RectangleShape2D_uydk0")
+debug_color = Color(0.6494426, 0.51744217, 0.15714636, 0.41960785)
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

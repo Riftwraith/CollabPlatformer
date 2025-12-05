@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://cqprps27blrwt"]
+[gd_scene load_steps=11 format=4 uid="uid://cqprps27blrwt"]
 
 [ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_3445o"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_h8rci"]
@@ -6,11 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://7k613xbni0a1" path="res://scenes/prefabs/slime_purple.tscn" id="5_5qruf"]
 [ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/checkpoint_area.tscn" id="6_2wtpf"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="6_juv4i"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="7_ry2mu"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ry2mu"]
 size = Vector2(120, 175)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5h7mk"]
+size = Vector2(85, 148)
 
 [node name="Room0" type="Node2D"]
 script = ExtResource("1_3445o")
@@ -112,6 +116,19 @@ position = Vector2(377.39227, 594.92084)
 position = Vector2(145.60773, -42.420837)
 shape = SubResource("RectangleShape2D_ry2mu")
 debug_color = Color(0.6458469, 0.5194328, 0.15265414, 0.41960785)
+
+[node name="CheckpointArea2" parent="Checkpoints" instance=ExtResource("6_2wtpf")]
+position = Vector2(377.39227, 594.92084)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea2"]
+position = Vector2(-6.892273, 68.07916)
+shape = SubResource("RectangleShape2D_5h7mk")
+debug_color = Color(0.6458469, 0.5194328, 0.15265414, 0.41960785)
+
+[node name="Collectables" type="Node2D" parent="."]
+
+[node name="Collectable" parent="Collectables" instance=ExtResource("7_ry2mu")]
+position = Vector2(431.57007, 84.52002)
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

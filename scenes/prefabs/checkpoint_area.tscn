@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cjgvi0w2qyiel" path="res://scripts/CheckpointArea.gd" id="1_wuf60"]
 
-[node name="CheckpointArea" type="Area2D"]
+[node name="CheckpointArea" type="Area2D" groups=["checkpoint_areas"]]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_wuf60")

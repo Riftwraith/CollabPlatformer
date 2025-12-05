@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=4 uid="uid://c8a80dokmsju"]
+[gd_scene load_steps=9 format=4 uid="uid://c8a80dokmsju"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_8bc4m"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_8bc4m"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_ljwso"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="4_jbsyo"]
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="5_8bc4m"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_ba6c5"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
@@ -22,7 +23,6 @@ tile_set = ExtResource("2_8bc4m")
 
 [node name="Player" parent="." instance=ExtResource("3_ljwso")]
 position = Vector2(374, 175)
-collision_layer = 2
 run_speed = 260.0
 air_speed = 260.0
 
@@ -101,6 +101,11 @@ collision_mask = 2
 position = Vector2(-232.29034, -311.16214)
 shape = SubResource("RectangleShape2D_8bc4m")
 debug_color = Color(0.63204, 0.69, 0.25530002, 0.41960785)
+
+[node name="Collectables" type="Node2D" parent="."]
+
+[node name="Collectable" parent="Collectables" instance=ExtResource("6_ba6c5")]
+position = Vector2(331.55524, 163.24869)
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

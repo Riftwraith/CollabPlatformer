@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://exe8wmfxkmwy"]
+[gd_scene load_steps=13 format=4 uid="uid://exe8wmfxkmwy"]
 
 [ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_5n3p8"]
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_5n3p8"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_a3ws7"]
 [ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="4_iv3rn"]
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="5_litjp"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="7_a3ws7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2nifc"]
 texture = ExtResource("2_5n3p8")
@@ -252,7 +253,10 @@ texture = ExtResource("5_litjp")
 position = Vector2(-2.3469849, -0.15002441)
 shape = SubResource("RectangleShape2D_q4iis")
 
-[node name="SafePlayerTimer" type="Timer" parent="."]
+[node name="Collectables" type="Node2D" parent="."]
+
+[node name="Collectable" parent="Collectables" instance=ExtResource("7_a3ws7")]
+position = Vector2(35.906982, 669.494)
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

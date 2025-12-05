@@ -4,12 +4,18 @@ extends Node
 @onready var fade_rect: ColorRect = $CanvasLayer/FadeRect
 
 var rooms:= {
-	Vector2i(0, 0): "res://scenes/levels/Level.tscn",
-	Vector2i(0, 1): "res://scenes/levels/level2.tscn",
+	Vector2i(0, 0): "res://scenes/levels/example_blockout.tscn",
+	Vector2i(0, 1): "res://scenes/levels/level.tscn",
 	Vector2i(1, 0): "res://scenes/levels/level2.tscn",
-	Vector2i(0, -1): "res://scenes/levels/level2.tscn",
-	Vector2i(-1, 0): "res://scenes/levels/level2.tscn",
+	Vector2i(0, -1): "res://scenes/gyms/slime_gym.tscn",
+	Vector2i(-1, 0): "res://scenes/levels/ExampleLevel.tscn",
 }
+
+var total_collectables: int = 0
+var obtained_collectables: int = 0
+var rooms_with_obtained_collectables: Array[String] = []
+
+var room_savedata:= {}
 
 func get_room_at(pos: Vector2i) -> String:
 	return rooms.get(pos, "")
@@ -19,14 +25,24 @@ func is_room_at(pos: Vector2i) -> bool:
 		return true
 	return false
 
-var room_savedata:= {}
-
 func store_savedata(room_path: String, data: Dictionary):
 	room_savedata[room_path] = data
 
 func _ready():
 	fade_rect.size = get_viewport().size
 	fade_rect.hide()
+	#calculate total collectables 
+	var unique_rooms = []
+	for room in rooms:
+		if room not in unique_rooms:
+			unique_rooms.append(room)
+			total_collectables += 1
+
+func record_obtained_collectable(room_path: String):
+	if room_path not in rooms_with_obtained_collectables:
+		rooms_with_obtained_collectables.append(room_path)
+		obtained_collectables += 1
+		print(str(obtained_collectables) + " / " + str(total_collectables))
 
 func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2i, player_pos: Vector2, player_vel: Vector2):
 	await fade_out(direction)
