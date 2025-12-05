@@ -48,7 +48,7 @@ var is_on_safe_ground: bool: #this is a varible that automatically updates
 #region Public functions 
 func respawn() -> void:
 	velocity = Vector2.ZERO
-	#disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE #disable collision
+	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE #disable collision
 	gravity_controller.enabled = true
 	control_enabled = false
 	anim_busy = true
