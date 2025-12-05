@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c36j5jvgrb4sv"]
+[gd_scene load_steps=3 format=3 uid="uid://c36j5jvgrb4sv"]
 
 [ext_resource type="Script" uid="uid://b21mhaxjkjlnh" path="res://scripts/RoomManager.gd" id="1_67wb0"]
+[ext_resource type="PackedScene" uid="uid://qm61ordp7g6r" path="res://scenes/prefabs/gui.tscn" id="2_v5o8e"]
 
 [node name="RoomManager" type="Node"]
 script = ExtResource("1_67wb0")
@@ -10,3 +11,5 @@ script = ExtResource("1_67wb0")
 [node name="FadeRect" type="ColorRect" parent="CanvasLayer"]
 offset_right = 768.0
 offset_bottom = 768.0
+
+[node name="GUI" parent="." instance=ExtResource("2_v5o8e")]

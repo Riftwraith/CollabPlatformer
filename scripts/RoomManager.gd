@@ -2,6 +2,7 @@
 extends Node
 
 @onready var fade_rect: ColorRect = $CanvasLayer/FadeRect
+@onready var GUI = $GUI
 
 var rooms:= {
 	Vector2i(0, 0): "res://scenes/levels/example_blockout.tscn",
@@ -42,7 +43,7 @@ func record_obtained_collectable(room_path: String):
 	if room_path not in rooms_with_obtained_collectables:
 		rooms_with_obtained_collectables.append(room_path)
 		obtained_collectables += 1
-		print(str(obtained_collectables) + " / " + str(total_collectables))
+		GUI.flash_collectables()
 
 func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2i, player_pos: Vector2, player_vel: Vector2):
 	await fade_out(direction)

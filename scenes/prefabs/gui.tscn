@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://qm61ordp7g6r"]
+
+[ext_resource type="Script" uid="uid://deq5k2ly33a3g" path="res://scripts/gui.gd" id="1_3thbu"]
+[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/keycap.png" id="1_orohx"]
+[ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="2_3thbu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwg38"]
+atlas = ExtResource("1_orohx")
+region = Rect2(0, 0, 12, 14)
+
+[sub_resource type="LabelSettings" id="LabelSettings_t4pu0"]
+font = ExtResource("2_3thbu")
+font_size = 8
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="GUI" type="CanvasLayer"]
+script = ExtResource("1_3thbu")
+
+[node name="CollectableGUI" type="HBoxContainer" parent="."]
+offset_left = 36.0
+offset_top = 33.0
+offset_right = 79.0
+offset_bottom = 47.0
+scale = Vector2(3, 3)
+
+[node name="KeycapTexture" type="TextureRect" parent="CollectableGUI"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_gwg38")
+
+[node name="CollectableLabel" type="Label" parent="CollectableGUI"]
+layout_mode = 2
+text = "1 / 2"
+label_settings = SubResource("LabelSettings_t4pu0")

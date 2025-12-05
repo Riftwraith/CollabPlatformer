@@ -1,8 +1,37 @@
-[gd_scene load_steps=5 format=3 uid="uid://blrkhaisjfeem"]
+[gd_scene load_steps=9 format=3 uid="uid://blrkhaisjfeem"]
 
-[ext_resource type="Texture2D" uid="uid://bbmhjqjf5t3fx" path="res://sprites/fruit.png" id="1_2bg5n"]
 [ext_resource type="Script" uid="uid://dd3ui3qwa0mx6" path="res://scripts/Collectable.gd" id="1_axuaq"]
+[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/keycap.png" id="2_lh631"]
 [ext_resource type="AudioStream" uid="uid://c2c1mjq6s0ek7" path="res://sounds/coin.wav" id="3_lh631"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lh631"]
+atlas = ExtResource("2_lh631")
+region = Rect2(0, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10mdb"]
+atlas = ExtResource("2_lh631")
+region = Rect2(12, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r3ml4"]
+atlas = ExtResource("2_lh631")
+region = Rect2(24, 0, 12, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_da4e6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lh631")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10mdb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r3ml4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_axuaq"]
 radius = 27.166155
@@ -10,11 +39,11 @@ radius = 27.166155
 [node name="Collectable" type="Node2D" groups=["collectables"]]
 script = ExtResource("1_axuaq")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3, 3)
-texture = ExtResource("1_2bg5n")
-region_enabled = true
-region_rect = Rect2(0, 16, 16, 16)
+sprite_frames = SubResource("SpriteFrames_da4e6")
+frame = 2
+frame_progress = 1.0
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 0
