@@ -274,6 +274,7 @@ radius = 14.0
 height = 42.0
 
 [node name="Player" type="CharacterBody2D"]
+collision_layer = 2
 collision_mask = 21
 script = ExtResource("1_onrkg")
 run_speed = 250.0
@@ -288,24 +289,30 @@ frame = 5
 frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 15)
+position = Vector2(0, 15)
 shape = SubResource("CapsuleShape2D_onrkg")
 
 [node name="FloorRayCasts" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
 
 [node name="FrontRay" type="RayCast2D" parent="FloorRayCasts"]
-position = Vector2(20, 0)
+position = Vector2(17, 0)
+target_position = Vector2(0, 100)
+collision_mask = 17
 
 [node name="BackRay" type="RayCast2D" parent="FloorRayCasts"]
-position = Vector2(-20, 0)
+position = Vector2(-17, 0)
+target_position = Vector2(0, 100)
+collision_mask = 17
 
 [node name="InteractArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_i3pqv")
+debug_color = Color(0.91, 0.16380002, 0.63639325, 0.11764706)
 
 [node name="Sounds" type="Node" parent="."]
 
@@ -313,12 +320,13 @@ shape = SubResource("CircleShape2D_i3pqv")
 stream = ExtResource("3_i3pqv")
 
 [node name="Hurtbox" type="Area2D" parent="."]
-collision_layer = 2
+collision_layer = 0
 collision_mask = 32
 
 [node name="Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 15)
 shape = SubResource("CapsuleShape2D_n0leu")
+debug_color = Color(0.99999994, 0.0065418356, 0.07833681, 0.41960785)
 
 [node name="GravityController" parent="." instance=ExtResource("4_8cdkg")]
 

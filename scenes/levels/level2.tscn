@@ -174,13 +174,14 @@ tile_set = ExtResource("2_d5djh")
 
 [node name="Player" parent="." instance=ExtResource("3_r6vdu")]
 position = Vector2(374, 175)
-collision_layer = 2
 
 [node name="ForegroundTiles" type="TileMapLayer" parent="."]
 use_parent_material = true
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAKAAQAAAAGAAYAAAAFAAQAAAABAAYAAAADAAYAAAAEAAkAAAAEAAYAAAAEAAkAAAAFAAYAAAAEAAkAAAAGAAYAAAAEAAkAAAAHAAYAAAAEAAkAAAAIAAYAAAAEAAkAAAAJAAYAAAAEAAkAAAAKAAYAAAAEAAkAAAALAAYAAAAEAAkAAAAEAAQAAAAAAAcAAAA=")
 tile_set = SubResource("TileSet_wkftn")
+
+[node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="RoomBoundaries" type="Node2D" parent="."]
 metadata/_edit_lock_ = true

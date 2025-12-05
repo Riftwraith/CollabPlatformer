@@ -16,6 +16,7 @@ var map_coords: Vector2i = Vector2i(0, 0)
 @onready var up_boundary = $RoomBoundaries/Up
 @onready var down_boundary = $RoomBoundaries/Down
 
+@onready var checkpoint_layer = $Checkpoints #All checkpoints are Area2Ds tied to this 
 
 var last_safe_player_position:= 0.5 * map_coords
 
@@ -23,6 +24,9 @@ var last_safe_player_position:= 0.5 * map_coords
 #Eg what enemies have been killed, doors opened etc
 var savedata:= {}
 var savedata_updated := false
+
+var current_checkpoint: Area2D = null 
+var current_respawn_point: Vector2 = 0.5 * room_bounds
 
 func load_savedata(_data: Dictionary): #apply savedata to objects in room (eg remove enemies that were previously killed)
 	pass
@@ -42,13 +46,20 @@ func _ready():
 	up_boundary.position = Vector2(0, -1 * exit_leeway)
 	down_boundary.position = room_bounds + Vector2(0, exit_leeway)
 	
+	#Load all checkpoint areas
+	for checkpoint in checkpoint_layer.get_children():# as Array[CheckpointArea]:
+		checkpoint.entered.connect(_on_checkpoint_entered)
+	
 	player.death_end.connect(_player_died)
 	
 	if savedata_updated:
 		load_savedata(savedata)
 
+func _on_checkpoint_entered(checkpoint: CheckpointArea, _body): 
+	current_checkpoint = checkpoint
+
 func _player_died():
-	respawn_player(last_safe_player_position)
+	respawn_player(current_respawn_point)
 
 func _player_left_screen(_body): #receives signal from boundary areas when the player enters them
 	if player.position.x < 0:
@@ -115,5 +126,8 @@ func _process(_delta):
 	#check if player on ground & within bounds: if so, save position
 	if _player_in_bounds() and player.is_on_safe_ground:
 		last_safe_player_position = player.position
-	else: 
-		pass
+
+	if current_checkpoint:
+		if current_checkpoint.overlaps_body(player):
+			if player.is_safe_position_below():
+				current_respawn_point = player.get_safe_position_below()

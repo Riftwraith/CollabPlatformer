@@ -178,7 +178,6 @@ tile_set = ExtResource("2_a3ws7")
 
 [node name="Player" parent="." instance=ExtResource("3_a3ws7")]
 position = Vector2(374, 175)
-collision_layer = 2
 
 [node name="ForegroundTiles" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -222,6 +221,8 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
 shape = SubResource("WorldBoundaryShape2D_2nifc")
+
+[node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
 position = Vector2(86.983475, 197.23965)

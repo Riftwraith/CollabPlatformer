@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://c8a80dokmsju"]
+[gd_scene load_steps=8 format=4 uid="uid://c8a80dokmsju"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_8bc4m"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_8bc4m"]
@@ -7,6 +7,9 @@
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="5_8bc4m"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8bc4m"]
+size = Vector2(247, 210)
 
 [node name="PlayerControllerGym" type="Node2D"]
 script = ExtResource("1_8bc4m")
@@ -86,6 +89,18 @@ metadata/_custom_type_script = "uid://tq3f6llby3r"
 position = Vector2(46, 175)
 script = ExtResource("5_8bc4m")
 metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="Checkpoint0" type="Area2D" parent="Checkpoints"]
+position = Vector2(614.29034, 501.16214)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint0"]
+position = Vector2(-232.29034, -311.16214)
+shape = SubResource("RectangleShape2D_8bc4m")
+debug_color = Color(0.63204, 0.69, 0.25530002, 0.41960785)
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

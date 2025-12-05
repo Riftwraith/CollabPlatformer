@@ -55,7 +55,6 @@ one_way_collision = true
 
 [node name="Player" parent="." instance=ExtResource("3_1gint")]
 position = Vector2(374, 175)
-collision_layer = 2
 run_speed = 260.0
 air_speed = 260.0
 
@@ -122,6 +121,8 @@ metadata/_custom_type_script = "uid://tq3f6llby3r"
 position = Vector2(46, 175)
 script = ExtResource("5_bbxpk")
 metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="Checkpoints" type="Node2D" parent="."]
 
 [connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
 [connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]

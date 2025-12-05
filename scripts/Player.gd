@@ -12,6 +12,7 @@ class_name Player
 @export var jump_peak_threshold = 50 #when velocity.y is greater than this, have passed jump peak
 
 @onready var hurtbox: Area2D = $Hurtbox
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var interact_area: Area2D = $InteractArea
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var anim_initial_scale: Vector2 = anim_sprite.scale
@@ -25,6 +26,7 @@ var control_enabled: bool = true #accepts player input or not
 var anim_busy: bool = false #lock animation (eg for respawning)
 
 var jump_speed: float
+var player_height: float #distance from origin to player's feet
 var jumping_up: bool = false #flag if releasing "jump" should reduce velocity.y
 var prev_grounded = false
 
@@ -46,7 +48,7 @@ var is_on_safe_ground: bool: #this is a varible that automatically updates
 #region Public functions 
 func respawn() -> void:
 	velocity = Vector2.ZERO
-	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE #disable collision
+	#disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE #disable collision
 	gravity_controller.enabled = true
 	control_enabled = false
 	anim_busy = true
@@ -60,6 +62,20 @@ func respawn() -> void:
 	control_enabled = true
 	anim_busy = false
 	spawn_end.emit()
+
+func is_safe_position_below() -> bool:
+	if not front_ray.is_colliding() or not back_ray.is_colliding():
+		return false
+	var front_y = front_ray.get_collision_point().y
+	var back_y = back_ray.get_collision_point().y
+	if back_y == front_y:
+		return true
+	return false
+
+func get_safe_position_below() -> Vector2:
+	if not is_safe_position_below(): 
+		return Vector2.ZERO
+	return Vector2(position.x, front_ray.get_collision_point().y - player_height)
 #endregion
 
 
@@ -67,6 +83,7 @@ func respawn() -> void:
 func _ready():
 	#calculate jump speed so that player has correct jump height
 	jump_speed = sqrt(2*jump_height*gravity_controller.gravity)
+	player_height = 0.5 * collision_shape.shape.height + collision_shape.position.y
 	anim_sprite.animation = "idle"
 	anim_sprite.play()
 
