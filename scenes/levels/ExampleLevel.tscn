@@ -47,11 +47,9 @@ tile_set = ExtResource("2_g18pg")
 [node name="Objects" type="Node2D" parent="."]
 position = Vector2(23, 410)
 
-[node name="Signpost" parent="Objects" instance=ExtResource("3_g18pg")]
-text = "Signpost1 text"
-
 [node name="Signpost2" parent="Objects" instance=ExtResource("3_g18pg")]
 position = Vector2(288, 287)
+text = "The signs look a bit sexier now"
 
 [node name="MovingPlatforms" type="Node2D" parent="."]
 position = Vector2(23, 410)

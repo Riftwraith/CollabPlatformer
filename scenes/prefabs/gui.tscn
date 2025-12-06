@@ -32,3 +32,10 @@ texture = SubResource("AtlasTexture_gwg38")
 layout_mode = 2
 text = "1 / 2"
 label_settings = SubResource("LabelSettings_t4pu0")
+
+[node name="Timers" type="Node" parent="."]
+
+[node name="InteractHold" type="Timer" parent="Timers"]
+one_shot = true
+
+[connection signal="timeout" from="Timers/InteractHold" to="." method="_on_interact_hold_timeout"]
