@@ -8,6 +8,7 @@ class_name Signpost
 		if is_instance_valid(text_label):
 			text_label.text = text
 @onready var sprite = $Sprite2D
+@onready var sprite_mat = sprite.material
 @onready var interactable = $Interactable
 @onready var text_panel = $MarginContainer
 @onready var text_label = $MarginContainer/MarginContainer/Label
@@ -19,17 +20,15 @@ var text_opened = false
 
 
 func _on_focus_start():
-	#sprite.modulate = Color(2, 2, 2, 1)
-	outline_sprite.show()
 	if not text_opened:
 		focus_label.show()
+	sprite_mat.set("shader_parameter/outline_enabled", true) # on
 
 func _on_focus_end():
 	if text_opened:
 		_close_text()
 	focus_label.hide()
-	#sprite.modulate = Color(1, 1, 1, 1)
-	outline_sprite.hide()
+	sprite_mat.set("shader_parameter/outline_enabled", false) # off
 
 
 func _on_interact():
@@ -53,6 +52,6 @@ func _ready():
 		text_panel.hide()
 	text_label.text = text
 	focus_label.hide()
-	outline_sprite.hide()
+	sprite_mat.set("shader_parameter/outline_enabled", false) # off
 
  

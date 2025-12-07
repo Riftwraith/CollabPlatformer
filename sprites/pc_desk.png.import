@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsmrpkmweftyy"
-path="res://.godot/imported/grass_autotile.png-d403bf62f754bb5beca198e1d5b30751.ctex"
+uid="uid://c0wcm43e7tbsa"
+path="res://.godot/imported/pc_desk.png-2ff16508bc31e71f9d41d136c53a1201.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/grass_autotile.png"
-dest_files=["res://.godot/imported/grass_autotile.png-d403bf62f754bb5beca198e1d5b30751.ctex"]
+source_file="res://sprites/pc_desk.png"
+dest_files=["res://.godot/imported/pc_desk.png-2ff16508bc31e71f9d41d136c53a1201.ctex"]
 
 [params]
 

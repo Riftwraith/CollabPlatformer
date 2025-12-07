@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6tso0p65p7jc"
-path="res://.godot/imported/concrete_autotile.png-a56ad039876561232c6248e824c6655a.ctex"
+uid="uid://cb061jylqv6uk"
+path="res://.godot/imported/text_sign.png-e8b2a3944571d1a2464bbe0eceff5562.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/concrete_autotile.png"
-dest_files=["res://.godot/imported/concrete_autotile.png-a56ad039876561232c6248e824c6655a.ctex"]
+source_file="res://sprites/text_sign.png"
+dest_files=["res://.godot/imported/text_sign.png-e8b2a3944571d1a2464bbe0eceff5562.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://70sai727hpy7"]
+[gd_scene load_steps=32 format=4 uid="uid://70sai727hpy7"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_32v3e"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_sjalr"]
@@ -9,10 +9,32 @@
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="6_sjalr"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/platforms.png" id="7_n3p5x"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="8_ef6q7"]
+[ext_resource type="PackedScene" uid="uid://c45th524x8nov" path="res://scenes/prefabs/WoodenDoor.tscn" id="9_0cpc7"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="9_02owh"]
+[ext_resource type="Texture2D" uid="uid://b722guacgpxh4" path="res://sprites/picture_frame.png" id="9_381ld"]
+[ext_resource type="Texture2D" uid="uid://cjpnurs11f12s" path="res://sprites/tutorial_screen.png" id="10_0sl33"]
+[ext_resource type="Texture2D" uid="uid://22kh7m1w2e17" path="res://sprites/tutorial_screen_small.png" id="10_25f7m"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="10_381ld"]
+[ext_resource type="Texture2D" uid="uid://c0wcm43e7tbsa" path="res://sprites/pc_desk.png" id="10_x10f8"]
+[ext_resource type="Texture2D" uid="uid://b43q05p6wbx4y" path="res://sprites/bed.png" id="11_cqtw8"]
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="11_x10f8"]
 [ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/checkpoint_area.tscn" id="12_cqtw8"]
+[ext_resource type="Texture2D" uid="uid://bom1x846li0nm" path="res://sprites/grafitti0.png" id="12_n3p5x"]
+[ext_resource type="Texture2D" uid="uid://bvg8r4ogm41ky" path="res://sprites/lightbulb.png" id="12_yi1ks"]
+[ext_resource type="Texture2D" uid="uid://k3l18u3copja" path="res://sprites/light_gradient.tres" id="13_x10f8"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_cqtw8"]
+light_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_yi1ks"]
+offsets = PackedFloat32Array(0, 0.86, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ntobd"]
+gradient = SubResource("Gradient_yi1ks")
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
 
 [sub_resource type="Curve2D" id="Curve2D_b713g"]
 _data = {
@@ -54,6 +76,7 @@ tile_map_data = PackedByteArray("AAAKAAwAAAAKAAkAAAALAAwAAAAKAAkAAAALAAsAAAAJAAk
 tile_set = ExtResource("2_sjalr")
 
 [node name="CollisionTiles" type="TileMapLayer" parent="."]
+material = SubResource("CanvasItemMaterial_cqtw8")
 use_parent_material = true
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAAAABAASAAIAAAAAAAEABAAXAAIAAAAAAAIABAAXAAIAAAAAAAMABAAXAAIAAAAAAAQABAAXAAIAAAAAAAUABAAXAAIAAAAAAAYABAASAAMAAAAAAA8ABAAJAAIAAAAAAA4ABAAJAAIAAAAAAA0ABAAJAAIAAAAAAAwABAAJAAIAAAAAAAsABAAGAAEAAAAAAAoABAALAAIAAAAAAAkABAALAAAAAAABAA8ABAAJAAIAAAACAA8ABAAJAAIAAAADAA8ABAAJAAIAAAAEAA8ABAAJAAIAAAAFAA8ABAAJAAIAAAAGAA8ABAALAAIAAAAJAA8AAwACAAEAAAAKAA8AAwAAAAEAAAALAA8AAwAAAAEAAAAMAA8AAwAAAAEAAAANAA8AAwAAAAEAAAAOAA8AAwAAAAEAAAAPAA8AAwAAAAEAAAAPAAkAAAAOAAQAAAAPAAoAAAAOAAYAAAAPAAsAAAAOAAYAAAAPAA0ABQABAAAAAAAPAAwAAAAOAAcAAAABAAAABAAVAAMAAAACAAAABAAVAAMAAAADAAAABAAVAAMAAAAEAAAABAAVAAMAAAAFAAAABAARAAIAAAAGAAAABAAXAAIAAAAJAAAABAAUAAMAAAAKAAAABAAVAAMAAAALAAAABAARAAIAAAABAAYABAAOAAMAAAACAAYABAAPAAMAAAADAAIABAAMAAAAAAADAAMABAAMAAEAAAADAAQABAANAAIAAAAEAAQABAAOAAMAAAAFAAQABAAPAAMAAAAFAAEABAAUAAMAAAAGAAEABAAXAAMAAAAMAAAABAAVAAIAAAALAAEABAAUAAEAAAALAAIABAAUAAEAAAALAAMABAAUAAMAAAAMAAMABAAVAAMAAAAMAAIABAAVAAIAAAAMAAEABAAVAAIAAAAOAAkAAAAMAAQAAAANAAkAAAANAAQAAAAMAAkAAAAMAAQAAAALAAkAAAANAAQAAAAKAAkAAAAKAAQAAAAGAA4ABAALAAIAAAAFAA4ABAAJAAIAAAAEAA4ABAAJAAIAAAADAA4ABAAJAAIAAAACAA4ABAAJAAIAAAABAA4ABAAJAAIAAAABAA0ABAAJAAIAAAACAA0ABAAGAAEAAAADAA0ABAAKAAAAAAAEAA0ABAAKAAAAAAAFAA0ABAAKAAAAAAAGAA0ABAAGAAAAAAAHAA0ABAACAAMAAAAIAA0ABAACAAMAAAALAA0ABQABAAAAAAAMAA0ABQACAAAAAAAKAAoAAAAOAAYAAAAOAA0ABQADAAAAAAAKAAsAAAALAAUAAAABAAsABAAKAAAAAAACAAsABAALAAAAAAACAAwABAALAAIAAAABAAwABAAJAAIAAAAEAAMAAAANAAMAAAACAAIAAQABAAUAAAABAAQAAQADAAUAAAANAA0AAQAAAAYAAAAIAA8AAQAAAAEAAAAHAAQAAQADAAUAAAAIAAEAAQADAAUAAAAHAAEAAQACAAUAAAAKAAMAAQACAAUAAAAJAAMAAQABAAUAAAAGAAQAAQACAAUAAAABAAUAAAANAAMAAAD/////BAAUAAAAAAD//wAABAAUAAEAAAD//wEABAAUAAEAAAD//wMABAAUAAEAAAD//wIABAAUAAEAAAD//wQABAAUAAEAAAD//wUABAAUAAEAAAD//wYABAAUAAMAAAAAAP//BAAWAAAAAAACAP//BAAWAAAAAAABAP//BAAWAAAAAAADAP//BAAWAAAAAAAEAP//BAAWAAAAAAAFAP//BAAWAAAAAAAGAP//BAAXAAAAAAAJAP//BAAUAAAAAAAKAP//BAAWAAAAAAALAP//BAAWAAAAAAAMAP//BAAWAAAAAAANAP//BAAXAAAAAAANAAAABAAXAAIAAAANAAEABAAXAAIAAAANAAIABAAXAAIAAAANAAMABAAXAAMAAAD//wkABAAIAAAAAAD//woABAAIAAEAAAD//wsABAAIAAEAAAD//wwABAAIAAEAAAD//w0ABAAIAAEAAAD//w4ABAAIAAEAAAD//w8ABAAIAAEAAAD//xAABAAIAAMAAAAAABAABAAJAAMAAAABABAABAAJAAMAAAACABAABAAJAAMAAAADABAABAAJAAMAAAAEABAABAAJAAMAAAAFABAABAAJAAMAAAAGABAABAALAAMAAAAJABAABAAIAAMAAAAKABAABAAJAAMAAAANABAABAAJAAMAAAAMABAABAAJAAMAAAALABAABAAJAAMAAAAOABAABAAJAAMAAAAPABAABAAJAAMAAAAQABAABAALAAMAAAAQAA0ABQACAAAAAAAQAAwABAAAAAIAAAAQAAsABAAAAAEAAAAQAAoABAAAAAEAAAAQAAkABAAAAAAAAAAKAA0ABQAAAAAAAAAJAA0ABAACAAMAAAADAAwAAAAKAAMAAAAQAA8AAwABAAEAAAA=")
@@ -88,10 +111,66 @@ centered = false
 region_enabled = true
 region_rect = Rect2(16, 64, 16, 16)
 
-[node name="Signpost" parent="." instance=ExtResource("6_sjalr")]
-position = Vector2(698, 600)
-text = "House is very 
-Work in Progress"
+[node name="TutorialScreen" type="Sprite2D" parent="Decoration"]
+position = Vector2(628, 336)
+scale = Vector2(3, 3)
+texture = ExtResource("10_0sl33")
+
+[node name="TutorialScreen2" type="Sprite2D" parent="Decoration"]
+position = Vector2(598, 524)
+scale = Vector2(3, 3)
+texture = ExtResource("10_25f7m")
+
+[node name="Grafitti0" type="Sprite2D" parent="Decoration"]
+position = Vector2(543, 91)
+scale = Vector2(3, 3)
+texture = ExtResource("12_n3p5x")
+centered = false
+
+[node name="PictureFrame" type="Sprite2D" parent="Decoration"]
+position = Vector2(666, 483.00003)
+scale = Vector2(3, 3)
+texture = ExtResource("9_381ld")
+centered = false
+
+[node name="PCDesk" type="Sprite2D" parent="Decoration"]
+position = Vector2(672, 564)
+scale = Vector2(3, 3)
+texture = ExtResource("10_x10f8")
+centered = false
+
+[node name="Bed" type="Sprite2D" parent="Decoration"]
+position = Vector2(534, 585)
+scale = Vector2(3, 3)
+texture = ExtResource("11_cqtw8")
+centered = false
+
+[node name="Bulb" type="Sprite2D" parent="Decoration"]
+position = Vector2(621, 480)
+scale = Vector2(3, 3)
+texture = ExtResource("12_yi1ks")
+centered = false
+
+[node name="PointLight2D" type="PointLight2D" parent="Decoration/Bulb"]
+position = Vector2(4, 3.3333333)
+scale = Vector2(2, 2)
+shadow_enabled = true
+texture = ExtResource("13_x10f8")
+
+[node name="PointLight2D" type="PointLight2D" parent="Decoration"]
+position = Vector2(631, 578)
+scale = Vector2(4.2500005, 3.269532)
+energy = 0.5
+blend_mode = 1
+texture = SubResource("GradientTexture2D_ntobd")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Decoration"]
+position = Vector2(648, 701)
+scale = Vector2(11.125001, 4.485545)
+energy = 0.5
+blend_mode = 1
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_ntobd")
 
 [node name="Objects" type="Node2D" parent="."]
 
@@ -122,6 +201,15 @@ position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_5d6x8")
 one_way_collision = true
 metadata/_edit_lock_ = true
+
+[node name="WoodenDoor" parent="Objects" instance=ExtResource("9_0cpc7")]
+position = Vector2(504.00433, 600.1667)
+
+[node name="Signpost" parent="Objects" instance=ExtResource("6_sjalr")]
+visible = false
+position = Vector2(698, 600)
+text = "House is very 
+Work in Progress"
 
 [node name="Player" parent="." instance=ExtResource("8_ef6q7")]
 position = Vector2(381, 524)

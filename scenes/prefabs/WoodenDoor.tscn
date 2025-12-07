@@ -1,0 +1,120 @@
+[gd_scene load_steps=17 format=3 uid="uid://c45th524x8nov"]
+
+[ext_resource type="Texture2D" uid="uid://bbw01itokxbnd" path="res://sprites/door.png" id="1_meqob"]
+[ext_resource type="Script" uid="uid://bywt1uej8fy1" path="res://scripts/WoodenDoor.gd" id="1_xqeof"]
+[ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="2_88qm0"]
+[ext_resource type="Shader" uid="uid://vbco5vtglpnh" path="res://shaders/PixelOutline.gdshader" id="2_mp6w2"]
+[ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="4_mp6w2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vrake"]
+shader = ExtResource("2_mp6w2")
+shader_parameter/outline_enabled = true
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/thickness = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrake"]
+atlas = ExtResource("1_meqob")
+region = Rect2(36, 0, 18, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_it6ti"]
+atlas = ExtResource("1_meqob")
+region = Rect2(18, 0, 18, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51ikd"]
+atlas = ExtResource("1_meqob")
+region = Rect2(0, 0, 18, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pavar"]
+atlas = ExtResource("1_meqob")
+region = Rect2(18, 0, 18, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufdyy"]
+atlas = ExtResource("1_meqob")
+region = Rect2(36, 0, 18, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mp6w2"]
+atlas = ExtResource("1_meqob")
+region = Rect2(54, 0, 18, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k4ckn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrake")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_it6ti")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51ikd")
+}],
+"loop": false,
+"name": &"closing",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pavar")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufdyy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mp6w2")
+}],
+"loop": false,
+"name": &"opening",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sh3mj"]
+size = Vector2(15, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hv1vu"]
+size = Vector2(15, 48)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vrake"]
+font = ExtResource("4_mp6w2")
+font_size = 8
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[node name="WoodenDoor" type="Node2D"]
+script = ExtResource("1_xqeof")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_vrake")
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_k4ckn")
+animation = &"closing"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-10.5, 0)
+shape = SubResource("RectangleShape2D_sh3mj")
+
+[node name="Interactable" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_88qm0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+position = Vector2(-10.5, 0)
+shape = SubResource("RectangleShape2D_hv1vu")
+
+[node name="FocusLabel" type="Label" parent="."]
+z_index = 2
+offset_left = -141.0
+offset_top = -50.0
+offset_right = -1.0
+offset_bottom = -42.0
+scale = Vector2(2, 2)
+text = "x: Open"
+label_settings = SubResource("LabelSettings_vrake")
+horizontal_alignment = 1
+
+[connection signal="focus_end" from="Interactable" to="." method="_on_interactable_focus_end"]
+[connection signal="focus_start" from="Interactable" to="." method="_on_interactable_focus_start"]
+[connection signal="interacted" from="Interactable" to="." method="_on_interactable_interacted"]

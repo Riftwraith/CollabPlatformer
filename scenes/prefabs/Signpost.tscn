@@ -1,9 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://75ru184f1rlh"]
+[gd_scene load_steps=10 format=3 uid="uid://75ru184f1rlh"]
 
 [ext_resource type="Script" uid="uid://be72eq5m1a2af" path="res://scripts/Signpost.gd" id="1_k42gy"]
-[ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_7nedd"]
+[ext_resource type="Shader" uid="uid://vbco5vtglpnh" path="res://shaders/PixelOutline.gdshader" id="2_b6n01"]
+[ext_resource type="Texture2D" uid="uid://cb061jylqv6uk" path="res://sprites/text_sign.png" id="3_5sbda"]
 [ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="3_b6n01"]
 [ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="4_7nedd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5sbda"]
+shader = ExtResource("2_b6n01")
+shader_parameter/outline_enabled = true
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/thickness = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5sbda"]
 size = Vector2(42, 25)
@@ -23,16 +30,10 @@ script = ExtResource("1_k42gy")
 text = "Hello! This is a sign"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_5sbda")
 scale = Vector2(3, 3)
-texture = ExtResource("2_7nedd")
-region_enabled = true
+texture = ExtResource("3_5sbda")
 region_rect = Rect2(128, 48, 16, 16)
-
-[node name="OutlineSprite" type="Sprite2D" parent="."]
-scale = Vector2(3, 3)
-texture = ExtResource("2_7nedd")
-region_enabled = true
-region_rect = Rect2(224, 32, 16, 16)
 
 [node name="Interactable" type="Area2D" parent="."]
 collision_layer = 8
@@ -44,6 +45,7 @@ position = Vector2(-1, -4)
 shape = SubResource("RectangleShape2D_5sbda")
 
 [node name="FocusLabel" type="Label" parent="."]
+visible = false
 z_index = 2
 offset_left = -141.0
 offset_top = -50.0
@@ -80,7 +82,7 @@ theme_override_constants/margin_bottom = 10
 [node name="Label" type="Label" parent="MarginContainer/MarginContainer"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-text = "Test text for the sign"
+text = "Hello! This is a sign"
 label_settings = SubResource("LabelSettings_b6n01")
 horizontal_alignment = 1
 autowrap_mode = 3
