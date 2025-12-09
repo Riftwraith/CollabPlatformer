@@ -340,5 +340,7 @@ one_shot = true
 wait_time = 0.2
 one_shot = true
 
+[node name="Camera2D" type="Camera2D" parent="."]
+
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_enter_area2D"]
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_enter"]

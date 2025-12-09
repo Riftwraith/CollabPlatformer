@@ -1,6 +1,6 @@
-[gd_scene load_steps=13 format=4 uid="uid://bwoes2mblt87m"]
+[gd_scene load_steps=12 format=4 uid="uid://bwoes2mblt87m"]
 
-[ext_resource type="Script" uid="uid://owr2fq5a7lv7" path="res://scripts/Room0.gd" id="1_3d5ku"]
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_m2jqj"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_g18pg"]
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_8luox"]
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="3_g18pg"]
@@ -18,13 +18,11 @@ point_count = 2
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4nl1t"]
 size = Vector2(96.000015, 24)
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uydk0"]
 size = Vector2(96, 339)
 
 [node name="Room1" type="Node2D"]
-script = ExtResource("1_3d5ku")
+script = ExtResource("1_m2jqj")
 room_name = "Example Level"
 creator_name = "FCP"
 
@@ -87,43 +85,6 @@ position = Vector2(-0.2942505, -69.852875)
 [node name="Player" parent="." instance=ExtResource("3_8luox")]
 position = Vector2(246, 585)
 
-[node name="RoomBoundaries" type="Node2D" parent="."]
-metadata/_edit_lock_ = true
-
-[node name="Left" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Left"]
-rotation = 1.5707964
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
-[node name="Right" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Right"]
-rotation = -1.5707964
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
-[node name="Up" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Up"]
-rotation = 3.1415927
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
-[node name="Down" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
 [node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="CheckpointArea" parent="Checkpoints" instance=ExtResource("7_m2jqj")]
@@ -133,8 +94,3 @@ position = Vector2(480, 264)
 position = Vector2(252, 142.5)
 shape = SubResource("RectangleShape2D_uydk0")
 debug_color = Color(0.6494426, 0.51744217, 0.15714636, 0.41960785)
-
-[connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Up" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Down" to="." method="_player_left_screen"]

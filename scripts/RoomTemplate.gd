@@ -34,7 +34,7 @@ const TILE_SIZE: int = 16 * 3
 var boundaries: Array[int]:
 	get: return [left_bound, width, upper_bound, height]
 	
-var world_boundaries: Array[float]:
+var world_boundaries: Array[int]:
 	get: return [
 		left_bound * TILE_SIZE, 
 		width * TILE_SIZE,
@@ -51,6 +51,7 @@ var world_rect: Rect2:
 	)
 
 @onready var player: Player = $Player
+@onready var camera: Camera2D = $Player/Camera2D
 
 #Dictionary that contains anything that needs to be remembered when the room is exited and re-entered
 #Eg what enemies have been killed, doors opened etc
@@ -87,6 +88,12 @@ func _create_boundary(pos: Vector2, normal: Vector2) -> Node2D:
 func _ready():
 	if Engine.is_editor_hint():
 		return
+	
+	if camera:
+		camera.limit_left = world_boundaries[Direction.Left]
+		camera.limit_right = world_boundaries[Direction.Right]
+		camera.limit_top = world_boundaries[Direction.Up]
+		camera.limit_bottom = world_boundaries[Direction.Down]
 
 	var positions: Array[Vector2] = [
 		Vector2(world_boundaries[Direction.Left] - exit_leeway, 0),  # Left

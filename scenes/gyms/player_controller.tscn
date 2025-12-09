@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://c8a80dokmsju"]
+[gd_scene load_steps=13 format=4 uid="uid://c8a80dokmsju"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_8bc4m"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_8bc4m"]
@@ -9,8 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_ba6c5"]
 [ext_resource type="TileSet" uid="uid://b3045bhfs3i4j" path="res://sprites/darkness_tileset.tres" id="6_koowx"]
 [ext_resource type="Script" uid="uid://5tm7fni4fvt3" path="res://shaders/DarknessLight.gd" id="8_koowx"]
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bc4m"]
 size = Vector2(247, 210)
@@ -52,43 +50,6 @@ texture = ExtResource("5_xj16c")
 use_parent_material = true
 scale = Vector2(3, 3)
 tile_set = ExtResource("2_8bc4m")
-
-[node name="RoomBoundaries" type="Node2D" parent="."]
-metadata/_edit_lock_ = true
-
-[node name="Left" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Left"]
-rotation = 1.5707964
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
-[node name="Right" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Right"]
-rotation = -1.5707964
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
-[node name="Up" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Up"]
-rotation = 3.1415927
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-
-[node name="Down" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
-shape = SubResource("WorldBoundaryShape2D_2nifc")
 
 [node name="DebugPoints" type="Node" parent="."]
 
@@ -144,8 +105,3 @@ material = SubResource("CanvasItemMaterial_koowx")
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAADAP//AAACAAEAAAAGAP//AAACAAEAAAADAP7/AAACAAMAAAAEAP7/AAACAAMAAAAFAP7/AAADAAEAAAAGAP7/AAADAAEAAAAHAP7/AAADAAAAAAD6//3/AAACAAAAAAD6//7/AAACAAEAAAD7//7/AAACAAMAAAD8//7/AAABAAAAAAD7//3/AAACAAIAAAD8//3/AAACAAIAAAD8////AAAAAAMAAAD9////AAABAAIAAAD+////AAABAAIAAAD+//7/AAABAAIAAAD///7/AAABAAMAAAACAP3/AAABAAIAAAABAP3/AAABAAAAAAACAP7/AAACAAMAAAABAP7/AAACAAEAAAD+/wAAAAABAAAAAAD//wEAAAABAAMAAAD//wAAAAABAAMAAAACAPz/AAACAAIAAAABAPz/AAACAAIAAAADAPz/AAACAAIAAAAEAP3/AAABAAIAAAAFAP3/AAABAAMAAAD//wIAAAADAAEAAAD+/wIAAAACAAEAAAD+/wEAAAAAAAMAAAD9/wAAAAACAAMAAAD8/wAAAAACAAEAAAD9//7/AAABAAIAAAADAP3/AAABAAIAAAAEAPz/AAACAAIAAAAFAPz/AAADAAAAAAAJAP//AAACAAEAAAAKAP//AAADAAEAAAAIAP7/AAACAAEAAAAJAP7/AAACAAAAAAAKAP7/AAADAAAAAAD/////AAABAAMAAAAAAPz/AAACAAIAAAD///z/AAACAAIAAAD///3/AAAAAAAAAAD+//3/AAABAAIAAAAAAP3/AAACAAMAAAD9//3/AAABAAEAAAD+//z/AAACAAIAAAD9//z/AAACAAAAAAAQAAMAAAADAAAAAAAQAAQAAAACAAAAAAARAAQAAAADAAAAAAAQAAUAAAACAAEAAAARAAUAAAADAAEAAAAEAAUAAAACAAMAAAADAAUAAAACAAEAAAAFAAUAAAACAAMAAAAGAAUAAAACAAMAAAAHAAUAAAACAAMAAAAHAAQAAAABAAIAAAAIAAQAAAABAAIAAAAJAAQAAAABAAIAAAAIAAUAAAACAAMAAAAKAAQAAAABAAIAAAALAAQAAAABAAIAAAAMAAQAAAABAAIAAAANAAQAAAABAAMAAAAJAAUAAAACAAMAAAAKAAUAAAACAAMAAAALAAUAAAACAAMAAAAMAAUAAAACAAMAAAANAAUAAAADAAEAAAAKAAMAAAABAAIAAAAKAAIAAAABAAIAAAAJAAIAAAABAAIAAAAIAAIAAAABAAIAAAAHAAIAAAABAAIAAAAGAAIAAAABAAIAAAAJAAMAAAABAAIAAAAIAAMAAAABAAIAAAAHAAMAAAABAAIAAAADAAQAAAAAAAMAAAADAAMAAAAAAAMAAAADAAIAAAAAAAMAAAAEAAIAAAABAAIAAAAEAAMAAAABAAIAAAAEAAQAAAABAAIAAAAFAAQAAAABAAIAAAAFAAMAAAABAAIAAAAEAAEAAAACAAIAAAADAAEAAAACAAAAAAAFAAIAAAABAAIAAAAGAAMAAAABAAIAAAAGAAEAAAACAAIAAAAFAAEAAAACAAIAAAAHAAEAAAACAAIAAAAIAAEAAAACAAIAAAALAAMAAAABAAIAAAAGAAQAAAABAAIAAAALAAIAAAABAAIAAAAMAAIAAAABAAIAAAANAAIAAAABAAIAAAAOAAIAAAABAAMAAAAOAAMAAAADAAEAAAANAAMAAAAAAAAAAAAMAAMAAAABAAIAAAAJAAEAAAACAAIAAAAKAAEAAAACAAIAAAALAAEAAAACAAIAAAANAAEAAAACAAIAAAAMAAEAAAACAAIAAAAOAAEAAAADAAAAAAA=")
 tile_set = ExtResource("6_koowx")
-
-[connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Up" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Down" to="." method="_player_left_screen"]

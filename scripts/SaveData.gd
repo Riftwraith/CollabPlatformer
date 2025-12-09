@@ -1,5 +1,4 @@
-extends RoomTemplate
-
+extends Node2D
 
 func load_savedata(_data: Dictionary): #apply savedata to objects in room (eg remove enemies that were previously killed)
 	pass
