@@ -17,9 +17,9 @@ var map_coords: Vector2i = Vector2i(0, 0)
 @export var creator_name: String = ""
 
 const left_bound: int = 0
-@export_range(16, 64) var width: int = 16
+@export_range(16, 64, 16) var width: int = 16
 const upper_bound: int = 0
-@export_range(16, 64) var height: int = 16
+@export_range(16, 64, 16) var height: int = 16
 
 enum Direction {
 	Left,
