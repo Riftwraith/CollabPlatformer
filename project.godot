@@ -28,6 +28,10 @@ window/size/viewport_height=768
 
 movie_writer/movie_file="C:/Users/riftw/Documents/new-game-project/movie.avi"
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [input]
 
 left={

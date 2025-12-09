@@ -11,6 +11,9 @@ var map_coords: Vector2i = Vector2i(0, 0)
 #Time before player gets control when entering room
 @export var enter_override_time: float = 0.3
 
+@export var room_name: String = "" #for display purposes
+@export var creator_name: String = ""
+
 const left_bound: int = 0
 @export_range(16, 64) var width: int = 16
 const upper_bound: int = 0
@@ -107,7 +110,7 @@ func _ready():
 		checkpoint.entered.connect(_on_checkpoint_entered)
 	
 	for collectable in get_tree().get_nodes_in_group("collectables") as Array[Collectable]:
-		if scene_file_path in RoomManager.rooms_with_obtained_collectables:
+		if RoomManager.obtained_current_room_collectable:
 			collectable.queue_free()
 		else:
 			collectable.obtained.connect(_on_collectable_obtained)

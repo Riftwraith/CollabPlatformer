@@ -322,6 +322,7 @@ shape = SubResource("RectangleShape2D_fvnuo")
 debug_color = Color(0.65091634, 0.51597965, 0.17585784, 0.41960785)
 
 [node name="Darkness" type="PointLight2D" parent="."]
+visible = false
 blend_mode = 1
 offset = Vector2(384, 384)
 script = ExtResource("23_yi1ks")

@@ -1,8 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://qm61ordp7g6r"]
+[gd_scene load_steps=10 format=3 uid="uid://qm61ordp7g6r"]
 
 [ext_resource type="Script" uid="uid://deq5k2ly33a3g" path="res://scripts/gui.gd" id="1_3thbu"]
 [ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/keycap.png" id="1_orohx"]
 [ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="2_3thbu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3thbu"]
+atlas = ExtResource("1_orohx")
+region = Rect2(0, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3vpg"]
+atlas = ExtResource("1_orohx")
+region = Rect2(0, 14, 12, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gwg38"]
 atlas = ExtResource("1_orohx")
@@ -14,8 +22,23 @@ font_size = 8
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_3thbu"]
+font = ExtResource("2_3thbu")
+font_size = 32
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 16
+
+[sub_resource type="LabelSettings" id="LabelSettings_gwg38"]
+font = ExtResource("2_3thbu")
+font_size = 24
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource("1_3thbu")
+collectable_img_col = SubResource("AtlasTexture_3thbu")
+collectable_img_grey = SubResource("AtlasTexture_i3vpg")
 
 [node name="CollectableGUI" type="HBoxContainer" parent="."]
 offset_left = 36.0
@@ -32,6 +55,32 @@ texture = SubResource("AtlasTexture_gwg38")
 layout_mode = 2
 text = "1 / 2"
 label_settings = SubResource("LabelSettings_t4pu0")
+
+[node name="RoomTitle" type="VBoxContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -398.0
+offset_top = -104.0
+offset_right = -54.0
+offset_bottom = -44.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="RoomName" type="Label" parent="RoomTitle"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Example Level"
+label_settings = SubResource("LabelSettings_3thbu")
+horizontal_alignment = 2
+
+[node name="Creator" type="Label" parent="RoomTitle"]
+layout_mode = 2
+text = "Henry & Ivan"
+label_settings = SubResource("LabelSettings_gwg38")
+horizontal_alignment = 2
 
 [node name="Timers" type="Node" parent="."]
 
