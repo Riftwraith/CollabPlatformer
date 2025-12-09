@@ -8,10 +8,9 @@ var map_coords: Vector2i = Vector2i(0, 0)
 @export var room_bounds: Vector2 =  Vector2(768, 768)
 #How player can leave room before transition
 @export var exit_leeway = 32
-#Time before player gets control when entering room
-@export var enter_override_time: float = 0#.08
 
-@export var room_name: String = "" #for display purposes
+#For display when entering room
+@export var room_name: String = ""
 @export var creator_name: String = ""
 
 const left_bound: int = 0
@@ -49,8 +48,6 @@ var world_rect: Rect2:
 	)
 
 @onready var player: Player = $Player
-
-var last_safe_player_position:= 0.5 * map_coords
 
 #Dictionary that contains anything that needs to be remembered when the room is exited and re-entered
 #Eg what enemies have been killed, doors opened etc
@@ -158,10 +155,12 @@ func player_enter( #called when player enters the room from a different room
 		Vector2i.DOWN:
 			player.position = Vector2(exit_player_pos.x, 0) 
 			player.velocity = exit_player_vel
+	if player.is_safe_position_below():
+		current_respawn_point = player.get_safe_position_below()
+	else:
+		current_respawn_point = player.position #very hacky 
 	#disable player control for a short delay
-	player.control_enabled = false
-	await get_tree().create_timer(enter_override_time).timeout
-	player.control_enabled = true
+
 
 
 
@@ -175,7 +174,7 @@ func _on_player_exit(direction: Vector2i): #move to neighbouring room if possibl
 		player.hide()
 	else:
 		#reset player position
-		respawn_player(last_safe_player_position)
+		respawn_player(current_respawn_point)
 
 func _set_child_processing(t_f: bool): #false: pauses everything in room, true: resumes
 	for child in get_children():
@@ -199,10 +198,6 @@ func _process(_delta):
 	if Engine.is_editor_hint():
 		queue_redraw()
 		return
-	
-	#check if player on ground & within bounds: if so, save position
-	if _player_in_bounds() and player.is_on_safe_ground:
-		last_safe_player_position = player.position
 
 	if current_checkpoint:
 		if current_checkpoint.overlaps_body(player):
