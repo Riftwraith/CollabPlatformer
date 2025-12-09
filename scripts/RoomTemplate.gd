@@ -9,6 +9,9 @@ var map_coords: Vector2i = Vector2i(0, 0)
 #How player can leave room before transition
 @export var exit_leeway = 32
 
+#Time before player gets control when entering room
+@export var enter_override_time: float = 0.01
+
 #For display when entering room
 @export var room_name: String = ""
 @export var creator_name: String = ""
@@ -160,6 +163,9 @@ func player_enter( #called when player enters the room from a different room
 	else:
 		current_respawn_point = player.position #very hacky 
 	#disable player control for a short delay
+	player.control_enabled = false
+	await get_tree().create_timer(enter_override_time).timeout
+	player.control_enabled = true
 
 
 
