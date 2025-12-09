@@ -39,6 +39,10 @@ func _ready():
 		if room not in unique_rooms:
 			unique_rooms.append(room)
 			total_collectables += 1
+	var current_room = get_tree().current_scene
+	GUI.set_titles(current_room.room_name, current_room.creator_name)
+	GUI.flash(GUI.title_gui)
+	
 
 func record_obtained_collectable(room_path: String):
 	obtained_current_room_collectable = true
@@ -66,9 +70,12 @@ func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2
 	get_tree().root.add_child(new_room)
 	get_tree().current_scene = new_room
 	new_room.player_enter(direction, player_pos, player_vel, old_coords)
+	
+	GUI.set_titles(new_room.room_name, new_room.creator_name)
+	GUI.flash(GUI.title_gui)
 
 	await fade_in(direction)
-	GUI.flash(GUI.title_gui)
+
 
 func fade_out(direction: Vector2i):
 	fade_rect.visible = true

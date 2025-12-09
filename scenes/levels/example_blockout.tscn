@@ -52,6 +52,8 @@ viewport_path = NodePath("Darkness/SubViewport")
 
 [node name="ExampleBlockout" type="Node2D"]
 script = ExtResource("1_32v3e")
+room_name = "Example Blockout"
+creator_name = "RW & FCP"
 
 [node name="Sky" type="TileMapLayer" parent="."]
 scale = Vector2(3, 3)
