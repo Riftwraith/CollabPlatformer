@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 class_name RoomTemplate
 
@@ -9,6 +10,31 @@ var map_coords: Vector2i = Vector2i(0, 0)
 @export var exit_leeway = 32
 #Time before player gets control when entering room
 @export var enter_override_time: float = 0.3
+
+@export var left_bound: int = 0
+@export var right_bound: int = 16
+@export var upper_bound: int = 0
+@export var lower_bound: int = 16
+
+enum Direction {
+	Left,
+	Right,
+	Up,
+	Down
+}
+
+var boundaries: Array[int]:
+	get: return [left_bound, right_bound, upper_bound, lower_bound]
+	
+const TILE_SIZE: int = 16 * 3
+
+func _get_rect() -> Rect2:
+	return Rect2(
+		boundaries[Direction.Left] * TILE_SIZE,
+		boundaries[Direction.Up] * TILE_SIZE,
+		(boundaries[Direction.Right] - boundaries[Direction.Left]) * TILE_SIZE,
+		(boundaries[Direction.Down] - boundaries[Direction.Up]) * TILE_SIZE,
+	)
 
 @onready var player: Player = $Player
 @onready var right_boundary = $RoomBoundaries/Right
@@ -38,6 +64,9 @@ func receive_savedata(data: Dictionary): #overwrite savedata (called by RoomMana
 	savedata_updated = true
 
 func _ready():
+	if Engine.is_editor_hint():
+		return
+		
 	#Set boundary areas to correct positions
 	left_boundary.position = Vector2(-1 * exit_leeway, 0)
 	right_boundary.position = room_bounds + Vector2(exit_leeway, 0)
@@ -130,7 +159,18 @@ func _player_in_bounds():
 		return true
 	return false
 
+func _draw():
+	if Engine.is_editor_hint():
+		draw_rect(
+			_get_rect(),
+			Color.DARK_BLUE * Color(1,1,1,0.2)
+		)
+
 func _process(_delta):
+	if Engine.is_editor_hint():
+		queue_redraw()
+		return
+	
 	#check if player on ground & within bounds: if so, save position
 	if _player_in_bounds() and player.is_on_safe_ground:
 		last_safe_player_position = player.position
