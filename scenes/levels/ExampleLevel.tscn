@@ -21,7 +21,7 @@ size = Vector2(96.000015, 24)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uydk0"]
-size = Vector2(48, 222)
+size = Vector2(96, 339)
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_3d5ku")
@@ -130,7 +130,7 @@ shape = SubResource("WorldBoundaryShape2D_2nifc")
 position = Vector2(480, 264)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea"]
-position = Vector2(252, 84)
+position = Vector2(252, 142.5)
 shape = SubResource("RectangleShape2D_uydk0")
 debug_color = Color(0.6494426, 0.51744217, 0.15714636, 0.41960785)
 

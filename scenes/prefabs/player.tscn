@@ -297,12 +297,12 @@ metadata/_edit_lock_ = true
 
 [node name="FrontRay" type="RayCast2D" parent="FloorRayCasts"]
 position = Vector2(17, 0)
-target_position = Vector2(0, 100)
+target_position = Vector2(0, 500)
 collision_mask = 17
 
 [node name="BackRay" type="RayCast2D" parent="FloorRayCasts"]
 position = Vector2(-17, 0)
-target_position = Vector2(0, 100)
+target_position = Vector2(0, 500)
 collision_mask = 17
 
 [node name="InteractArea" type="Area2D" parent="."]

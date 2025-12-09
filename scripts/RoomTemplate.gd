@@ -9,7 +9,7 @@ var map_coords: Vector2i = Vector2i(0, 0)
 #How player can leave room before transition
 @export var exit_leeway = 32
 #Time before player gets control when entering room
-@export var enter_override_time: float = 0.3
+@export var enter_override_time: float = 0#.08
 
 @export var room_name: String = "" #for display purposes
 @export var creator_name: String = ""
