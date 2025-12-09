@@ -14,8 +14,6 @@ class_name Signpost
 @onready var text_label = $MarginContainer/MarginContainer/Label
 @onready var focus_label = $FocusLabel
 
-@onready var outline_sprite = $OutlineSprite
-
 var text_opened = false
 
 
