@@ -11,10 +11,10 @@ var map_coords: Vector2i = Vector2i(0, 0)
 #Time before player gets control when entering room
 @export var enter_override_time: float = 0.3
 
-@export var left_bound: int = 0
-@export var right_bound: int = 16
-@export var upper_bound: int = 0
-@export var lower_bound: int = 16
+const left_bound: int = 0
+@export_range(16, 64) var width: int = 16
+const upper_bound: int = 0
+@export_range(16, 64) var height: int = 16
 
 enum Direction {
 	Left,
@@ -23,13 +23,22 @@ enum Direction {
 	Down
 }
 
-var boundaries: Array[int]:
-	get: return [left_bound, right_bound, upper_bound, lower_bound]
 	
 const TILE_SIZE: int = 16 * 3
 
-func _get_rect() -> Rect2:
-	return Rect2(
+var boundaries: Array[int]:
+	get: return [left_bound, width, upper_bound, height]
+	
+var world_boundaries: Array[float]:
+	get: return [
+		left_bound * TILE_SIZE, 
+		width * TILE_SIZE,
+		upper_bound * TILE_SIZE,
+		height * TILE_SIZE
+	]
+
+var world_rect: Rect2:
+	get: return Rect2(
 		boundaries[Direction.Left] * TILE_SIZE,
 		boundaries[Direction.Up] * TILE_SIZE,
 		(boundaries[Direction.Right] - boundaries[Direction.Left]) * TILE_SIZE,
@@ -37,10 +46,6 @@ func _get_rect() -> Rect2:
 	)
 
 @onready var player: Player = $Player
-@onready var right_boundary = $RoomBoundaries/Right
-@onready var left_boundary = $RoomBoundaries/Left
-@onready var up_boundary = $RoomBoundaries/Up
-@onready var down_boundary = $RoomBoundaries/Down
 
 var last_safe_player_position:= 0.5 * map_coords
 
@@ -63,15 +68,39 @@ func receive_savedata(data: Dictionary): #overwrite savedata (called by RoomMana
 	savedata = data
 	savedata_updated = true
 
+func _create_boundary(pos: Vector2, normal: Vector2) -> Node2D:
+	var area = Area2D.new()
+	var col_shape = CollisionShape2D.new()
+	var shape = WorldBoundaryShape2D.new()
+	shape.normal = normal
+	col_shape.shape = shape
+	area.position = pos
+	area.collision_layer = 0
+	area.collision_mask = 2
+	area.add_child(col_shape)
+	add_child(area)
+	return area
+
 func _ready():
 	if Engine.is_editor_hint():
 		return
-		
-	#Set boundary areas to correct positions
-	left_boundary.position = Vector2(-1 * exit_leeway, 0)
-	right_boundary.position = room_bounds + Vector2(exit_leeway, 0)
-	up_boundary.position = Vector2(0, -1 * exit_leeway)
-	down_boundary.position = room_bounds + Vector2(0, exit_leeway)
+
+	var positions: Array[Vector2] = [
+		Vector2(world_boundaries[Direction.Left] - exit_leeway, 0),  # Left
+		Vector2(world_boundaries[Direction.Right] + exit_leeway, 0), # Right
+		Vector2(0, world_boundaries[Direction.Up] - exit_leeway),    # Up
+		Vector2(0, world_boundaries[Direction.Down] + exit_leeway),  # Down
+	]
+	var normals: Array[Vector2] = [
+		Vector2.RIGHT,  # Left
+		Vector2.LEFT,   # Right
+		Vector2.DOWN,   # Up
+		Vector2.UP      # Down
+	]
+	
+	for i in range(Direction.size()):
+		var boundary_area = _create_boundary(positions[i], normals[i])
+		boundary_area.body_entered.connect(_player_left_screen)
 	
 	#Load all checkpoint areas
 	for checkpoint in get_tree().get_nodes_in_group("checkpoint_areas") as Array[CheckpointArea]:
@@ -161,10 +190,7 @@ func _player_in_bounds():
 
 func _draw():
 	if Engine.is_editor_hint():
-		draw_rect(
-			_get_rect(),
-			Color.DARK_BLUE * Color(1,1,1,0.2)
-		)
+		draw_rect(world_rect, Color.DARK_BLUE * Color(1,1,1,0.2))
 
 func _process(_delta):
 	if Engine.is_editor_hint():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://cwwu4rl5lhgfg"]
+[gd_scene load_steps=10 format=4 uid="uid://cwwu4rl5lhgfg"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_6q4t8"]
 [ext_resource type="Texture2D" uid="uid://b3mpcdxcwiqc2" path="res://sprites/world_tileset.png" id="2_8tcn8"]
@@ -159,8 +159,6 @@ texture = ExtResource("2_8tcn8")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_2nifc")
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_2nifc"]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_r6vdu"]
 radius = 18.027756
 
@@ -184,48 +182,6 @@ tile_set = SubResource("TileSet_wkftn")
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
-[node name="RoomBoundaries" type="Node2D" parent="."]
-metadata/_edit_lock_ = true
-
-[node name="Left" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Left"]
-rotation = 1.5707964
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-metadata/_edit_lock_ = true
-
-[node name="Right" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Right"]
-rotation = -1.5707964
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-metadata/_edit_lock_ = true
-
-[node name="Up" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Up"]
-rotation = 3.1415927
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-metadata/_edit_lock_ = true
-
-[node name="Down" type="Area2D" parent="RoomBoundaries"]
-collision_layer = 0
-collision_mask = 2
-metadata/_edit_group_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoomBoundaries/Down"]
-shape = SubResource("WorldBoundaryShape2D_2nifc")
-metadata/_edit_lock_ = true
-
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
 position = Vector2(618.951, 632.797)
 collision_mask = 3
@@ -241,8 +197,3 @@ shape = SubResource("CircleShape2D_r6vdu")
 
 [node name="Collectable" parent="Collectables" instance=ExtResource("6_ok6xr")]
 position = Vector2(736.83844, 139.27158)
-
-[connection signal="body_entered" from="RoomBoundaries/Left" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Right" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Up" to="." method="_player_left_screen"]
-[connection signal="body_entered" from="RoomBoundaries/Down" to="." method="_player_left_screen"]
