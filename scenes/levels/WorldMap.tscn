@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://c75x52ojjomvo"]
+
+[ext_resource type="Script" uid="uid://cvj8nx50e0i0m" path="res://scripts/LevelManagement/LevelLoader.gd" id="1_sy7l7"]
+[ext_resource type="PackedScene" uid="uid://daxe8u5te47vm" path="res://scenes/levels/BigLevel.tscn" id="3_0yqb7"]
+[ext_resource type="Script" uid="uid://cmgjmhfrgu2mt" path="res://scripts/LevelManagement/LevelProxy.gd" id="3_6k55n"]
+[ext_resource type="PackedScene" uid="uid://bwoes2mblt87m" path="res://scenes/levels/ExampleLevel.tscn" id="3_8e116"]
+
+[node name="WorldMap" type="Node2D"]
+script = ExtResource("1_sy7l7")
+levels = Array[PackedScene]([ExtResource("3_0yqb7"), ExtResource("3_8e116")])
+level_cache = Dictionary[String, NodePath]({
+"res://scenes/levels/BigLevel.tscn": NodePath("BigLevel"),
+"res://scenes/levels/ExampleLevel.tscn": NodePath("ExampleLevel")
+})
+
+[node name="BigLevel" type="Node2D" parent="."]
+script = ExtResource("3_6k55n")
+
+[node name="ExampleLevel" type="Node2D" parent="."]
+script = ExtResource("3_6k55n")
