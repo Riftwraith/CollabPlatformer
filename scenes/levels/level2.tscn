@@ -1,24 +1,27 @@
-[gd_scene load_steps=7 format=4 uid="uid://cwwu4rl5lhgfg"]
+[gd_scene load_steps=8 format=4 uid="uid://cwwu4rl5lhgfg"]
 
-[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_6q4t8"]
-[ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_d5djh"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="3_r6vdu"]
-[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="4_8tcn8"]
-[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_ok6xr"]
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_2p574"]
+[ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_e5vnl"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/Player.tscn" id="3_twycr"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="4_inlfm"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="5_e3qul"]
+[ext_resource type="Script" uid="uid://bu2u76mpkgvs" path="res://scenes/levels/Level2SaveData.gd" id="6_e5vnl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_r6vdu"]
 radius = 18.027756
 
-[node name="Level" type="Node2D"]
-script = ExtResource("1_6q4t8")
+[node name="Level2" type="Node2D" node_paths=PackedStringArray("save_data")]
+script = ExtResource("1_2p574")
+enter_override_time = 0.01
+save_data = NodePath("Room2SaveData")
 
 [node name="CollisionTiles" type="TileMapLayer" parent="."]
 use_parent_material = true
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAA8AAgABAAMAAAABAA8AAgACAAMAAAACAA8AAgACAAMAAAAEAA8AAgACAAMAAAADAA8AAgACAAMAAAAGAA8AAgACAAMAAAAFAA8AAgACAAMAAAAJAA8AAgACAAMAAAAIAA8AAgACAAMAAAAHAA8AAgACAAMAAAALAA8AAgACAAMAAAAKAA8AAgACAAMAAAAMAA8AAgACAAMAAAANAA8AAgACAAMAAAAOAA8AAgACAAMAAAAPAA8AAgADAAIAAAAAAAAAAgABAAMAAAAAAAsAAgAAAAEAAAAAAAoAAgAAAAAAAAAAAA0AAgAAAAIAAAAAAAwAAgAAAAEAAAABAAAAAgACAAMAAAACAAAAAgACAAMAAAAFAAAAAgACAAMAAAAEAAAAAgACAAMAAAADAAAAAgACAAMAAAAIAAAAAgACAAMAAAAHAAAAAgACAAMAAAAGAAAAAgACAAMAAAAKAAAAAgACAAMAAAAJAAAAAgACAAMAAAAMAAAAAgACAAMAAAALAAAAAgACAAMAAAANAAAAAgACAAMAAAAOAAAAAgACAAMAAAAPAAAAAgADAAAAAAAPAAEAAgAAAAEAAAAPAAIAAgAAAAEAAAAPAAMAAgAAAAEAAAAPAAUAAgAAAAEAAAAPAAQAAgAAAAEAAAAPAAYAAgAAAAEAAAAPAAgAAgAAAAEAAAAPAAcAAgAAAAEAAAAPAAoAAgAAAAEAAAAPAAkAAgAAAAEAAAAPAAsAAgAAAAEAAAAPAAwAAgAAAAEAAAAPAA0AAgAAAAEAAAAPAA4AAgAAAAEAAAAGAAcAAgABAAMAAAAHAAcAAgACAAMAAAAIAAcAAgACAAMAAAAJAAcAAgACAAMAAAAKAAcAAgADAAAAAAAKAAgAAgAAAAEAAAAKAAkAAgAAAAEAAAAKAAoAAgADAAIAAAAJAAoAAgACAAMAAAAIAAoAAgACAAMAAAAHAAoAAgACAAMAAAAGAAoAAgABAAAAAAAGAAsAAgAAAAEAAAAGAAwAAgAAAAEAAAAGAA0AAgABAAIAAAAHAA0AAgACAAMAAAAIAA0AAgACAAMAAAAJAA0AAgACAAMAAAAKAA0AAgADAAMAAAA=")
-tile_set = ExtResource("2_d5djh")
+tile_set = ExtResource("2_e5vnl")
 
-[node name="Player" parent="." instance=ExtResource("3_r6vdu")]
+[node name="Player" parent="." instance=ExtResource("3_twycr")]
 position = Vector2(374, 175)
 
 [node name="Checkpoints" type="Node2D" parent="."]
@@ -29,12 +32,15 @@ collision_mask = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
 scale = Vector2(0.28125, 0.2734375)
-texture = ExtResource("4_8tcn8")
+texture = ExtResource("4_inlfm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
 shape = SubResource("CircleShape2D_r6vdu")
 
 [node name="Collectables" type="Node2D" parent="."]
 
-[node name="Collectable" parent="Collectables" instance=ExtResource("6_ok6xr")]
+[node name="Collectable" parent="Collectables" instance=ExtResource("5_e3qul")]
 position = Vector2(214, 674)
+
+[node name="Room2SaveData" type="Node" parent="."]
+script = ExtResource("6_e5vnl")

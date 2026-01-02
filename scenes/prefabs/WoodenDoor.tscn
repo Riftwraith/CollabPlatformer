@@ -1,10 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://c45th524x8nov"]
+[gd_scene load_steps=19 format=3 uid="uid://c45th524x8nov"]
 
 [ext_resource type="Texture2D" uid="uid://bbw01itokxbnd" path="res://sprites/objects/door.png" id="1_meqob"]
 [ext_resource type="Script" uid="uid://bywt1uej8fy1" path="res://scripts/WoodenDoor.gd" id="1_xqeof"]
 [ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="2_88qm0"]
 [ext_resource type="Shader" uid="uid://vbco5vtglpnh" path="res://shaders/PixelOutline.gdshader" id="2_mp6w2"]
 [ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="4_mp6w2"]
+[ext_resource type="AudioStream" uid="uid://b1jbuov6gl1d3" path="res://sounds/door_close.wav" id="6_pavar"]
+[ext_resource type="AudioStream" uid="uid://cexkql22whar7" path="res://sounds/door_open.wav" id="7_ufdyy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vrake"]
 shader = ExtResource("2_mp6w2")
@@ -50,7 +52,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"closing",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -64,7 +66,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"opening",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sh3mj"]
@@ -114,6 +116,16 @@ scale = Vector2(2, 2)
 text = "x: Open"
 label_settings = SubResource("LabelSettings_vrake")
 horizontal_alignment = 1
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="DoorClose" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("6_pavar")
+
+[node name="DoorOpen" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("7_ufdyy")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
 [connection signal="focus_end" from="Interactable" to="." method="_on_interactable_focus_end"]
 [connection signal="focus_start" from="Interactable" to="." method="_on_interactable_focus_start"]

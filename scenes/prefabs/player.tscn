@@ -1,9 +1,13 @@
-[gd_scene load_steps=41 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=45 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/characters/tellyface_spritesheet.png" id="2_n0leu"]
 [ext_resource type="AudioStream" uid="uid://basri1vkllti4" path="res://sounds/jump.wav" id="3_i3pqv"]
+[ext_resource type="AudioStream" uid="uid://bdp8pgdf8ar8m" path="res://sounds/hurt.wav" id="4_2ad00"]
 [ext_resource type="PackedScene" uid="uid://ceb0sd0ykfkvm" path="res://scenes/prefabs/GravityController.tscn" id="4_8cdkg"]
+[ext_resource type="AudioStream" uid="uid://behcn8hnaw3sw" path="res://sounds/power_up.wav" id="5_xd804"]
+[ext_resource type="AudioStream" uid="uid://b7mxsbdqnfsvk" path="res://sounds/respawn.wav" id="6_yk21n"]
+[ext_resource type="AudioStream" uid="uid://dd75padneqd8l" path="res://sounds/die.wav" id="7_dhcaw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0leu"]
 atlas = ExtResource("2_n0leu")
@@ -318,6 +322,19 @@ debug_color = Color(0.91, 0.16380002, 0.63639325, 0.11764706)
 
 [node name="Jump" type="AudioStreamPlayer" parent="Sounds"]
 stream = ExtResource("3_i3pqv")
+volume_db = -4.0
+
+[node name="Hurt" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("4_2ad00")
+
+[node name="PowerUp" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("5_xd804")
+
+[node name="Respawn" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("6_yk21n")
+
+[node name="Die" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("7_dhcaw")
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_layer = 0
@@ -341,6 +358,9 @@ wait_time = 0.2
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_enter_area2D"]
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_enter"]

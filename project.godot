@@ -23,6 +23,7 @@ RoomManager="*res://scenes/prefabs/RoomManager.tscn"
 
 window/size/viewport_width=768
 window/size/viewport_height=768
+window/size/resizable=false
 
 [editor]
 

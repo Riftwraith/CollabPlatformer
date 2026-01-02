@@ -1,42 +1,42 @@
 [gd_scene load_steps=10 format=3 uid="uid://qm61ordp7g6r"]
 
-[ext_resource type="Script" uid="uid://deq5k2ly33a3g" path="res://scripts/gui.gd" id="1_3thbu"]
-[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/objects/keycap.png" id="1_orohx"]
-[ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="2_3thbu"]
+[ext_resource type="Script" uid="uid://deq5k2ly33a3g" path="res://scripts/GUI.gd" id="1_0nsfk"]
+[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/objects/keycap.png" id="2_gnlb7"]
+[ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="3_gild1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3thbu"]
-atlas = ExtResource("1_orohx")
+atlas = ExtResource("2_gnlb7")
 region = Rect2(0, 0, 12, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i3vpg"]
-atlas = ExtResource("1_orohx")
+atlas = ExtResource("2_gnlb7")
 region = Rect2(0, 14, 12, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gwg38"]
-atlas = ExtResource("1_orohx")
+atlas = ExtResource("2_gnlb7")
 region = Rect2(0, 0, 12, 14)
 
 [sub_resource type="LabelSettings" id="LabelSettings_t4pu0"]
-font = ExtResource("2_3thbu")
+font = ExtResource("3_gild1")
 font_size = 8
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_3thbu"]
-font = ExtResource("2_3thbu")
+font = ExtResource("3_gild1")
 font_size = 32
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 16
 
 [sub_resource type="LabelSettings" id="LabelSettings_gwg38"]
-font = ExtResource("2_3thbu")
+font = ExtResource("3_gild1")
 font_size = 24
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
 [node name="GUI" type="CanvasLayer"]
-script = ExtResource("1_3thbu")
+script = ExtResource("1_0nsfk")
 collectable_img_col = SubResource("AtlasTexture_3thbu")
 collectable_img_grey = SubResource("AtlasTexture_i3vpg")
 

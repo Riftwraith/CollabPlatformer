@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="4_8doac"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/tiles/platforms.png" id="5_fesy5"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_2nmli"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="7_ajnnu"]
-[ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/checkpoint_area.tscn" id="8_p3fty"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/Player.tscn" id="7_ajnnu"]
+[ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/CheckpointArea.tscn" id="8_p3fty"]
 
 [sub_resource type="Curve2D" id="Curve2D_m2jqj"]
 _data = {

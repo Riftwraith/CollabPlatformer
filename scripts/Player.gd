@@ -8,8 +8,8 @@ class_name Player
 @export var coyote_time: float = 0.1 #s time you can jump after walking off ledge
 @export var jump_queue_time: float = 0.1 #s time you can jump before landing
 @export var drop_timeout: float = 0.25 #s how long to disable collision when dropping through platforms
-@export var hang_time: float = 0.075 
 @export var jump_peak_threshold = 50 #when velocity.y is greater than this, have passed jump peak
+@export var impact_speed_threhold = 500 #impacts at higher speed than this made sound
 
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -21,6 +21,13 @@ class_name Player
 @onready var front_ray: RayCast2D = $FloorRayCasts/FrontRay
 @onready var back_ray: RayCast2D = $FloorRayCasts/BackRay
 @onready var gravity_controller: GravityController = $GravityController
+
+@onready var sounds = {
+	"respawn": $Sounds/Respawn,
+	"jump": $Sounds/Jump,
+	"impact": $Sounds/Hurt,
+	"die": $Sounds/Die,
+}
 
 var control_enabled: bool = true #accepts player input or not
 var anim_busy: bool = false #lock animation (eg for respawning)
@@ -37,16 +44,8 @@ signal death_end
 signal spawn_begin
 signal spawn_end
 
-var is_on_safe_ground: bool: #this is a varible that automatically updates
-	get:
-		if not is_on_floor():
-			return false
-		if front_ray.is_colliding() and back_ray.is_colliding():
-			return true
-		return false
-
 #region Public functions 
-func respawn() -> void:
+func respawn() -> void: #play respawn animation and temporarily disable control
 	velocity = Vector2.ZERO
 	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE #disable collision
 	gravity_controller.enabled = true
@@ -55,6 +54,7 @@ func respawn() -> void:
 	anim_sprite.animation = "respawn"
 	anim_sprite.play()
 	_flash_white(2)
+	sounds["respawn"].play()
 	spawn_begin.emit()
 	
 	await anim_sprite.animation_finished
@@ -63,7 +63,7 @@ func respawn() -> void:
 	anim_busy = false
 	spawn_end.emit()
 
-func is_safe_position_below() -> bool:
+func is_safe_position_below() -> bool: #is there a flat area to stand on below
 	if not front_ray.is_colliding() or not back_ray.is_colliding():
 		return false
 	var front_y = front_ray.get_collision_point().y
@@ -80,7 +80,7 @@ func get_safe_position_below() -> Vector2:
 
 
 #region Godot Functions
-func _ready():
+func _ready(): #called when first loaded in
 	#calculate jump speed so that player has correct jump height
 	jump_speed = sqrt(2*jump_height*gravity_controller.gravity)
 	player_height = 0.5 * collision_shape.shape.height + collision_shape.position.y
@@ -103,26 +103,26 @@ func _process(_delta: float): #called every frame
 			focus.start_focus(self)
 	current_focus = focus
 
-func _physics_process(delta): #called every frame
+func _physics_process(delta): #called every physics frame
 	# handle all character movement in physics
 	var move_vec = _read_inputs() 
 	
 	var curr_grounded = is_on_floor()
-	if curr_grounded && !prev_grounded:
+	if curr_grounded && !prev_grounded: #just landed 
 		# start land tween	
 		_squash_and_stretch(
 			1.2,   # hsquash
 			0.8,   # vsquash
 			0.025, # squash_in
 			0.05,  # squash_out
-		)
+		)		
 	prev_grounded = curr_grounded
 
 	if is_on_floor():
 		#ground movement
 		if control_enabled:
 			velocity.x = move_vec.x * run_speed 
-		_jump()
+		_handle_jump() 
 		coyote_timer.start(coyote_time)
 	else:
 		#air movement
@@ -130,7 +130,7 @@ func _physics_process(delta): #called every frame
 			velocity.x = move_vec.x * air_speed 
 		#If you walk off a ledge, you can still jump within a certain window
 		if !coyote_timer.is_stopped():
-			_jump()
+			_handle_jump()
 			
 		if jumping_up && abs(velocity.y) < jump_peak_threshold: #reduce gravity if holding jump
 			gravity_controller.gravity_scale = 0.5
@@ -146,7 +146,7 @@ func _physics_process(delta): #called every frame
 
 #region Private functions
 #region Game Logic
-func _read_inputs() -> Vector2:
+func _read_inputs() -> Vector2: #handles input and returns a 2d direction vector
 	var move_vec = Vector2.ZERO
 	if !control_enabled:
 		return move_vec
@@ -156,7 +156,6 @@ func _read_inputs() -> Vector2:
 	if Input.is_action_pressed("right"):
 		move_vec += Vector2.RIGHT
 		
-	
 	if Input.is_action_just_pressed("jump"):
 		if Input.is_action_pressed("down"):
 			_drop_from_platform()
@@ -172,18 +171,23 @@ func _read_inputs() -> Vector2:
 			interactable.interact(self)
 	return move_vec
 	
-func _handle_collisions(delta: float) -> void:
+func _handle_collisions(delta: float) -> void: #currently only does pushing of Rigidbodies 
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
+		if not collision: return
 		var collider = collision.get_collider()
 		
 		var collision_pos = collision.get_position()
+		var collision_speed = ((collision.get_travel() + collision.get_remainder()) / delta).dot(-1 * collision.get_normal())
+		if collision_speed > impact_speed_threhold:
+			await get_tree().process_frame
+			sounds["impact"].play()
 		var tilemap = collider as TileMapLayer
 		if tilemap:
 			var tile_coord = tilemap.local_to_map(tilemap.to_local(collision_pos))
 			var _tile_data: TileData = tilemap.get_cell_tile_data(tile_coord)
 			#does nothing
-			pass	
+			pass
 		
 		if collider is RigidBody2D: #pushable
 			var coll_speed = (collision.get_travel() + collision.get_remainder()).length() / delta
@@ -200,9 +204,9 @@ enum AnchorDirection {
 	Bottom,
 }
 
-# returns true if a jump was successfully done
-# false if the jump failed (eg. jump cooldown not exceeded)
-func _jump() -> bool:
+func _handle_jump() -> bool: 
+	# returns true if a jump was successfully done
+	# false if the jump failed (eg. jump cooldown not exceeded)
 	if jump_queue_timer.is_stopped():
 		return false
 	
@@ -218,10 +222,12 @@ func _jump() -> bool:
 		0.10,  # squash_in
 		0.20,  # squash_out
 	)
+	sounds["jump"].pitch_scale = randf_range(0.95, 1.05)
+	sounds["jump"].play()
 	return true
 
-# try to drop from the platform
-func _drop_from_platform() -> void:
+func _drop_from_platform() -> void: # try to drop from a platform
+	#does this by temporarily disabling collisions with all platforms
 	const one_way_collision_mask = 1 << 4
 	if is_on_floor():
 		collision_mask ^= one_way_collision_mask
@@ -229,7 +235,7 @@ func _drop_from_platform() -> void:
 		timeout.timeout.connect(func(): collision_mask |= one_way_collision_mask)
 
 	
-func _get_closest_interactable() -> Interactable:
+func _get_closest_interactable() -> Interactable: #returns closest object in InteractArea
 	var closest: Interactable = null
 	var closestDist: float = 0
 	for object in (interact_area.get_overlapping_areas() + interact_area.get_overlapping_bodies()):
@@ -242,7 +248,7 @@ func _get_closest_interactable() -> Interactable:
 			closestDist = global_position.distance_squared_to(closest.global_position)
 	return closest
 	
-func _die(knockback_velocity: Vector2) -> void:
+func _die(knockback_velocity: Vector2) -> void: #plays death animation and disables control
 	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
 	gravity_controller.enabled = false
 	
@@ -251,6 +257,7 @@ func _die(knockback_velocity: Vector2) -> void:
 	velocity = knockback_velocity
 	anim_busy = true
 	control_enabled = false
+	sounds["die"].play()
 	death_begin.emit()
 	
 	await anim_sprite.animation_finished
@@ -261,7 +268,7 @@ func _die(knockback_velocity: Vector2) -> void:
 
 #region Feedback Animations
 
-func _set_movement_anim() -> void:
+func _set_movement_anim() -> void: #changes sprite animation based on velocity
 	anim_sprite.play()
 	
 	if not is_on_floor():

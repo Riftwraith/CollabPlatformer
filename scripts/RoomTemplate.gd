@@ -10,7 +10,7 @@ var map_coords: Vector2i = Vector2i(0, 0)
 @export var exit_leeway = 32
 
 #Time before player gets control when entering room
-@export var enter_override_time: float = 0.01
+@export var enter_override_time: float = 0.1
 
 #For display when entering room
 @export var room_name: String = ""
@@ -20,6 +20,8 @@ const left_bound: int = 0
 @export_range(16, 64, 16) var width: int = 16
 const upper_bound: int = 0
 @export_range(16, 64, 16) var height: int = 16
+
+@export var save_data: SaveData
 
 enum Direction {
 	Left,
@@ -55,22 +57,19 @@ var world_rect: Rect2:
 
 #Dictionary that contains anything that needs to be remembered when the room is exited and re-entered
 #Eg what enemies have been killed, doors opened etc
-var savedata:= {}
-var savedata_updated := false
 
 var current_checkpoint: Area2D = null 
 var current_respawn_point: Vector2 = 0.5 * room_bounds
 
-func load_savedata(_data: Dictionary): #apply savedata to objects in room (eg remove enemies that were previously killed)
-	pass
-
 func create_savedata() -> Dictionary: #store everything to be remembered in savedata dictionary
 	var data = {}
+	if save_data: 
+		data = save_data.create_savedata()
 	return data
 
 func receive_savedata(data: Dictionary): #overwrite savedata (called by RoomManager when room loaded)
-	savedata = data
-	savedata_updated = true
+	if save_data: 
+		save_data.receive_savedata(data)
 
 func _create_boundary(pos: Vector2, normal: Vector2) -> Node2D:
 	var area = Area2D.new()
@@ -124,8 +123,16 @@ func _ready():
 
 	player.death_end.connect(_player_died)
 	
-	if savedata_updated:
-		load_savedata(savedata)
+	if save_data:
+		save_data.load_savedata()
+	
+	#Fade in all ambient audio and start from random position
+	var tween = create_tween()
+	for audio_player in get_tree().get_nodes_in_group("ambient_audio"):
+		audio_player.volume_linear = 0.0
+		var length = audio_player.stream.get_length()
+		audio_player.play(randf() * length)
+		tween.parallel().tween_property(audio_player, "volume_linear", 1.0, 1.0)
 
 func _on_checkpoint_entered(checkpoint: CheckpointArea, _body): 
 	current_checkpoint = checkpoint
@@ -174,15 +181,17 @@ func player_enter( #called when player enters the room from a different room
 	await get_tree().create_timer(enter_override_time).timeout
 	player.control_enabled = true
 
-
-
-
 func _on_player_exit(direction: Vector2i): #move to neighbouring room if possible, otherwise respawn player
 	var new_map_coords = map_coords + direction 
 	if RoomManager.is_room_at(new_map_coords):
 		RoomManager.transition_to(map_coords, new_map_coords, direction, player.position, player.velocity)
-		savedata = create_savedata()
+		var savedata = create_savedata()
 		RoomManager.store_savedata(scene_file_path, savedata)
+		
+		var tween = create_tween() #fade out all audio
+		for audio_player in get_tree().get_nodes_in_group("ambient_audio"):
+			tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
+		
 		_set_child_processing(false) #pause everything
 		player.hide()
 	else:

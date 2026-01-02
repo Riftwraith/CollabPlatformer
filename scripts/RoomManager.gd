@@ -1,14 +1,13 @@
 # RoomManager.gd
 extends Node
 
-@onready var fade_rect: ColorRect = $CanvasLayer/FadeRect
 @onready var GUI = $GUI
 
 var rooms:= {
-	Vector2i(0, 0): "res://scenes/levels/example_blockout.tscn",
-	Vector2i(0, 1): "res://scenes/levels/level.tscn",
-	Vector2i(1, 0): "res://scenes/levels/level2.tscn",
-	Vector2i(0, -1): "res://scenes/gyms/slime_gym.tscn",
+	Vector2i(0, 0): "res://scenes/levels/ExampleHub.tscn",
+	Vector2i(0, 1): "res://scenes/levels/Level1.tscn",
+	Vector2i(1, 0): "res://scenes/levels/Level2.tscn",
+	Vector2i(0, -1): "res://scenes/gyms/SlimeGym.tscn",
 	Vector2i(-1, 0): "res://scenes/levels/ExampleLevel.tscn",
 }
 
@@ -31,8 +30,6 @@ func store_savedata(room_path: String, data: Dictionary):
 	room_savedata[room_path] = data
 
 func _ready():
-	fade_rect.size = get_viewport().size
-	fade_rect.hide()
 	#calculate total collectables 
 	var unique_rooms = []
 	for room in rooms:
@@ -78,18 +75,24 @@ func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2
 
 
 func fade_out(direction: Vector2i):
-	fade_rect.visible = true
+	var fade_rect = ColorRect.new()
+	GUI.add_child(fade_rect)
+	fade_rect.size = get_viewport().size
 	fade_rect.modulate.a = 0.0
 	fade_rect.position = fade_rect.size * Vector2(direction)
 	print(direction)
-	var tween = fade_rect.create_tween()
+	var tween = create_tween()
 	tween.tween_property(fade_rect, "modulate:a", 1.0, 0.4)
 	tween.tween_property(fade_rect, "position", Vector2.ZERO, 0.4)
 	await tween.finished
+	fade_rect.queue_free()
 
 func fade_in(direction: Vector2i):
-	var tween = fade_rect.create_tween()
+	var fade_rect = ColorRect.new()
+	GUI.add_child(fade_rect)
+	fade_rect.size = get_viewport().size
+	var tween = create_tween()
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.4)
 	tween.tween_property(fade_rect, "position", -1 * fade_rect.size * Vector2(direction), 0.4)
 	await tween.finished
-	fade_rect.visible = false
+	fade_rect.queue_free()
