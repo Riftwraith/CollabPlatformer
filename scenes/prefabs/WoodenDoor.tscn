@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://c45th524x8nov"]
 
-[ext_resource type="Texture2D" uid="uid://bbw01itokxbnd" path="res://sprites/door.png" id="1_meqob"]
+[ext_resource type="Texture2D" uid="uid://bbw01itokxbnd" path="res://sprites/objects/door.png" id="1_meqob"]
 [ext_resource type="Script" uid="uid://bywt1uej8fy1" path="res://scripts/WoodenDoor.gd" id="1_xqeof"]
 [ext_resource type="Script" uid="uid://bfhxa7idk325q" path="res://scripts/Interactable.gd" id="2_88qm0"]
 [ext_resource type="Shader" uid="uid://vbco5vtglpnh" path="res://shaders/PixelOutline.gdshader" id="2_mp6w2"]

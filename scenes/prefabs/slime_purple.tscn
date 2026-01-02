@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://7k613xbni0a1"]
 
 [ext_resource type="Script" uid="uid://4fnuutjckmhh" path="res://scripts/enemy_ai/Walker.gd" id="1_fmm0k"]
-[ext_resource type="SpriteFrames" uid="uid://cr6tj54g77il0" path="res://sprites/slime_purple.tres" id="2_ilm7o"]
+[ext_resource type="SpriteFrames" uid="uid://cr6tj54g77il0" path="res://sprites/characters/slime_purple.tres" id="2_ilm7o"]
 [ext_resource type="PackedScene" uid="uid://ceb0sd0ykfkvm" path="res://scenes/prefabs/GravityController.tscn" id="3_5det7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ekwi3"]
@@ -15,7 +15,7 @@ size = Vector2(4, 4)
 radius = 18.0
 height = 40.0
 
-[node name="slime_green" type="CharacterBody2D"]
+[node name="SlimePurple" type="CharacterBody2D"]
 collision_layer = 64
 collision_mask = 81
 script = ExtResource("1_fmm0k")

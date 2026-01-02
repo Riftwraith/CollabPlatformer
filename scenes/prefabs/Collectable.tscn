@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://blrkhaisjfeem"]
 
 [ext_resource type="Script" uid="uid://dd3ui3qwa0mx6" path="res://scripts/Collectable.gd" id="1_axuaq"]
-[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/keycap.png" id="2_lh631"]
+[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/objects/keycap.png" id="2_lh631"]
 [ext_resource type="AudioStream" uid="uid://c2c1mjq6s0ek7" path="res://sounds/coin.wav" id="3_lh631"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lh631"]

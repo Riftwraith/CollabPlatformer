@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://qm61ordp7g6r"]
 
 [ext_resource type="Script" uid="uid://deq5k2ly33a3g" path="res://scripts/gui.gd" id="1_3thbu"]
-[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/keycap.png" id="1_orohx"]
+[ext_resource type="Texture2D" uid="uid://byuifcvqbcr6s" path="res://sprites/objects/keycap.png" id="1_orohx"]
 [ext_resource type="FontFile" uid="uid://dmkaq7i4bye25" path="res://fonts/PixelOperator8.ttf" id="2_3thbu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3thbu"]

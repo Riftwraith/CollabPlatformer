@@ -1,7 +1,7 @@
 [gd_scene load_steps=41 format=3 uid="uid://ckudr8chj1kgo"]
 
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
-[ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/tellyface_spritesheet.png" id="2_n0leu"]
+[ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/characters/tellyface_spritesheet.png" id="2_n0leu"]
 [ext_resource type="AudioStream" uid="uid://basri1vkllti4" path="res://sounds/jump.wav" id="3_i3pqv"]
 [ext_resource type="PackedScene" uid="uid://ceb0sd0ykfkvm" path="res://scenes/prefabs/GravityController.tscn" id="4_8cdkg"]
 
