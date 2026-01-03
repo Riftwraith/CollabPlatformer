@@ -44,7 +44,8 @@ func flash(element: Control):
 	var tween = create_tween()
 	tween.tween_property(element, "modulate", Color(1, 1, 1, 1), 0.2)
 	await get_tree().create_timer(2.0).timeout
-	if Input.is_action_pressed("interact"): return
+	if Input.is_action_pressed("interact"):
+		return
 	tween = create_tween()
 	tween.tween_property(element, "modulate", Color(1, 1, 1, 0), 0.2)
 

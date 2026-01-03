@@ -127,13 +127,15 @@ func _ready():
 	if save_data:
 		save_data.load_savedata()
 	
-	#Fade in all ambient audio and start from random position
-	var tween = create_tween()
-	for audio_player in get_tree().get_nodes_in_group("ambient_audio"):
-		audio_player.volume_linear = 0.0
-		var length = audio_player.stream.get_length()
-		audio_player.play(randf() * length)
-		tween.parallel().tween_property(audio_player, "volume_linear", 1.0, 1.0)
+	var audio_players = get_tree().get_nodes_in_group("ambient_audio")
+	if audio_players.size() > 0:
+		#Fade in all ambient audio and start from random position
+		var tween = create_tween()
+		for audio_player in get_tree().get_nodes_in_group("ambient_audio"):
+			audio_player.volume_linear = 0.0
+			var length = audio_player.stream.get_length()
+			audio_player.play(randf() * length)
+			tween.parallel().tween_property(audio_player, "volume_linear", 1.0, 1.0)
 
 func _on_checkpoint_entered(checkpoint: CheckpointArea, _body): 
 	current_checkpoint = checkpoint
@@ -192,9 +194,11 @@ func _on_player_exit(direction: Vector2i): #move to neighbouring room if possibl
 		var savedata = create_savedata()
 		roomManager.store_savedata(scene_file_path, savedata)
 		
-		var tween = create_tween() #fade out all audio
-		for audio_player in get_tree().get_nodes_in_group("ambient_audio"):
-			tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
+		var audio_players = get_tree().get_nodes_in_group("ambient_audio")
+		if audio_players.size() > 0:
+			var tween = create_tween() #fade out all audio
+			for audio_player in audio_players:
+				tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
 		
 		_set_child_processing(false) #pause everything
 		player.hide()
