@@ -65,6 +65,9 @@ func get_target_level(curr_scene: PackedScene, position_in_level: Vector2, trans
 	else:
 		return null
 
+func contains(scene: PackedScene) -> bool:
+	return scene.resource_path in level_cache 
+
 func level_to_grid(scene: PackedScene, player_pos_in_level: Vector2) -> Vector2i:
 	const LEVEL_TILE_SIZE = 768 # scale 3 * 16 cell per grid scale * 16px per cell  
 	

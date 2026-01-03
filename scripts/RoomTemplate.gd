@@ -15,14 +15,14 @@ class_name RoomTemplate
 @export var room_name: String = ""
 @export var creator_name: String = ""
 
-const LEVEL_TILE_SIZE: int = 16
+const LEVEL_TILE_STEP: int = 16
 const left_bound: int = 0
-@export_range(LEVEL_TILE_SIZE, 64, LEVEL_TILE_SIZE) var width: int = 16
 const upper_bound: int = 0
-@export_range(LEVEL_TILE_SIZE, 64, LEVEL_TILE_SIZE) var height: int = 16
+@export_range(LEVEL_TILE_STEP, 64, LEVEL_TILE_STEP) var width: int = 16
+@export_range(LEVEL_TILE_STEP, 64, LEVEL_TILE_STEP) var height: int = 16
 
 @export var save_data: SaveData
-@onready var roomManager: RoomManager = get_node("/root/RoomManager")
+@onready var current_scene: PackedScene = load(scene_file_path) as PackedScene
 
 enum Direction {
 	Left,
@@ -185,26 +185,31 @@ func player_enter( #called when player enters the room from a different room
 	player.control_enabled = true
 
 func _on_player_exit(direction: Vector2i): #move to neighbouring room if possible, otherwise respawn player
-	var curr_scene = load(scene_file_path) as PackedScene
-	var grid_coords = roomManager.level_to_grid(curr_scene, player.position)
-	var new_map_coords = grid_coords + direction 
-	print("trying to go ", new_map_coords, " from ", grid_coords, " in ", curr_scene.resource_path)
-	if roomManager.is_room_at(new_map_coords):
-		roomManager.transition_to(grid_coords, new_map_coords, direction, player.position, player.velocity)
-		var savedata = create_savedata()
-		roomManager.store_savedata(scene_file_path, savedata)
-		
-		var audio_players = get_tree().get_nodes_in_group("ambient_audio")
-		if audio_players.size() > 0:
-			var tween = create_tween() #fade out all audio
-			for audio_player in audio_players:
-				tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
-		
-		_set_child_processing(false) #pause everything
-		player.hide()
-	else:
-		#reset player position
+	var fallback = func():
 		respawn_player(current_respawn_point)
+		
+	if !RoomManager.worldMap.contains(current_scene):
+		push_warning("current scene ", current_scene.resource_path, " is not registered in WorldMap")
+		return fallback.call() 
+		
+	var grid_coords = RoomManager.worldMap.level_to_grid(current_scene, player.position)
+	var new_map_coords = grid_coords + direction
+	if !RoomManager.is_room_at(new_map_coords):
+		push_warning("there is no room ", direction, " in world map from ", current_scene.resource_path, " at ", new_map_coords)
+		return fallback.call()
+		
+	RoomManager.transition_to(grid_coords, new_map_coords, direction, player.position, player.velocity)
+	var savedata = create_savedata()
+	RoomManager.store_savedata(scene_file_path, savedata)
+	
+	var audio_players = get_tree().get_nodes_in_group("ambient_audio")
+	if audio_players.size() > 0:
+		var tween = create_tween() #fade out all audio
+		for audio_player in audio_players:
+			tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
+	
+	_set_child_processing(false) #pause everything
+	player.hide()
 
 func _set_child_processing(t_f: bool): #false: pauses everything in room, true: resumes
 	for child in get_children():
@@ -216,9 +221,7 @@ func respawn_player(pos):
 	player.respawn()
 
 func _player_in_bounds():
-	if player.position.x > 0 and player.position.x < room_bounds.x and player.position.y > 0 and player.position.y < room_bounds.y:
-		return true
-	return false
+	return player.position.x > 0 and player.position.x < room_bounds.x and player.position.y > 0 and player.position.y < room_bounds.y
 
 func _draw():
 	if Engine.is_editor_hint():
