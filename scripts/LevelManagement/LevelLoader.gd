@@ -21,6 +21,14 @@ var proxies: Array[LevelProxy]:
 	
 @export_tool_button("Update Proxies") var refresh = _refresh_data
 func _refresh_data() -> void:
+	var deleteQueue: Array[LevelProxy] = []
+	for proxy in proxies:
+		if !(proxy.scene in levels):
+			deleteQueue.push_back(proxy)
+	for deleteMe in deleteQueue:
+		print("deleting ", deleteMe)
+		level_cache.erase(deleteMe.scene.resource_path)
+		deleteMe.free()
 	_create_level_proxies()
 
 @export_tool_button("Snap Proxies") var snap = func():
@@ -125,6 +133,8 @@ func _create_level_proxies() -> void:
 
 		var level_id = level.resource_path
 		var find_level = level_cache.get(level_id)
+		
+		print("level id ", level_id)
 		var level_proxy: LevelProxy
 		if find_level != null:
 			level_proxy = get_node(find_level)
