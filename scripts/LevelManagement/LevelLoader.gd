@@ -1,12 +1,13 @@
 @tool
 class_name LevelLoader
-extends Node
+extends Node2D
 
 #### Let us define the following coordinate spaces:
 ####    LEVEL COORDS: Vector2  refer to a position in the loaded level
 ####    WORLD COORDS: Vector2  refer to a position in the world map's level
 ####    GRID  COORDS: Vector2i refer to a position in the grid of levels in world map.
 
+const WORLD_TILE_SIZE = 768
 @export var skipScreenshotInEditor: bool = false
 @export var worldDims: Vector2i = Vector2i(8, 8)
 @export var levels: Array[PackedScene] = []
@@ -32,7 +33,6 @@ func _refresh_data() -> void:
 	_create_level_proxies()
 
 @export_tool_button("Snap Proxies") var snap = func():
-	const WORLD_TILE_SIZE = 768
 	for proxy in proxies:
 		var pos = proxy.global_position
 		pos /= WORLD_TILE_SIZE
@@ -82,8 +82,8 @@ func level_to_grid(scene: PackedScene, player_pos_in_level: Vector2) -> Vector2i
 	var proxy_path = level_cache[scene.resource_path]
 	var proxy = get_node(proxy_path) as LevelProxy
 	
-	player_pos_in_level.x = clamp(player_pos_in_level.x, 0, proxy.grid_size.x * LEVEL_TILE_SIZE)
-	player_pos_in_level.y = clamp(player_pos_in_level.y, 0, proxy.grid_size.y * LEVEL_TILE_SIZE)
+	player_pos_in_level.x = clamp(player_pos_in_level.x, 0, proxy.grid_size.x * LEVEL_TILE_SIZE - 1)
+	player_pos_in_level.y = clamp(player_pos_in_level.y, 0, proxy.grid_size.y * LEVEL_TILE_SIZE - 1)
 	var player_world_map_pos = proxy.position + player_pos_in_level # TEMP: LIKELY TO BREAK IF WORLD IS SCALED
 	return player_world_map_pos / LEVEL_TILE_SIZE
 
@@ -171,3 +171,23 @@ func _ready() -> void:
 			#proxy.texture = null
 		_world = _compute_world_array()
 		
+
+func _draw():
+	if Engine.is_editor_hint():
+		for x in range(0, worldDims.x + 1):
+			draw_line(Vector2(x, 0) * WORLD_TILE_SIZE, Vector2(x, worldDims.y) * WORLD_TILE_SIZE, Color.AQUA)
+		for y in range(0, worldDims.y + 1):
+			draw_line(Vector2(0, y) * WORLD_TILE_SIZE, Vector2(worldDims.x, y) * WORLD_TILE_SIZE, Color.AQUA)
+		
+		# border
+		const border_color = Color.RED
+		const border_width = 10
+		draw_line(Vector2(0, 0) * WORLD_TILE_SIZE, Vector2(0, worldDims.y) * WORLD_TILE_SIZE, border_color, border_width)
+		draw_line(Vector2(worldDims.x, 0) * WORLD_TILE_SIZE, Vector2(worldDims.x, worldDims.y) * WORLD_TILE_SIZE, border_color, border_width)
+		draw_line(Vector2(0, 0) * WORLD_TILE_SIZE, Vector2(worldDims.x, 0) * WORLD_TILE_SIZE, border_color, border_width)
+		draw_line(Vector2(0, worldDims.y) * WORLD_TILE_SIZE, Vector2(worldDims.x, worldDims.y) * WORLD_TILE_SIZE, border_color, border_width)
+		
+func _process(_delta):
+	if Engine.is_editor_hint():
+		queue_redraw()
+		return

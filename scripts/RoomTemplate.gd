@@ -192,13 +192,14 @@ func _on_player_exit(direction: Vector2i): #move to neighbouring room if possibl
 		push_warning("current scene ", current_scene.resource_path, " is not registered in WorldMap")
 		return fallback.call() 
 		
-	var grid_coords = RoomManager.worldMap.level_to_grid(current_scene, player.position)
+	var grid_coords = RoomManager.worldMap.level_to_grid(current_scene, player.global_position)
 	var new_map_coords = grid_coords + direction
 	if !RoomManager.is_room_at(new_map_coords):
+		push_warning("player is at ", player.global_position)
 		push_warning("there is no room ", direction, " in world map from ", current_scene.resource_path, " at ", new_map_coords)
 		return fallback.call()
 		
-	RoomManager.transition_to(grid_coords, new_map_coords, direction, player.position, player.velocity)
+	RoomManager.transition_to(grid_coords, new_map_coords, direction, player.global_position, player.velocity)
 	var savedata = create_savedata()
 	RoomManager.store_savedata(scene_file_path, savedata)
 	
