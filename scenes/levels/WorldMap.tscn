@@ -12,8 +12,10 @@ level_cache = Dictionary[String, NodePath]({
 "res://scenes/levels/BigLevel.tscn": NodePath("Proxies/BigLevel"),
 "res://scenes/levels/ExampleLevel.tscn": NodePath("Proxies/ExampleLevel")
 })
+metadata/_edit_lock_ = true
 
 [node name="Proxies" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="ExampleLevel" type="Node2D" parent="Proxies"]
 script = ExtResource("3_6k55n")
@@ -21,7 +23,7 @@ scene = ExtResource("3_8e116")
 grid_size = Vector2i(1, 1)
 
 [node name="BigLevel" type="Node2D" parent="Proxies"]
-position = Vector2(771, 1)
+position = Vector2(768, 0)
 script = ExtResource("3_6k55n")
 scene = ExtResource("3_dsyud")
 grid_size = Vector2i(2, 2)

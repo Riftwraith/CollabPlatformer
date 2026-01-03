@@ -2,14 +2,7 @@
 extends Node
 
 @onready var GUI = $GUI
-
-var rooms:= {
-	Vector2i(0, 0): "res://scenes/levels/ExampleHub.tscn",
-	Vector2i(0, 1): "res://scenes/levels/Level1.tscn",
-	Vector2i(1, 0): "res://scenes/levels/Level2.tscn",
-	Vector2i(0, -1): "res://scenes/gyms/SlimeGym.tscn",
-	Vector2i(-1, 0): "res://scenes/levels/ExampleLevel.tscn",
-}
+@onready var worldMap: LevelLoader = $WorldMap
 
 var total_collectables: int = 0
 var obtained_collectables: int = 0
@@ -18,12 +11,9 @@ var rooms_with_obtained_collectables: Array[String] = []
 
 var room_savedata:= {}
 
-func get_room_at(pos: Vector2i) -> String:
-	return rooms.get(pos, "")
-
 func is_room_at(pos: Vector2i) -> bool:
-	if rooms.has(pos):
-		return true
+	#if rooms.has(pos):
+		#return true
 	return false
 
 func store_savedata(room_path: String, data: Dictionary):
@@ -31,8 +21,8 @@ func store_savedata(room_path: String, data: Dictionary):
 
 func _ready():
 	#calculate total collectables 
-	var unique_rooms = []
-	for room in rooms:
+	var unique_rooms: Array[PackedScene] = []
+	for room in worldMap.levels:
 		if room not in unique_rooms:
 			unique_rooms.append(room)
 			total_collectables += 1
@@ -51,7 +41,7 @@ func record_obtained_collectable(room_path: String):
 func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2i, player_pos: Vector2, player_vel: Vector2):
 	await fade_out(direction)
 	get_tree().current_scene.free()
-	var room_path = get_room_at(new_coords)
+	var room_path = worldMap.get_level_at(new_coords)
 	
 	if room_path in rooms_with_obtained_collectables:
 		obtained_current_room_collectable = true

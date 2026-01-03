@@ -6,6 +6,9 @@ class_name LevelProxy
 @export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var grid_size: Vector2i 
 var sprite: Sprite2D
 
+@export_tool_button("Edit Level") var edit_level = func():
+	EditorInterface.open_scene_from_path(scene.resource_path)
+
 static func create_proxy(theScene: PackedScene, parent: Node):
 	var retval = LevelProxy.new()
 	parent.add_child(retval)
@@ -14,16 +17,24 @@ static func create_proxy(theScene: PackedScene, parent: Node):
 	
 	print("initializing ", theScene.resource_path)
 	retval.name = theScene.resource_path.trim_prefix("res://scenes/levels/").trim_suffix(".tscn")
-	retval._initialize_screenshot()
+	retval._instantiate_scene()
 	return retval
 
-func _ready() -> void:
-	if !sprite:
-		_initialize_screenshot()
+@export_tool_button("Refresh") var refresh = refresh_data
+func refresh_data() -> void:
+	_instantiate_scene()
 
-func _initialize_screenshot():
+#func _ready() -> void:
+	#if !sprite:
+		#_instantiate_scene()
+
+func _instantiate_scene():
 	print("taking screenshot of ", scene.resource_path)
 	var scene_tree: RoomTemplate = scene.instantiate()
+	grid_size = Vector2i(scene_tree.width, scene_tree.height) / 16
+	_take_screenshot(scene_tree)
+
+func _take_screenshot(scene_tree: RoomTemplate):
 	var viewport = SubViewport.new()
 	viewport.add_child(scene_tree)
 	add_child(viewport)
@@ -53,5 +64,3 @@ func _initialize_screenshot():
 	add_child(sprite)
 	sprite.texture = ImageTexture.create_from_image(viewport.get_texture().get_image())	
 	viewport.queue_free()
-	grid_size = sprite.get_rect().size / 768
-	print(grid_size)

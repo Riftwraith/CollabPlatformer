@@ -5,8 +5,9 @@ extends Node
 #### Let us define the following coordinate spaces:
 ####    LEVEL COORDS: Vector2  refer to a position in the loaded level
 ####    WORLD COORDS: Vector2  refer to a position in the world map's level
-####    GRID  COORDS: Vector2i refer to a position in the level grid.
+####    GRID  COORDS: Vector2i refer to a position in the grid of levels in world map.
 
+@export var skipScreenshotInEditor: bool = false
 @export var worldDims: Vector2i = Vector2i(8, 8)
 @export var levels: Array[PackedScene] = []
 @export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var level_cache: Dictionary[String, NodePath] = {}
@@ -17,24 +18,47 @@ var proxies: Array[LevelProxy]:
 	get: 
 		return Array(_proxy_parent.get_children(), TYPE_OBJECT, "Node2D", LevelProxy)
 
-@export_tool_button("Reset Cache") var reset = reset_cache
+	
+@export_tool_button("Update Proxies") var refresh = _refresh_data
+func _refresh_data() -> void:
+	_create_level_proxies()
+
+@export_tool_button("Snap Proxies") var snap = func():
+	const WORLD_TILE_SIZE = 768
+	for proxy in proxies:
+		var pos = proxy.global_position
+		pos /= WORLD_TILE_SIZE
+		pos.x = roundf(pos.x)
+		pos.y = roundf(pos.y)
+		pos *= WORLD_TILE_SIZE
+		proxy.global_position = pos
+	
+@export_tool_button("Reset Proxies") var reset = reset_cache
 func reset_cache() -> void:
 	for child in _proxy_parent.get_children():
 		print("freeing ", child.name)
 		child.free()
 	level_cache = {}
-	_create_level_proxies()
-	
-func get_level_proxy_at(worldCoord: Vector2i) -> LevelProxy:
+	_refresh_data()
+
+
+func _get_level_proxy_at(worldCoord: Vector2i) -> LevelProxy:
 	# bounds check
 	if (worldCoord.x < 0 || worldCoord.x >= worldDims.x ||
 		worldCoord.y < 0 || worldCoord.y >= worldDims.y):
 		return null
 	return _world[_grid_to_flat_index(worldCoord)]
+	
+func get_level_at(worldCoord: Vector2i) -> PackedScene:
+	var scene = _get_level_proxy_at(worldCoord).scene
+	if scene:
+		return scene
+	else:
+		return null
 
 func get_target_level(curr_scene: PackedScene, position_in_level: Vector2, transition_direction: Vector2i) -> PackedScene:
 	var grid_pos = _level_to_grid(curr_scene, position_in_level)
-	var level_proxy = get_level_proxy_at(grid_pos + transition_direction)
+	var level_proxy = _get_level_proxy_at(grid_pos + transition_direction)
 	if level_proxy:
 		assert(level_proxy != curr_scene)
 		return level_proxy.scene
@@ -48,7 +72,6 @@ func _level_to_grid(scene: PackedScene, player_pos_in_level: Vector2) -> Vector2
 	var player_world_map_pos = proxy.position + player_pos_in_level # TEMP: LIKELY TO BREAK IF WORLD IS SCALED
 	return player_world_map_pos / LEVEL_TILE_SIZE
 
-# local to WorldMap level
 func _world_to_grid(from: Vector2) -> Vector2i:
 	const TILE_SIZE = 768 # scale 3 * 16 cell per grid scale * 16px per cell  
 	return Vector2i(from / TILE_SIZE)
@@ -56,8 +79,8 @@ func _world_to_grid(from: Vector2) -> Vector2i:
 func _grid_to_flat_index(from: Vector2i) -> int:
 	return from.y * worldDims.x + from.x
 
-@export_tool_button("Test WorldArray") var worldArrayTest = _computeWorldArray
-func _computeWorldArray() -> Array[LevelProxy]:
+#@export_tool_button("Test WorldArray") var worldArrayTest = _compute_world_array
+func _compute_world_array() -> Array[LevelProxy]:
 	var world_flat_size = worldDims.x * worldDims.y
 	var arr = Array([], TYPE_OBJECT, "Node2D", LevelProxy)
 	arr.resize(world_flat_size)
@@ -69,7 +92,6 @@ func _computeWorldArray() -> Array[LevelProxy]:
 			for x in range(grid_size.x):
 				var idx = _grid_to_flat_index(grid_pos + Vector2i(x, y))
 				arr[idx] = proxy
-				print(idx, ": ", proxy)
 				
 	if Engine.is_editor_hint():
 		for y in range(worldDims.y):
@@ -99,6 +121,7 @@ func _create_level_proxies() -> void:
 		var level_proxy: LevelProxy
 		if find_level != null:
 			level_proxy = get_node(find_level)
+			level_proxy.refresh_data()
 		else:
 			level_proxy = LevelProxy.create_proxy(level, _proxy_parent)
 			find_level = get_path_to(level_proxy)
@@ -111,12 +134,23 @@ func _create_level_proxies() -> void:
 
 func _ready() -> void:
 	print(levels.size())
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() && !skipScreenshotInEditor:
+		print("loading levels ", skipScreenshotInEditor)
 		_create_level_proxies()
 		EditorInterface.get_inspector().property_edited.connect(func(_p): 
-			reset_cache())
+			_refresh_data())
 	else:
-		for proxy in proxies:
-			proxy.texture = null
-		_world = _computeWorldArray()
+		# this code comes from when a Proxy is a Sprite2D
+		# however, storing the cached sprite texture anyway will load it even
+		# in-game
+		#
+		# so we make the proxies create a Sprite2D child, and skip creation
+		# when we're not in the editor. there are probably smarter ways to do
+		# this, but there's no need to overengineer the tooling this much
+		# 
+		# either way, only henry and ivan should be touching this code.
+		# 
+		#for proxy in proxies:
+			#proxy.texture = null
+		_world = _compute_world_array()
 		
