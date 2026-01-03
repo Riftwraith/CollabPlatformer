@@ -17,13 +17,13 @@
 [ext_resource type="PackedScene" uid="uid://c45th524x8nov" path="res://scenes/prefabs/WoodenDoor.tscn" id="15_1mnwl"]
 [ext_resource type="AudioStream" uid="uid://c5l6aox5yg0ka" path="res://sounds/motor_loop.wav" id="15_516m5"]
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="16_427e6"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/Player.tscn" id="17_sok87"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="17_sok87"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="18_n452j"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="19_oace5"]
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="20_hhjo6"]
 [ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/CheckpointArea.tscn" id="21_k380g"]
 [ext_resource type="AudioStream" uid="uid://cf1j2c0sudxs8" path="res://sounds/outdoor_ambience.wav" id="22_81osc"]
-[ext_resource type="Script" uid="uid://823subner376" path="res://scenes/levels/ExampleHubSaveData.gd" id="24_067go"]
+[ext_resource type="Script" path="res://scenes/levels/ExampleHubSaveData.gd" id="24_067go"]
 
 [sub_resource type="Curve2D" id="Curve2D_b713g"]
 _data = {
