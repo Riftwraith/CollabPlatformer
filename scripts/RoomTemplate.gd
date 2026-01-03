@@ -3,7 +3,6 @@ extends Node2D
 class_name RoomTemplate
 
 #Position on global map
-var map_coords: Vector2i = Vector2i(0, 0)
 #If player exceeds these bounds, room transition
 @export var room_bounds: Vector2 =  Vector2(768, 768)
 #How player can leave room before transition
@@ -23,6 +22,7 @@ const upper_bound: int = 0
 @export_range(LEVEL_TILE_SIZE, 64, LEVEL_TILE_SIZE) var height: int = 16
 
 @export var save_data: SaveData
+@onready var roomManager: RoomManager = get_node("/root/RoomManager")
 
 enum Direction {
 	Left,
@@ -183,11 +183,14 @@ func player_enter( #called when player enters the room from a different room
 	player.control_enabled = true
 
 func _on_player_exit(direction: Vector2i): #move to neighbouring room if possible, otherwise respawn player
-	var new_map_coords = map_coords + direction 
-	if RoomManager.is_room_at(new_map_coords):
-		RoomManager.transition_to(map_coords, new_map_coords, direction, player.position, player.velocity)
+	var curr_scene = load(scene_file_path) as PackedScene
+	var grid_coords = roomManager.level_to_grid(curr_scene, player.position)
+	var new_map_coords = grid_coords + direction 
+	print("trying to go ", new_map_coords, " from ", grid_coords, " in ", curr_scene.resource_path)
+	if roomManager.is_room_at(new_map_coords):
+		roomManager.transition_to(grid_coords, new_map_coords, direction, player.position, player.velocity)
 		var savedata = create_savedata()
-		RoomManager.store_savedata(scene_file_path, savedata)
+		roomManager.store_savedata(scene_file_path, savedata)
 		
 		var tween = create_tween() #fade out all audio
 		for audio_player in get_tree().get_nodes_in_group("ambient_audio"):

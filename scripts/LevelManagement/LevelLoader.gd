@@ -50,14 +50,14 @@ func _get_level_proxy_at(worldCoord: Vector2i) -> LevelProxy:
 	return _world[_grid_to_flat_index(worldCoord)]
 	
 func get_level_at(worldCoord: Vector2i) -> PackedScene:
-	var scene = _get_level_proxy_at(worldCoord).scene
-	if scene:
-		return scene
+	var level_proxy = _get_level_proxy_at(worldCoord)
+	if level_proxy:
+		return level_proxy.scene
 	else:
 		return null
 
 func get_target_level(curr_scene: PackedScene, position_in_level: Vector2, transition_direction: Vector2i) -> PackedScene:
-	var grid_pos = _level_to_grid(curr_scene, position_in_level)
+	var grid_pos = level_to_grid(curr_scene, position_in_level)
 	var level_proxy = _get_level_proxy_at(grid_pos + transition_direction)
 	if level_proxy:
 		assert(level_proxy != curr_scene)
@@ -65,10 +65,14 @@ func get_target_level(curr_scene: PackedScene, position_in_level: Vector2, trans
 	else:
 		return null
 
-func _level_to_grid(scene: PackedScene, player_pos_in_level: Vector2) -> Vector2i:
+func level_to_grid(scene: PackedScene, player_pos_in_level: Vector2) -> Vector2i:
 	const LEVEL_TILE_SIZE = 768 # scale 3 * 16 cell per grid scale * 16px per cell  
+	
 	var proxy_path = level_cache[scene.resource_path]
 	var proxy = get_node(proxy_path) as LevelProxy
+	
+	player_pos_in_level.x = clamp(player_pos_in_level.x, 0, proxy.grid_size.x * LEVEL_TILE_SIZE)
+	player_pos_in_level.y = clamp(player_pos_in_level.y, 0, proxy.grid_size.y * LEVEL_TILE_SIZE)
 	var player_world_map_pos = proxy.position + player_pos_in_level # TEMP: LIKELY TO BREAK IF WORLD IS SCALED
 	return player_world_map_pos / LEVEL_TILE_SIZE
 
