@@ -2,9 +2,6 @@
 extends Node2D
 class_name RoomTemplate
 
-#Position on global map
-#If player exceeds these bounds, room transition
-@export var room_bounds: Vector2 =  Vector2(768, 768)
 #How player can leave room before transition
 @export var exit_leeway = 32
 
@@ -16,13 +13,12 @@ class_name RoomTemplate
 @export var creator_name: String = ""
 
 const LEVEL_TILE_STEP: int = 16
-const left_bound: int = 0
-const upper_bound: int = 0
 @export_range(LEVEL_TILE_STEP, 64, LEVEL_TILE_STEP) var width: int = 16
 @export_range(LEVEL_TILE_STEP, 64, LEVEL_TILE_STEP) var height: int = 16
 
 @export var save_data: SaveData
 @onready var current_scene: PackedScene = load(scene_file_path) as PackedScene
+@onready var gui: GameGui = RoomManager.gui
 
 enum Direction {
 	Left,
@@ -35,13 +31,13 @@ enum Direction {
 const TILE_SIZE: int = 16 * 3
 
 var boundaries: Array[int]:
-	get: return [left_bound, width, upper_bound, height]
+	get: return [0, width, 0, height]
 	
 var world_boundaries: Array[int]:
 	get: return [
-		left_bound * TILE_SIZE, 
+		0 * TILE_SIZE, 
 		width * TILE_SIZE,
-		upper_bound * TILE_SIZE,
+		0 * TILE_SIZE,
 		height * TILE_SIZE
 	]
 
@@ -60,7 +56,7 @@ var world_rect: Rect2:
 #Eg what enemies have been killed, doors opened etc
 
 var current_checkpoint: Area2D = null 
-var current_respawn_point: Vector2 = 0.5 * room_bounds
+var current_respawn_point: Vector2 = world_rect.get_center()
 
 func create_savedata() -> Dictionary: #store everything to be remembered in savedata dictionary
 	var data = {}
@@ -122,6 +118,9 @@ func _ready():
 		else:
 			collectable.obtained.connect(_on_collectable_obtained)
 
+	gui.set_titles(room_name, creator_name)
+	gui.flash(gui.title_gui)
+	
 	player.death_end.connect(_player_died)
 	
 	if save_data:
@@ -136,6 +135,16 @@ func _ready():
 			var length = audio_player.stream.get_length()
 			audio_player.play(randf() * length)
 			tween.parallel().tween_property(audio_player, "volume_linear", 1.0, 1.0)
+	
+	if player.is_safe_position_below():
+		current_respawn_point = player.get_safe_position_below()
+	else:
+		current_respawn_point = player.position #very hacky
+		
+	#disable player control for a short delay
+	player.control_enabled = false
+	await get_tree().create_timer(enter_override_time).timeout
+	player.control_enabled = true
 
 func _on_checkpoint_entered(checkpoint: CheckpointArea, _body): 
 	current_checkpoint = checkpoint
@@ -147,82 +156,40 @@ func _player_died():
 	respawn_player(current_respawn_point)
 
 func _player_left_screen(_body): #receives signal from boundary areas when the player enters them
-	if player.position.x < 0:
-		_on_player_exit(Vector2i.LEFT)
-	if player.position.x > room_bounds.x:
-		_on_player_exit(Vector2i.RIGHT)
-	if player.position.y < 0:
-		_on_player_exit(Vector2i.UP)
-	if player.position.y > room_bounds.y:
-		_on_player_exit(Vector2i.DOWN)
+	if !player.control_enabled:
+		return
+		
+	var exitDir: Vector2i
+	if player.position.x < 0:                                   exitDir = Vector2i.LEFT
+	if player.position.x >= world_boundaries[Direction.Right]: exitDir = Vector2i.RIGHT
+	if player.position.y < 0:                                   exitDir = Vector2i.UP
+	if player.position.y >= world_boundaries[Direction.Down]:  exitDir = Vector2i.DOWN
+	RoomManager.enqueue_level_change(exitDir, self)
 
-func player_enter( #called when player enters the room from a different room
-	direction: Vector2i,  #player movement direction
-	exit_player_pos: Vector2, #position of player in previous room 
-	exit_player_vel: Vector2, #velocity of player in previous room
-	_enter_from_coords: Vector2i #map_coords of previous room (unused)
-	): 
-	match direction: #put the player at the right place depending on the direction used to enter the room
-		Vector2i.LEFT:
-			player.position = Vector2(room_bounds.x, exit_player_pos.y)
-			player.velocity = Vector2(min(exit_player_vel.x, -1 * player.run_speed), exit_player_vel.y)
-		Vector2i.RIGHT:
-			player.position = Vector2(0, exit_player_pos.y)
-			player.velocity = Vector2(max(exit_player_vel.x, player.run_speed), exit_player_vel.y)
-		Vector2i.UP:
-			player.position = Vector2(exit_player_pos.x, room_bounds.y) 
-			player.velocity = Vector2(exit_player_vel.x, min(exit_player_vel.y, -1 * player.jump_speed))
-		Vector2i.DOWN:
-			player.position = Vector2(exit_player_pos.x, 0) 
-			player.velocity = exit_player_vel
-	if player.is_safe_position_below():
-		current_respawn_point = player.get_safe_position_below()
-	else:
-		current_respawn_point = player.position #very hacky 
-	#disable player control for a short delay
-	player.control_enabled = false
-	await get_tree().create_timer(enter_override_time).timeout
-	player.control_enabled = true
-
-func _on_player_exit(direction: Vector2i): #move to neighbouring room if possible, otherwise respawn player
-	var fallback = func():
-		respawn_player(current_respawn_point)
-		
-	if !RoomManager.worldMap.contains(current_scene):
-		push_warning("current scene ", current_scene.resource_path, " is not registered in WorldMap")
-		return fallback.call() 
-		
-	var grid_coords = RoomManager.worldMap.level_to_grid(current_scene, player.global_position)
-	var new_map_coords = grid_coords + direction
-	if !RoomManager.is_room_at(new_map_coords):
-		push_warning("player is at ", player.global_position)
-		push_warning("there is no room ", direction, " in world map from ", current_scene.resource_path, " at ", new_map_coords)
-		return fallback.call()
-		
-	RoomManager.transition_to(grid_coords, new_map_coords, direction, player.global_position, player.velocity)
+# housekeeping on room unload
+func cleanup():
+	# save room data
 	var savedata = create_savedata()
 	RoomManager.store_savedata(scene_file_path, savedata)
 	
+	# tween out audio
 	var audio_players = get_tree().get_nodes_in_group("ambient_audio")
 	if audio_players.size() > 0:
 		var tween = create_tween() #fade out all audio
 		for audio_player in audio_players:
 			tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
-	
-	_set_child_processing(false) #pause everything
-	player.hide()
-
+		
 func _set_child_processing(t_f: bool): #false: pauses everything in room, true: resumes
 	for child in get_children():
 		child.set_process(t_f)
 		child.set_physics_process(t_f)
 
-func respawn_player(pos):
+func respawn_player(pos = current_respawn_point):
 	player.position = pos
-	player.respawn()
+	player.play_respawn_feedback()
 
 func _player_in_bounds():
-	return player.position.x > 0 and player.position.x < room_bounds.x and player.position.y > 0 and player.position.y < room_bounds.y
+	return player.position.x > 0 and player.position.x < world_boundaries[Direction.Right] and player.position.y > 0 and player.position.y < world_boundaries[Direction.Down]
 
 func _draw():
 	if Engine.is_editor_hint():

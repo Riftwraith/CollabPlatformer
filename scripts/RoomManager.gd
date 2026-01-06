@@ -1,7 +1,8 @@
 # RoomManager.gd
 extends Node
 
-@onready var gui = $GUI
+const WORLD_TILE_SIZE = 768
+@onready var gui: GameGui = $GUI
 @onready var worldMap: LevelLoader = $WorldMap
 
 var total_collectables: int = 0
@@ -10,9 +11,6 @@ var obtained_current_room_collectable: bool = false
 var rooms_with_obtained_collectables: Array[String] = []
 
 var room_savedata:= {}
-
-func level_to_grid(scene: PackedScene, level_coord: Vector2) -> Vector2i:
-	return worldMap.level_to_grid(scene, level_coord)
 
 func is_room_at(pos: Vector2i) -> bool:
 	return worldMap.get_level_at(pos) != null
@@ -27,9 +25,6 @@ func _ready():
 		if room not in unique_rooms:
 			unique_rooms.append(room)
 			total_collectables += 1
-	var current_room = get_tree().current_scene
-	gui.set_titles(current_room.room_name, current_room.creator_name)
-	gui.flash(gui.title_gui)
 	
 
 func record_obtained_collectable(room_path: String):
@@ -39,51 +34,89 @@ func record_obtained_collectable(room_path: String):
 		obtained_collectables += 1
 		gui.flash(gui.collectable_gui)
 
-func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2i, player_pos: Vector2, player_vel: Vector2):
-	await fade_out(direction)
+func enqueue_level_change(exitDir: Vector2i, room: RoomTemplate):
+	get_tree().process_frame.connect(_level_change.bind(exitDir, room))
+	return
+
+func _level_change(exitDir: Vector2i, room: RoomTemplate):
+	# disconnect on call
+	get_tree().process_frame.disconnect(_level_change)
+	
+	if !worldMap.contains(room.current_scene):
+		push_warning("current scene ", room.current_scene.resource_path, " is not registered in WorldMap")
+		room.respawn_player()
+		return
+	
+	# retrieve params for next level
+	var oldPlayer = room.player
+	var oldPlayerVelocity = oldPlayer.velocity
+	var oldScene = room.current_scene
+	var oldPlayerPos = oldPlayer.position
+	var oldGridCoords = worldMap.level_to_grid(oldScene, oldPlayerPos)
+	var oldLocalGridCoords = worldMap.get_local_grid(oldGridCoords)
+	var oldPlayerLocalGridOffset = oldPlayerPos - Vector2(oldLocalGridCoords * WORLD_TILE_SIZE)
+	var nextGridCoords = oldGridCoords + exitDir
+	var nextScene = worldMap.get_level_at(nextGridCoords)
+	
+	if nextScene == null:
+		push_warning("player is at ", oldPlayerPos)
+		push_warning("there is no room ", exitDir, " in world map from ", oldScene.resource_path, " at ", nextGridCoords)
+		room.respawn_player()
+		return
+	
+	var nextLocalGridCoords = worldMap.get_local_grid(nextGridCoords)
+	var newPlayerPos = Vector2(nextLocalGridCoords - exitDir) * WORLD_TILE_SIZE + oldPlayerLocalGridOffset
+	
+	# pause the level
+	room._set_child_processing(false) #pause everything
+	oldPlayer.hide()
+	
+	# fade out
+	await fade_out(exitDir)
+	
+	# unload level
+	room.cleanup()
 	get_tree().current_scene.free()
-	var room_path = worldMap.get_level_at(new_coords).resource_path
-	print("room path: ", room_path)
 	
-	if room_path in rooms_with_obtained_collectables:
-		obtained_current_room_collectable = true
-	else:
-		obtained_current_room_collectable = false
-
-	var new_room = load(room_path).instantiate() as RoomTemplate
+	# load level
+	var newRoom = nextScene.instantiate() as RoomTemplate
+	get_tree().root.add_child(newRoom)
+	get_tree().current_scene = newRoom
 	
-	if room_savedata.has(room_path): 
-		new_room.receive_savedata(room_savedata[room_path])
+	# set level params
+	var newRoomPath = nextScene.resource_path
+	obtained_current_room_collectable = newRoomPath in rooms_with_obtained_collectables
+	if room_savedata.has(newRoomPath):
+		newRoom.receive_savedata(room_savedata[newRoomPath])
+	var newPlayer = newRoom.player
+	newPlayer.position = newPlayerPos
+	match exitDir:
+		Vector2i.UP: newPlayer.velocity = Vector2.UP * newPlayer.jump_speed
+		Vector2i.DOWN: 
+			newPlayer.position += Vector2.UP * 96
+			newPlayer.velocity = oldPlayerVelocity
+		_: newPlayer.velocity = Vector2(exitDir) * newPlayer.run_speed
+	fade_in()
 	
-	get_tree().root.add_child(new_room)
-	get_tree().current_scene = new_room
-	new_room.player_enter(direction, player_pos, player_vel, old_coords)
-	
-	gui.set_titles(new_room.room_name, new_room.creator_name)
-	gui.flash(gui.title_gui)
-
-	await fade_in(direction)
-
 
 func fade_out(direction: Vector2i):
 	var fade_rect = ColorRect.new()
 	gui.add_child(fade_rect)
 	fade_rect.size = get_viewport().size
-	fade_rect.modulate.a = 0.0
 	fade_rect.position = fade_rect.size * Vector2(direction)
-	print(direction)
+	
 	var tween = create_tween()
-	tween.tween_property(fade_rect, "modulate:a", 1.0, 0.4)
+	tween.tween_interval(0.2)
 	tween.tween_property(fade_rect, "position", Vector2.ZERO, 0.4)
 	await tween.finished
 	fade_rect.queue_free()
 
-func fade_in(direction: Vector2i):
+func fade_in():
 	var fade_rect = ColorRect.new()
 	gui.add_child(fade_rect)
 	fade_rect.size = get_viewport().size
 	var tween = create_tween()
+	tween.tween_interval(0.2)
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.4)
-	tween.tween_property(fade_rect, "position", -1 * fade_rect.size * Vector2(direction), 0.4)
 	await tween.finished
 	fade_rect.queue_free()

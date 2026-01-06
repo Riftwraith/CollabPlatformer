@@ -1,5 +1,5 @@
 extends CanvasLayer
-class_name GUI
+class_name GameGui
 
 @onready var collectable_gui = $CollectableGUI
 @onready var collectable_text_rec = $CollectableGUI/KeycapTexture
