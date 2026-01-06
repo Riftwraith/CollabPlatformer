@@ -194,6 +194,23 @@ metadata/_custom_type_script = "uid://b8s22g74qlh6j"
 [node name="Collectable" parent="Collectables" instance=ExtResource("19_oace5")]
 position = Vector2(331.55524, 163.24869)
 
+[node name="DebugPoints" type="Node" parent="."]
+
+[node name="DebugPoint" type="Node2D" parent="DebugPoints"]
+position = Vector2(330, 125)
+script = ExtResource("20_hhjo6")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint2" type="Node2D" parent="DebugPoints"]
+position = Vector2(712.1756, 393.30197)
+script = ExtResource("20_hhjo6")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint3" type="Node2D" parent="DebugPoints"]
+position = Vector2(485.90552, 124.43994)
+script = ExtResource("20_hhjo6")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
 [node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="CheckpointArea7" parent="Checkpoints" instance=ExtResource("21_k380g")]

@@ -12,7 +12,7 @@ func _teleport_to(debugPoint: DebugPoint) -> void:
 	print_debug("teleporting to ", debugPoint.global_position)
 	parent.global_position = debugPoint.global_position
 	if parent.has_method("respawn"):
-		parent.respawn()
+		parent.play_respawn_feedback()
 	pass
 
 # Called when the node enters the scene tree for the first time.

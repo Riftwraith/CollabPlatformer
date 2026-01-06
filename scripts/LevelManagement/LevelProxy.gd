@@ -4,6 +4,7 @@ class_name LevelProxy
 
 @export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var scene: PackedScene
 @export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var grid_size: Vector2i 
+@onready var grid_pos: Vector2i = Vector2i(position / 768)
 var sprite: Sprite2D
 
 @export_tool_button("Edit Level") var edit_level = func():

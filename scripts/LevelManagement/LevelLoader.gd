@@ -50,19 +50,23 @@ func reset_cache() -> void:
 	_refresh_data()
 
 
-func _get_level_proxy_at(worldCoord: Vector2i) -> LevelProxy:
+func _get_level_proxy_at(gridCoord: Vector2i) -> LevelProxy:
 	# bounds check
-	if (worldCoord.x < 0 || worldCoord.x >= worldDims.x ||
-		worldCoord.y < 0 || worldCoord.y >= worldDims.y):
+	if (gridCoord.x < 0 || gridCoord.x >= worldDims.x ||
+		gridCoord.y < 0 || gridCoord.y >= worldDims.y):
 		return null
-	return _world[_grid_to_flat_index(worldCoord)]
+	return _world[_grid_to_flat_index(gridCoord)]
 	
-func get_level_at(worldCoord: Vector2i) -> PackedScene:
-	var level_proxy = _get_level_proxy_at(worldCoord)
+func get_level_at(gridCoord: Vector2i) -> PackedScene:
+	var level_proxy = _get_level_proxy_at(gridCoord)
 	if level_proxy:
 		return level_proxy.scene
 	else:
 		return null
+
+func get_local_grid(gridCoord: Vector2i) -> Vector2i:
+	var level_proxy = _get_level_proxy_at(gridCoord)
+	return gridCoord - level_proxy.grid_pos
 
 func get_target_level(curr_scene: PackedScene, position_in_level: Vector2, transition_direction: Vector2i) -> PackedScene:
 	var grid_pos = level_to_grid(curr_scene, position_in_level)
@@ -80,7 +84,7 @@ func level_to_grid(scene: PackedScene, player_pos_in_level: Vector2) -> Vector2i
 	const LEVEL_TILE_SIZE = 768 # scale 3 * 16 cell per grid scale * 16px per cell  
 	
 	var proxy_path = level_cache[scene.resource_path]
-	var proxy = get_node(proxy_path) as LevelProxy
+	var proxy: LevelProxy = get_node(proxy_path) as LevelProxy
 	
 	player_pos_in_level.x = clamp(player_pos_in_level.x, 0, proxy.grid_size.x * LEVEL_TILE_SIZE - 1)
 	player_pos_in_level.y = clamp(player_pos_in_level.y, 0, proxy.grid_size.y * LEVEL_TILE_SIZE - 1)

@@ -45,7 +45,7 @@ signal spawn_begin
 signal spawn_end
 
 #region Public functions 
-func respawn() -> void: #play respawn animation and temporarily disable control
+func play_respawn_feedback() -> void: #play respawn animation and temporarily disable control
 	velocity = Vector2.ZERO
 	disable_mode = CollisionObject2D.DISABLE_MODE_KEEP_ACTIVE #disable collision
 	gravity_controller.enabled = true
