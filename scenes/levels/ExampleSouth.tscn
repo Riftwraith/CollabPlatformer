@@ -108,10 +108,6 @@ scale_amount_min = 4.0
 scale_amount_max = 4.0
 color = Color(0.32927376, 0.67555845, 0.87411356, 1)
 
-[node name="Signpost" parent="." instance=ExtResource("5_j5dps")]
-position = Vector2(457, 408)
-text = "2D lighting!"
-
 [node name="GameObjects" type="Node2D" parent="."]
 
 [node name="Signpost" parent="GameObjects" instance=ExtResource("5_j5dps")]
@@ -122,6 +118,10 @@ text = "Godot has lots of cool inbuilt features"
 position = Vector2(447, 648)
 text = "Particles!
 Audio Stream Player 2Ds!"
+
+[node name="Signpost3" parent="GameObjects" instance=ExtResource("5_j5dps")]
+position = Vector2(457, 408)
+text = "2D lighting!"
 
 [node name="Player" parent="." instance=ExtResource("5_mnm8i")]
 position = Vector2(374, 175)
