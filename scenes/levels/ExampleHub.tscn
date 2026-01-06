@@ -17,13 +17,13 @@
 [ext_resource type="PackedScene" uid="uid://c45th524x8nov" path="res://scenes/prefabs/WoodenDoor.tscn" id="15_1mnwl"]
 [ext_resource type="AudioStream" uid="uid://c5l6aox5yg0ka" path="res://sounds/motor_loop.wav" id="15_516m5"]
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="16_427e6"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="17_sok87"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/Player.tscn" id="17_sok87"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="18_n452j"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="19_oace5"]
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="20_hhjo6"]
 [ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/CheckpointArea.tscn" id="21_k380g"]
 [ext_resource type="AudioStream" uid="uid://cf1j2c0sudxs8" path="res://sounds/outdoor_ambience.wav" id="22_81osc"]
-[ext_resource type="Script" path="res://scenes/levels/ExampleHubSaveData.gd" id="24_067go"]
+[ext_resource type="Script" uid="uid://823subner376" path="res://scenes/levels/ExampleHubSaveData.gd" id="24_067go"]
 
 [sub_resource type="Curve2D" id="Curve2D_b713g"]
 _data = {
@@ -46,18 +46,20 @@ room_name = "Example Hub"
 creator_name = "RW & FCP"
 save_data = NodePath("ExampleHubSaveData")
 
-[node name="Sky" type="TileMapLayer" parent="."]
+[node name="BackgroundArt" type="Node2D" parent="."]
+
+[node name="SkyTiles" type="TileMapLayer" parent="BackgroundArt"]
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAAMABwAAAAAAAAAAAAQABwAAAAEAAAABAAMABwAAAAAAAAABAAQABwAAAAEAAAACAAIABwAAAAAAAAACAAMABwAAAAAAAAACAAQABwAAAAEAAAADAAIABwAAAAAAAAADAAMABwAAAAAAAAADAAQABwAAAAEAAAAEAAIABwAAAAAAAAAEAAMABwAAAAEAAAAEAAQABwAAAAIAAAAFAAIABwAAAAAAAAAFAAMABwAAAAAAAAAFAAQABwAAAAEAAAAGAAIABwAAAAAAAAAGAAMABwAAAAEAAAAGAAQABwAAAAIAAAAHAAIABwAAAAAAAAAHAAMABwAAAAEAAAAHAAQABwAAAAIAAAAIAAIABwAAAAAAAAAIAAMABwAAAAEAAAAIAAQABwAAAAIAAAAJAAIABwAAAAAAAAAJAAMABwAAAAAAAAAJAAQABwAAAAEAAAAKAAIABwAAAAAAAAAKAAMABwAAAAAAAAAKAAQABwAAAAEAAAALAAIABwAAAAAAAAALAAMABwAAAAAAAAALAAQABwAAAAEAAAAMAAIABwAAAAAAAAAMAAMABwAAAAAAAAAMAAQABwAAAAEAAAANAAIABwAAAAAAAAANAAMABwAAAAAAAAANAAQABwAAAAEAAAAOAAIABwAAAAAAAAAOAAMABwAAAAAAAAAOAAQABwAAAAEAAAAPAAIABwAAAAAAAAAPAAMABwAAAAAAAAAPAAQABwAAAAEAAAAAAAcABwAAAAMAAAAAAAgABwAAAAQAAAAAAAkABwAAAAQAAAABAAcABwAAAAMAAAABAAgABwAAAAQAAAABAAkABwAAAAQAAAACAAcABwAAAAIAAAACAAgABwAAAAMAAAACAAkABwAAAAQAAAADAAcABwAAAAIAAAADAAgABwAAAAMAAAADAAkABwAAAAQAAAAEAAcABwAAAAIAAAAEAAgABwAAAAMAAAAEAAkABwAAAAQAAAAFAAcABwAAAAMAAAAFAAgABwAAAAQAAAAFAAkABwAAAAQAAAAGAAcABwAAAAQAAAAGAAgABwAAAAQAAAAGAAkABwAAAAQAAAAHAAcABwAAAAQAAAAHAAgABwAAAAQAAAAHAAkABwAAAAQAAAAIAAcABwAAAAMAAAAIAAgABwAAAAQAAAAIAAkABwAAAAQAAAAJAAcABwAAAAMAAAAJAAgABwAAAAQAAAAJAAkABwAAAAQAAAAKAAcABwAAAAQAAAAKAAgABwAAAAQAAAAKAAkABwAAAAQAAAALAAcABwAAAAMAAAALAAgABwAAAAQAAAALAAkABwAAAAQAAAAMAAcABwAAAAMAAAAMAAgABwAAAAQAAAAMAAkABwAAAAQAAAANAAcABwAAAAMAAAANAAgABwAAAAQAAAANAAkABwAAAAQAAAAOAAcABwAAAAMAAAAOAAgABwAAAAQAAAAOAAkABwAAAAQAAAAPAAcABwAAAAQAAAAPAAgABwAAAAQAAAAPAAkABwAAAAQAAAAAAAYABwAAAAIAAAABAAYABwAAAAIAAAACAAYABwAAAAIAAAADAAYABwAAAAIAAAAEAAYABwAAAAIAAAAFAAYABwAAAAIAAAAGAAYABwAAAAMAAAAHAAYABwAAAAMAAAAIAAYABwAAAAIAAAAJAAYABwAAAAIAAAAKAAYABwAAAAMAAAALAAYABwAAAAIAAAAMAAYABwAAAAIAAAANAAYABwAAAAIAAAAOAAYABwAAAAIAAAAPAAYABwAAAAMAAAAMAAAABwAAAAAAAAAMAAEABwAAAAAAAAANAAAABwAAAAAAAAANAAEABwAAAAAAAAAOAAAABwAAAAAAAAAOAAEABwAAAAAAAAAPAAAABwAAAAAAAAAPAAEABwAAAAAAAAAAAAIABwAAAAAAAAABAAIABwAAAAAAAAAAAAUABwAAAAIAAAABAAUABwAAAAIAAAACAAUABwAAAAIAAAADAAUABwAAAAIAAAAEAAUABwAAAAIAAAAFAAUABwAAAAIAAAAGAAUABwAAAAIAAAAHAAUABwAAAAIAAAAIAAUABwAAAAIAAAAJAAUABwAAAAIAAAAKAAUABwAAAAIAAAALAAUABwAAAAIAAAAMAAUABwAAAAIAAAANAAUABwAAAAIAAAAOAAUABwAAAAIAAAAPAAUABwAAAAIAAAAAAAoABwAAAAQAAAAAAAsABwAAAAQAAAAAAAwABwAAAAQAAAAAAA0ABwAAAAQAAAAAAA4ABwAAAAQAAAABAAoABwAAAAQAAAABAAsABwAAAAQAAAABAAwABwAAAAQAAAABAA0ABwAAAAQAAAABAA4ABwAAAAQAAAACAAoABwAAAAQAAAACAAsABwAAAAQAAAACAAwABwAAAAQAAAACAA0ABwAAAAQAAAACAA4ABwAAAAQAAAADAAoABwAAAAQAAAADAAsABwAAAAQAAAADAAwABwAAAAQAAAADAA0ABwAAAAQAAAADAA4ABwAAAAQAAAAEAAoABwAAAAQAAAAEAAsABwAAAAQAAAAEAAwABwAAAAQAAAAEAA0ABwAAAAQAAAAEAA4ABwAAAAQAAAAFAAoABwAAAAQAAAAFAAsABwAAAAQAAAAFAAwABwAAAAQAAAAFAA0ABwAAAAQAAAAFAA4ABwAAAAQAAAAGAAoABwAAAAQAAAAGAAsABwAAAAQAAAAGAAwABwAAAAQAAAAGAA0ABwAAAAQAAAAGAA4ABwAAAAQAAAAHAAoABwAAAAQAAAAHAAsABwAAAAQAAAAHAAwABwAAAAQAAAAHAA0ABwAAAAQAAAAHAA4ABwAAAAQAAAAIAAoABwAAAAQAAAAIAAsABwAAAAQAAAAIAAwABwAAAAQAAAAIAA0ABwAAAAQAAAAIAA4ABwAAAAQAAAAJAAoABwAAAAQAAAAJAAsABwAAAAQAAAAJAAwABwAAAAQAAAAJAA0ABwAAAAQAAAAJAA4ABwAAAAQAAAAKAAoABwAAAAQAAAAKAAsABwAAAAQAAAAKAAwABwAAAAQAAAAKAA0ABwAAAAQAAAAKAA4ABwAAAAQAAAALAAoABwAAAAQAAAALAAsABwAAAAQAAAALAAwABwAAAAQAAAALAA0ABwAAAAQAAAALAA4ABwAAAAQAAAAMAAoABwAAAAQAAAAMAAsABwAAAAQAAAAMAAwABwAAAAQAAAAMAA0ABwAAAAQAAAAMAA4ABwAAAAQAAAANAAoABwAAAAQAAAANAAsABwAAAAQAAAANAAwABwAAAAQAAAANAA0ABwAAAAQAAAANAA4ABwAAAAQAAAAOAAoABwAAAAQAAAAOAAsABwAAAAQAAAAOAAwABwAAAAQAAAAOAA0ABwAAAAQAAAAOAA4ABwAAAAQAAAAPAAoABwAAAAQAAAAPAAsABwAAAAQAAAAPAAwABwAAAAQAAAAPAA0ABwAAAAQAAAAPAA4ABwAAAAQAAAAAAAAABwAAAAAAAAAAAAEABwAAAAAAAAABAAAABwAAAAAAAAABAAEABwAAAAAAAAACAAAABwAAAAAAAAACAAEABwAAAAAAAAADAAAABwAAAAAAAAADAAEABwAAAAAAAAAEAAAABwAAAAAAAAAEAAEABwAAAAAAAAAFAAAABwAAAAAAAAAFAAEABwAAAAAAAAAGAAAABwAAAAAAAAAGAAEABwAAAAAAAAAHAAAABwAAAAAAAAAHAAEABwAAAAAAAAAIAAAABwAAAAAAAAAIAAEABwAAAAAAAAAJAAAABwAAAAAAAAAJAAEABwAAAAAAAAAKAAAABwAAAAAAAAAKAAEABwAAAAAAAAALAAAABwAAAAAAAAALAAEABwAAAAAAAAA=")
 tile_set = ExtResource("2_81osc")
 
-[node name="Skyline" type="Sprite2D" parent="."]
+[node name="Skyline" type="Sprite2D" parent="BackgroundArt"]
 position = Vector2(0, 80)
 scale = Vector2(3, 3)
 texture = ExtResource("3_516m5")
 centered = false
 
-[node name="Background" type="TileMapLayer" parent="."]
+[node name="BackgroundTiles" type="TileMapLayer" parent="BackgroundArt"]
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAKAAwAAwACAAUAAAALAAwAAwACAAUAAAALAAsAAwACAAUAAAALAAoAAwAAAAUAAAAMAAoAAwABAAUAAAAMAAsAAwACAAUAAAAMAAwAAwABAAUAAAANAAwAAwABAAUAAAAOAAsAAwAAAAUAAAAOAAoAAwABAAUAAAANAAoAAwABAAUAAAANAAsAAwABAAUAAAAOAAwAAwABAAUAAAAMAA0AAwABAAAAAAANAA0AAwAAAAAAAAAOAA0AAwAAAAAAAAAQAA4AAwACAAAAAAAPAA4AAwAAAAAAAAAOAA4AAwAAAAAAAAANAA4AAwAAAAAAAAAMAA4AAwABAAAAAAALAA4AAwAAAAAAAAAKAA4AAwAAAAAAAAAJAA4AAwABAAAAAAAIAA4AAwACAAAAAAAHAA4AAwACAAAAAAAHAA8AAwACAAAAAAAIAA8AAwAAAAAAAAAJAA8AAwAAAAAAAAAKAA8AAwACAAAAAAALAA8AAwABAAAAAAAMAA8AAwABAAAAAAANAA8AAwACAAAAAAAOAA8AAwAAAAAAAAAQAA8AAwACAAAAAAAQAA0AAwAAAAAAAAALAA0AAwAAAAAAAAAPAA0AAwACAAAAAAAIABAAAwAAAAAAAAAHABAAAwABAAAAAAAJABAAAwACAAAAAAAKABAAAwACAAAAAAACAAUAAwAGAAAAAAACAAQAAwAEAAEAAAABAAEAAwAFAAAAAAABAAIAAwAGAAAAAAABAAMAAwAFAAAAAAABAAQAAwAFAAEAAAABAAUAAwAEAAAAAAACAAMAAwAFAAAAAAACAAIAAwAEAAAAAAACAAEAAwAEAAIAAAADAAEAAwAEAAIAAAAEAAEAAwAEAAIAAAAEAAIAAwAEAAEAAAAEAAMAAwAEAAIAAAACAAYAAwAFAAEAAAAFAAMAAwADAAAAAAAFAAQAAwAFAAIAAAAFAAIAAwADAAAAAAAFAAEAAwAHAAEAAAADAAIAAwAGAAAAAAAKAAsAAwACAAUAAAAPAAwAAwABAAUAAAADAAQAAwAEAAAAAAADAAMAAwAFAAEAAAAEAAQAAwAEAAIAAAAKAAoAAwABAAUAAAAPAAoAAwAAAAUAAAAPAAsAAwABAAUAAAAPAA8AAwACAAAAAAAKAA0AAwAAAAAAAAADAAUAAwAFAAMAAAADAAcAAwAFAAMAAAADAAkAAwAFAAMAAAABAAcAAwADAAMAAAABAAkAAwADAAMAAAADAAsAAwAFAAMAAAAJAAIAAwADAAMAAAAJAAAAAwADAAMAAAALAAQAAwADAAMAAAALAAYAAwADAAMAAAALAAgAAwADAAMAAAANAAgAAwADAAMAAAA=")
 tile_set = ExtResource("2_81osc")
@@ -68,80 +70,82 @@ scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAAAAAgAGABIAAAAAAAEAAgALABIAAAAAAAIAAgALABIAAAAAAAMAAgALABIAAAAAAAQAAgALABIAAAAAAAUAAgALABIAAAAAAAYAAgAGABMAAAAAAA8AAgAJAAIAAAAAAA4AAgAJAAIAAAAAAA0AAgAJAAIAAAAAAAwAAgAJAAIAAAAAAAsAAgAGAAEAAAAAAAoAAgALAAIAAAAAAAkAAgALAAAAAAABAA8AAgAJAAIAAAACAA8AAgAJAAIAAAADAA8AAgAJAAIAAAAEAA8AAgAJAAIAAAAFAA8AAgAJAAIAAAAGAA8AAgALAAIAAAAJAA8AAgAIAAAAAAAKAA8AAgAKAAAAAAALAA8AAgAKAAAAAAAMAA8AAgAKAAAAAAANAA8AAgAKAAAAAAAOAA8AAgAKAAAAAAAPAA8AAgAKAAAAAAAPAAkAAgADABQAAAAPAAoAAgAAABUAAAAPAAsAAgAAABUAAAAPAA0AAgACAAMAAAAPAAwAAgAAABYAAAABAAAAAgAJABMAAAACAAAAAgAJABMAAAADAAAAAgAJABMAAAAEAAAAAgAJABMAAAAFAAAAAgAFABIAAAAGAAAAAgALABIAAAAJAAAAAgAIABMAAAAKAAAAAgAJABMAAAALAAAAAgAFABIAAAABAAYAAgACABMAAAACAAYAAgADABMAAAADAAIAAgAAABAAAAADAAMAAgAAABEAAAADAAQAAgABABIAAAAEAAQAAgACABMAAAAFAAQAAgADABMAAAAFAAEAAgAIABMAAAAGAAEAAgALABMAAAAMAAAAAgAJABIAAAALAAEAAgAIABEAAAALAAIAAgAIABEAAAALAAMAAgAIABMAAAAMAAMAAgAJABMAAAAMAAIAAgAJABIAAAAMAAEAAgAJABIAAAAOAAkAAgACABcAAAANAAkAAgACABcAAAAMAAkAAgACABcAAAALAAkAAgACABcAAAAKAAkAAgABABQAAAAGAA4AAgALAAIAAAAFAA4AAgAJAAIAAAAEAA4AAgAJAAIAAAADAA4AAgAJAAIAAAACAA4AAgAJAAIAAAABAA4AAgAJAAIAAAABAA0AAgAJAAIAAAACAA0AAgAGAAEAAAADAA0AAgAKAAAAAAAEAA0AAgAKAAAAAAAFAA0AAgAKAAAAAAAGAA0AAgAGAAAAAAAHAA0AAgACAAMAAAAIAA0AAgACAAMAAAALAA0AAgACAAMAAAAMAA0AAgADAAMAAAAKAAoAAgAAABUAAAAOAA0AAgABAAMAAAAKAAsAAgAAABYAAAABAAsAAgAKAAAAAAACAAsAAgALAAAAAAACAAwAAgALAAIAAAABAAwAAgAJAAIAAAACAAIAAQABAAUAAAABAAQAAQACAAUAAAAIAA8AAQAAAAEAAAAHAAQAAQACAAUAAAAIAAEAAQACAAUAAAAHAAEAAQADAAUAAAAKAAMAAQADAAUAAAAJAAMAAQABAAUAAAAGAAQAAQADAAUAAAANAAAAAgALABIAAAANAAEAAgALABIAAAANAAIAAgALABIAAAANAAMAAgALABMAAAAKAA0AAgACAAMAAAAJAA0AAgACAAMAAAABAAUABgAAAAAAAAAEAAMABgAAAAAAAAANAA0AAQAAAAYAAAAJABAAAgAIAAMAAAAKABAAAgAJAAMAAAALABAAAgAJAAMAAAAMABAAAgAJAAMAAAANABAAAgAJAAMAAAAOABAAAgAJAAMAAAAPABAAAgAJAAMAAAAQABAAAgALAAMAAAAQAA8AAgALAAAAAAAQAA0AAgADAAMAAAAGABAAAgALAAMAAAAFABAAAgAJAAMAAAAEABAAAgAJAAMAAAADABAAAgAJAAMAAAACABAAAgAJAAMAAAABABAAAgAJAAMAAAAAABAAAgAJAAMAAAD//xAAAgAIAAMAAAD//w8AAgAIAAEAAAD//w4AAgAIAAEAAAD//w0AAgAIAAEAAAD//wkAAgAIAAAAAAD//woAAgAIAAEAAAD//wsAAgAIAAEAAAD//wwAAgAIAAEAAAD//wYAAgAIABMAAAD//wUAAgAIABEAAAD//wQAAgAIABEAAAD//wMAAgAIABEAAAD//wIAAgAIABEAAAD//wEAAgAIABEAAAD//wAAAgAIABEAAAD/////AgAIABAAAAAAAP//AgAKABAAAAABAP//AgAKABAAAAACAP//AgAKABAAAAADAP//AgAKABAAAAAEAP//AgAKABAAAAAFAP//AgAKABAAAAAGAP//AgALABAAAAAJAP//AgAIABAAAAAKAP//AgAKABAAAAALAP//AgAKABAAAAAMAP//AgAKABAAAAANAP//AgALABAAAAA=")
 tile_set = ExtResource("2_81osc")
 
-[node name="TerrainTops" type="TileMapLayer" parent="."]
+[node name="ForegroundArt" type="Node2D" parent="."]
+
+[node name="TerrainTopTiles" type="TileMapLayer" parent="ForegroundArt"]
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAD//wkACAABAAAAAAAAAAkACAACAAAAAAACAAsACAACAAAAAAABAAsACAAEAAAAAAADAA0ACAAEAAAAAAACAA0ACAADAAAAAAAEAA0ACAAEAAAAAAAFAA0ACAAEAAAAAAAGAA0ACAAEAAAAAAAHAA0ACAAEAAAAAAAIAA0ACAAEAAAAAAAJAA0ACAAHAAAAAAAKAA0ACAAEAAEAAAALAA0ACAAEAAEAAAAMAA0ACAACAAEAAAAPAA0ACAAEAAEAAAAQAA0ACAACAAEAAAAOAA0ACAABAAEAAAABAAYACAAEAAUAAAACAAYACAACAAUAAAAAAAYACAADAAUAAAADAAQACAADAAUAAAAEAAQACAAEAAUAAAAFAAQACAAEAAUAAAAGAAQACAAFAAUAAAADAAIACAAAAAUAAAAKAAkACAAAAAYAAAALAAkACAAEAAYAAAAMAAkACAAEAAYAAAANAAkACAAEAAYAAAAOAAkACAAEAAYAAAAPAAkACAACAAYAAAAAAAsACAADAAAAAAA=")
 tile_set = ExtResource("2_81osc")
 
-[node name="Foreground" type="TileMapLayer" parent="."]
+[node name="ForegroundTiles" type="TileMapLayer" parent="ForegroundArt"]
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAAgABQAGAAMAAAAPAA4ABQAHAAMAAAA=")
 tile_set = ExtResource("2_81osc")
 
-[node name="Decoration" type="Node2D" parent="."]
+[node name="DecorationSprites" type="Node2D" parent="ForegroundArt"]
 
-[node name="TreeSprite" type="Sprite2D" parent="Decoration"]
+[node name="Tree" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(232, 477)
 scale = Vector2(3, 3)
 texture = ExtResource("4_067go")
 centered = false
 
-[node name="TutorialScreen" type="Sprite2D" parent="Decoration"]
+[node name="TutorialScreenBig" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(628, 336)
 scale = Vector2(3, 3)
 texture = ExtResource("5_5tka8")
 
-[node name="TutorialScreen2" type="Sprite2D" parent="Decoration"]
+[node name="TutorialScreenSmall" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(598, 524)
 scale = Vector2(3, 3)
 texture = ExtResource("6_4pa25")
 
-[node name="Grafitti0" type="Sprite2D" parent="Decoration"]
+[node name="Grafitti" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(543, 91)
 scale = Vector2(3, 3)
 texture = ExtResource("7_jt4sw")
 centered = false
 
-[node name="PictureFrame" type="Sprite2D" parent="Decoration"]
+[node name="PictureFrame" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(666, 483.00003)
 scale = Vector2(3, 3)
 texture = ExtResource("8_g4jwe")
 centered = false
 
-[node name="PCDesk" type="Sprite2D" parent="Decoration"]
+[node name="PCDesk" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(672, 564)
 scale = Vector2(3, 3)
 texture = ExtResource("9_n13dg")
 centered = false
 
-[node name="Bed" type="Sprite2D" parent="Decoration"]
+[node name="Bed" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(534, 585)
 scale = Vector2(3, 3)
 texture = ExtResource("10_vn4p2")
 centered = false
 
-[node name="Bulb" type="Sprite2D" parent="Decoration"]
+[node name="Bulb" type="Sprite2D" parent="ForegroundArt/DecorationSprites"]
 position = Vector2(621, 480)
 scale = Vector2(3, 3)
 texture = ExtResource("11_16an6")
 centered = false
 
-[node name="PointLight2D" type="PointLight2D" parent="Decoration/Bulb"]
+[node name="PointLight2D" type="PointLight2D" parent="ForegroundArt/DecorationSprites/Bulb"]
 position = Vector2(4, 3.3333333)
 scale = Vector2(2, 2)
 shadow_enabled = true
 texture = ExtResource("12_5aiqc")
 
-[node name="Objects" type="Node2D" parent="."]
+[node name="GameObjects" type="Node2D" parent="."]
 
-[node name="Conveyor" parent="Objects" node_paths=PackedStringArray("display_sprite") instance=ExtResource("13_6b52p")]
+[node name="Conveyor" parent="GameObjects" node_paths=PackedStringArray("display_sprite") instance=ExtResource("13_6b52p")]
 position = Vector2(192, 312)
 curve = SubResource("Curve2D_b713g")
 display_sprite = NodePath("RigidBody2D/Sprite2D")
 travel_time = 2.0
 wait_time = 0.5
 
-[node name="RigidBody2D" type="RigidBody2D" parent="Objects/Conveyor"]
+[node name="RigidBody2D" type="RigidBody2D" parent="GameObjects/Conveyor"]
 collision_layer = 16
 collision_mask = 2
 gravity_scale = 0.0
@@ -149,29 +153,29 @@ freeze = true
 freeze_mode = 1
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="Objects/Conveyor/RigidBody2D"]
+[node name="Sprite2D" type="Sprite2D" parent="GameObjects/Conveyor/RigidBody2D"]
 scale = Vector2(3, 3)
 texture = ExtResource("14_dcta3")
 region_enabled = true
 region_rect = Rect2(16, 64, 32, 16)
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Objects/Conveyor/RigidBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameObjects/Conveyor/RigidBody2D"]
 position = Vector2(0, -12)
 shape = SubResource("RectangleShape2D_5d6x8")
 one_way_collision = true
 metadata/_edit_lock_ = true
 
-[node name="MotorHum" type="AudioStreamPlayer2D" parent="Objects/Conveyor/RigidBody2D" groups=["ambient_audio"]]
+[node name="MotorHum" type="AudioStreamPlayer2D" parent="GameObjects/Conveyor/RigidBody2D" groups=["ambient_audio"]]
 stream = ExtResource("15_516m5")
 volume_db = 10.0
 autoplay = true
 max_distance = 300.0
 
-[node name="WoodenDoor" parent="Objects" instance=ExtResource("15_1mnwl")]
+[node name="WoodenDoor" parent="GameObjects" instance=ExtResource("15_1mnwl")]
 position = Vector2(504.00433, 600.1667)
 
-[node name="Signpost" parent="Objects" instance=ExtResource("16_427e6")]
+[node name="Signpost" parent="GameObjects" instance=ExtResource("16_427e6")]
 position = Vector2(110, 504)
 text = "Welcome to the test Hub"
 
@@ -185,32 +189,10 @@ script = ExtResource("18_n452j")
 teleport_locations = [NodePath("../../DebugPoints/DebugPoint"), NodePath("../../DebugPoints/DebugPoint2"), NodePath("../../DebugPoints/DebugPoint3")]
 metadata/_custom_type_script = "uid://b8s22g74qlh6j"
 
-[node name="ForegroundTiles" type="TileMapLayer" parent="."]
-use_parent_material = true
-scale = Vector2(3, 3)
-tile_set = ExtResource("2_81osc")
-
 [node name="Collectables" type="Node2D" parent="."]
 
 [node name="Collectable" parent="Collectables" instance=ExtResource("19_oace5")]
 position = Vector2(331.55524, 163.24869)
-
-[node name="DebugPoints" type="Node" parent="."]
-
-[node name="DebugPoint" type="Node2D" parent="DebugPoints"]
-position = Vector2(91.929504, 244.22995)
-script = ExtResource("20_hhjo6")
-metadata/_custom_type_script = "uid://tq3f6llby3r"
-
-[node name="DebugPoint2" type="Node2D" parent="DebugPoints"]
-position = Vector2(712.1756, 393.30197)
-script = ExtResource("20_hhjo6")
-metadata/_custom_type_script = "uid://tq3f6llby3r"
-
-[node name="DebugPoint3" type="Node2D" parent="DebugPoints"]
-position = Vector2(485.90552, 124.43994)
-script = ExtResource("20_hhjo6")
-metadata/_custom_type_script = "uid://tq3f6llby3r"
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
@@ -237,5 +219,23 @@ position = Vector2(293, 457)
 stream = ExtResource("22_81osc")
 autoplay = true
 
-[node name="ExampleHubSaveData" type="Node" parent="."]
+[node name="DebugPoints" type="Node2D" parent="."]
+
+[node name="DebugPoint" type="Node2D" parent="DebugPoints"]
+position = Vector2(91.929504, 244.22995)
+script = ExtResource("20_hhjo6")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint2" type="Node2D" parent="DebugPoints"]
+position = Vector2(712.1756, 393.30197)
+script = ExtResource("20_hhjo6")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="DebugPoint3" type="Node2D" parent="DebugPoints"]
+position = Vector2(485.90552, 124.43994)
+script = ExtResource("20_hhjo6")
+metadata/_custom_type_script = "uid://tq3f6llby3r"
+
+[node name="ExampleHubSaveData" type="Node" parent="." node_paths=PackedStringArray("wooden_door")]
 script = ExtResource("24_067go")
+wooden_door = NodePath("../GameObjects/WoodenDoor")

@@ -1,7 +1,7 @@
 # RoomManager.gd
 extends Node
 
-@onready var GUI = $GUI
+@onready var gui = $GUI
 @onready var worldMap: LevelLoader = $WorldMap
 
 var total_collectables: int = 0
@@ -28,8 +28,8 @@ func _ready():
 			unique_rooms.append(room)
 			total_collectables += 1
 	var current_room = get_tree().current_scene
-	GUI.set_titles(current_room.room_name, current_room.creator_name)
-	GUI.flash(GUI.title_gui)
+	gui.set_titles(current_room.room_name, current_room.creator_name)
+	gui.flash(gui.title_gui)
 	
 
 func record_obtained_collectable(room_path: String):
@@ -37,7 +37,7 @@ func record_obtained_collectable(room_path: String):
 	if room_path not in rooms_with_obtained_collectables:
 		rooms_with_obtained_collectables.append(room_path)
 		obtained_collectables += 1
-		GUI.flash(GUI.collectable_gui)
+		gui.flash(gui.collectable_gui)
 
 func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2i, player_pos: Vector2, player_vel: Vector2):
 	await fade_out(direction)
@@ -59,15 +59,15 @@ func transition_to(old_coords:Vector2i, new_coords: Vector2i, direction: Vector2
 	get_tree().current_scene = new_room
 	new_room.player_enter(direction, player_pos, player_vel, old_coords)
 	
-	GUI.set_titles(new_room.room_name, new_room.creator_name)
-	GUI.flash(GUI.title_gui)
+	gui.set_titles(new_room.room_name, new_room.creator_name)
+	gui.flash(gui.title_gui)
 
 	await fade_in(direction)
 
 
 func fade_out(direction: Vector2i):
 	var fade_rect = ColorRect.new()
-	GUI.add_child(fade_rect)
+	gui.add_child(fade_rect)
 	fade_rect.size = get_viewport().size
 	fade_rect.modulate.a = 0.0
 	fade_rect.position = fade_rect.size * Vector2(direction)
@@ -80,7 +80,7 @@ func fade_out(direction: Vector2i):
 
 func fade_in(direction: Vector2i):
 	var fade_rect = ColorRect.new()
-	GUI.add_child(fade_rect)
+	gui.add_child(fade_rect)
 	fade_rect.size = get_viewport().size
 	var tween = create_tween()
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.4)
