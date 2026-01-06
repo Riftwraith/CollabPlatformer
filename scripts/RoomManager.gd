@@ -2,7 +2,7 @@
 extends Node
 
 const WORLD_TILE_SIZE = 768
-@onready var GUI = $GUI
+@onready var gui: GameGui = $GUI
 @onready var worldMap: LevelLoader = $WorldMap
 
 var total_collectables: int = 0
@@ -96,7 +96,7 @@ func _level_change(exitDir: Vector2i, room: RoomTemplate):
 			newPlayer.position += Vector2.UP * 96
 			newPlayer.velocity = oldPlayerVelocity
 		_: newPlayer.velocity = Vector2(exitDir) * newPlayer.run_speed
-	fade_in(exitDir)
+	fade_in()
 	
 
 func fade_out(direction: Vector2i):
@@ -111,7 +111,7 @@ func fade_out(direction: Vector2i):
 	await tween.finished
 	fade_rect.queue_free()
 
-func fade_in(direction: Vector2i):
+func fade_in():
 	var fade_rect = ColorRect.new()
 	gui.add_child(fade_rect)
 	fade_rect.size = get_viewport().size

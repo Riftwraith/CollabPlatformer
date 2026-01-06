@@ -42,8 +42,12 @@ size = Vector2(26.943695, 86)
 
 [node name="ExampleHub" type="Node2D" node_paths=PackedStringArray("save_data")]
 script = ExtResource("1_7vw8o")
+exit_leeway = null
+enter_override_time = null
 room_name = "Example Hub"
 creator_name = "RW & FCP"
+width = null
+height = null
 save_data = NodePath("ExampleHubSaveData")
 
 [node name="BackgroundArt" type="Node2D" parent="."]

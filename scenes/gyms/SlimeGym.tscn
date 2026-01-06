@@ -14,8 +14,10 @@ size = Vector2(120, 175)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5h7mk"]
 size = Vector2(85, 148)
 
-[node name="Room0" type="Node2D"]
+[node name="Room1" type="Node2D"]
 script = ExtResource("1_ry2mu")
+room_name = null
+creator_name = null
 
 [node name="Background Tiles" type="TileMapLayer" parent="."]
 use_parent_material = true
