@@ -18,7 +18,6 @@ const LEVEL_TILE_STEP: int = 16
 
 @export var save_data: SaveData
 @onready var current_scene: PackedScene = load(scene_file_path) as PackedScene
-@onready var gui: GameGui = RoomManager.gui
 
 enum Direction {
 	Left,
@@ -118,8 +117,8 @@ func _ready():
 		else:
 			collectable.obtained.connect(_on_collectable_obtained)
 
-	gui.set_titles(room_name, creator_name)
-	gui.flash(gui.title_gui)
+	RoomManager.gui.set_titles(room_name, creator_name)
+	RoomManager.gui.flash(RoomManager.gui.title_gui)
 	
 	player.death_end.connect(_player_died)
 	
