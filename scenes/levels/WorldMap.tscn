@@ -2,36 +2,37 @@
 
 [ext_resource type="Script" uid="uid://cvj8nx50e0i0m" path="res://scripts/LevelManagement/LevelLoader.gd" id="1_sy7l7"]
 [ext_resource type="Script" uid="uid://cmgjmhfrgu2mt" path="res://scripts/LevelManagement/LevelProxy.gd" id="3_6k55n"]
-[ext_resource type="PackedScene" uid="uid://bwoes2mblt87m" path="res://scenes/levels/ExampleLevel.tscn" id="3_8e116"]
-[ext_resource type="PackedScene" uid="uid://b0yxsq6lyhyfm" path="res://scenes/levels/BigLevel.tscn" id="3_dsyud"]
+[ext_resource type="PackedScene" uid="uid://cwwu4rl5lhgfg" path="res://scenes/levels/ExampleEast.tscn" id="3_8e116"]
 [ext_resource type="PackedScene" uid="uid://70sai727hpy7" path="res://scenes/levels/ExampleHub.tscn" id="4_8e116"]
+[ext_resource type="PackedScene" uid="uid://exe8wmfxkmwy" path="res://scenes/levels/ExampleSouth.tscn" id="4_dsyud"]
 
 [node name="WorldMap" type="Node2D"]
 script = ExtResource("1_sy7l7")
-levels = Array[PackedScene]([ExtResource("3_8e116"), ExtResource("3_dsyud"), ExtResource("4_8e116")])
+levels = Array[PackedScene]([ExtResource("4_8e116"), ExtResource("3_8e116"), ExtResource("4_dsyud")])
 level_cache = Dictionary[String, NodePath]({
-"res://scenes/levels/BigLevel.tscn": NodePath("Proxies/BigLevel"),
+"res://scenes/levels/ExampleEast.tscn": NodePath("Proxies/ExampleEast"),
 "res://scenes/levels/ExampleHub.tscn": NodePath("Proxies/ExampleHub"),
-"res://scenes/levels/ExampleLevel.tscn": NodePath("Proxies/ExampleLevel")
+"res://scenes/levels/ExampleSouth.tscn": NodePath("Proxies/ExampleSouth")
 })
 metadata/_edit_lock_ = true
 
 [node name="Proxies" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="ExampleLevel" type="Node2D" parent="Proxies"]
+[node name="ExampleHub" type="Node2D" parent="Proxies"]
+position = Vector2(2304, 2304)
+script = ExtResource("3_6k55n")
+scene = ExtResource("4_8e116")
+grid_size = Vector2i(1, 1)
+
+[node name="ExampleEast" type="Node2D" parent="Proxies"]
+position = Vector2(3072, 2304)
 script = ExtResource("3_6k55n")
 scene = ExtResource("3_8e116")
 grid_size = Vector2i(1, 1)
 
-[node name="BigLevel" type="Node2D" parent="Proxies"]
-position = Vector2(768, 0)
+[node name="ExampleSouth" type="Node2D" parent="Proxies"]
+position = Vector2(2304, 3072)
 script = ExtResource("3_6k55n")
-scene = ExtResource("3_dsyud")
-grid_size = Vector2i(2, 2)
-
-[node name="ExampleHub" type="Node2D" parent="Proxies"]
-position = Vector2(0, 768)
-script = ExtResource("3_6k55n")
-scene = ExtResource("4_8e116")
+scene = ExtResource("4_dsyud")
 grid_size = Vector2i(1, 1)
