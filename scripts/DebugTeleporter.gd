@@ -7,9 +7,9 @@ class_name DebugTeleporter
 var _parent: Node2D
 var _prev_key: Key = KEY_NONE
 
-func _teleport_to(debugPoint: DebugPoint) -> void:
-	print_debug("teleporting to ", debugPoint.global_position)
-	_parent.global_position = debugPoint.global_position
+func _teleport_to(debug_point: DebugPoint) -> void:
+	print_debug("teleporting to ", debug_point.global_position)
+	_parent.global_position = debug_point.global_position
 	if _parent.has_method("respawn"):
 		_parent.play_respawn_feedback()
 	pass
