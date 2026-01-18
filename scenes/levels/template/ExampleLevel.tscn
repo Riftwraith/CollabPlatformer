@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=4 uid="uid://bwoes2mblt87m"]
+[gd_scene load_steps=12 format=4 uid="uid://bwoes2mblt87m"]
 
 [ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level/RoomTemplate.gd" id="1_m2jqj"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_g18pg"]
-[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/Player.tscn" id="3_8luox"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/player.tscn" id="3_8luox"]
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="4_ekwi3"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/tiles/platforms.png" id="5_siqlb"]
+[ext_resource type="Script" uid="uid://362olr6sbv1v" path="res://scenes/levels/template/AutoJump.gd" id="6_0cn30"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="7_siqlb"]
+[ext_resource type="Script" uid="uid://c58nd18oh017g" path="res://scenes/levels/template/SaveJumpData.gd" id="8_ircju"]
 
 [sub_resource type="Curve2D" id="Curve2D_m2jqj"]
 _data = {
@@ -16,9 +18,10 @@ point_count = 2
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4nl1t"]
 size = Vector2(96.000015, 24)
 
+[sub_resource type="LabelSettings" id="LabelSettings_0cn30"]
+
 [node name="ExampleLevel" type="Node2D"]
 script = ExtResource("1_m2jqj")
-exit_leeway = null
 room_name = "Example Level"
 creator_name = "FCP"
 
@@ -65,6 +68,19 @@ one_way_collision = true
 [node name="Player" parent="." instance=ExtResource("3_8luox")]
 position = Vector2(407.23514, 657.42)
 
+[node name="AutoJump" type="Node2D" parent="Player"]
+script = ExtResource("6_0cn30")
+metadata/_custom_type_script = "uid://362olr6sbv1v"
+
+[node name="Label" type="Label" parent="Player/AutoJump"]
+offset_left = -33.235138
+offset_top = -40.419983
+offset_right = 35.0
+offset_bottom = -18.086649
+text = "0"
+label_settings = SubResource("LabelSettings_0cn30")
+horizontal_alignment = 1
+
 [node name="Collectables" type="Node2D" parent="."]
 
 [node name="Collectable" parent="Collectables" instance=ExtResource("7_siqlb")]
@@ -75,3 +91,7 @@ position = Vector2(240, 552)
 [node name="AudioPlayers" type="Node2D" parent="."]
 
 [node name="DebugPoints" type="Node2D" parent="."]
+
+[node name="SaveJumpData" type="Node" parent="."]
+script = ExtResource("8_ircju")
+metadata/_custom_type_script = "uid://c58nd18oh017g"

@@ -49,6 +49,29 @@ func flash(element: Control):
 	tween = create_tween()
 	tween.tween_property(element, "modulate", Color(1, 1, 1, 0), 0.2)
 
+func fade_out(direction: Vector2i):
+	var fade_rect = ColorRect.new()
+	add_child(fade_rect)
+	fade_rect.size = get_viewport().size
+	fade_rect.position = fade_rect.size * Vector2(direction)
+	
+	var tween = create_tween()
+	tween.tween_interval(0.2)
+	tween.tween_property(fade_rect, "position", Vector2.ZERO, 0.4)
+	await tween.finished
+	fade_rect.queue_free()
+
+func fade_in():
+	var fade_rect = ColorRect.new()
+	add_child(fade_rect)
+	fade_rect.size = get_viewport().size
+	var tween = create_tween()
+	tween.tween_interval(0.2)
+	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.4)
+	await tween.finished
+	fade_rect.queue_free()
+
+
 func _on_interact_hold_timeout():
 	#show collectable GUI
 	var tween = create_tween()

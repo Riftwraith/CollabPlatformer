@@ -25,7 +25,6 @@ func _ready():
 		if room not in unique_rooms:
 			unique_rooms.append(room)
 			total_collectables += 1
-	
 
 func record_obtained_collectable(room_path: String):
 	obtained_current_room_collectable = true
@@ -72,7 +71,7 @@ func _level_change(exitDir: Vector2i, room: RoomTemplate):
 	old_player.hide()
 	
 	# fade out
-	await fade_out(exitDir)
+	await gui.fade_out(exitDir)
 	
 	# unload level
 	room.cleanup()
@@ -96,27 +95,4 @@ func _level_change(exitDir: Vector2i, room: RoomTemplate):
 			newPlayer.position += Vector2.UP * 96
 			newPlayer.velocity = old_player_velocity
 		_: newPlayer.velocity = Vector2(exitDir) * newPlayer.run_speed
-	fade_in()
-	
-
-func fade_out(direction: Vector2i):
-	var fade_rect = ColorRect.new()
-	gui.add_child(fade_rect)
-	fade_rect.size = get_viewport().size
-	fade_rect.position = fade_rect.size * Vector2(direction)
-	
-	var tween = create_tween()
-	tween.tween_interval(0.2)
-	tween.tween_property(fade_rect, "position", Vector2.ZERO, 0.4)
-	await tween.finished
-	fade_rect.queue_free()
-
-func fade_in():
-	var fade_rect = ColorRect.new()
-	gui.add_child(fade_rect)
-	fade_rect.size = get_viewport().size
-	var tween = create_tween()
-	tween.tween_interval(0.2)
-	tween.tween_property(fade_rect, "modulate:a", 0.0, 0.4)
-	await tween.finished
-	fade_rect.queue_free()
+	gui.fade_in()

@@ -15,7 +15,8 @@ signal obtained
 func _process(delta):
 	_anim_sprite.play()
 	_t += delta
-	if _t > oscillate_period: _t = _t - oscillate_period
+	if _t > oscillate_period:
+		_t = _t - oscillate_period
 	_anim_sprite.position.y = oscillate_amplitude * sin(TAU * _t / oscillate_period)
 
 func _on_area_2d_body_entered(body: Node2D):
