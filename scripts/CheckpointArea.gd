@@ -1,5 +1,5 @@
 extends Area2D
-class_name  CheckpointArea
+class_name CheckpointArea
 
 signal entered
 

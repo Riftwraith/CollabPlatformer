@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=45 format=3 uid="uid://btum1axrcj38k"]
 
 [ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/characters/tellyface_spritesheet.png" id="2_n0leu"]
