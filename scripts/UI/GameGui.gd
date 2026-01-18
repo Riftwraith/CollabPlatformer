@@ -14,6 +14,9 @@ class_name GameGui
 
 @onready var interact_hold_timer = $Timers/InteractHold
 
+var info_tween 
+
+
 func _ready():
 	collectable_gui.modulate = Color(1, 1, 1, 0)
 	title_gui.modulate = Color(1, 1, 1, 0)
@@ -36,9 +39,7 @@ func _process(_delta):
 
 	if Input.is_action_just_released("interact"):
 		interact_hold_timer.stop()
-		var tween = create_tween()
-		tween.tween_property(collectable_gui, "modulate", Color(1, 1, 1, 0), 0.2)
-		tween.parallel().tween_property(title_gui, "modulate", Color(1, 1, 1, 0), 0.2)
+		_set_info_alpha(0)
 
 func flash(element: Control):
 	var tween = create_tween()
@@ -50,6 +51,7 @@ func flash(element: Control):
 	tween.tween_property(element, "modulate", Color(1, 1, 1, 0), 0.2)
 
 func fade_out(direction: Vector2i):
+	_set_info_alpha(0)
 	var fade_rect = ColorRect.new()
 	add_child(fade_rect)
 	fade_rect.size = get_viewport().size
@@ -71,9 +73,14 @@ func fade_in():
 	await tween.finished
 	fade_rect.queue_free()
 
+func _set_info_alpha(a: float):
+	if info_tween and info_tween.is_running():
+		info_tween.kill()
+	info_tween = create_tween()
+	info_tween.tween_property(collectable_gui, "modulate", Color(1, 1, 1, a), 0.2)
+	info_tween.parallel().tween_property(title_gui, "modulate", Color(1, 1, 1, a), 0.2)
+
 
 func _on_interact_hold_timeout():
 	#show collectable GUI
-	var tween = create_tween()
-	tween.tween_property(collectable_gui, "modulate", Color(1, 1, 1, 1), 0.2)
-	tween.parallel().tween_property(title_gui, "modulate", Color(1, 1, 1, 1), 0.2)
+	_set_info_alpha(1)

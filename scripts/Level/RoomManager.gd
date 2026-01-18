@@ -3,7 +3,7 @@ extends Node
 
 const WORLD_TILE_SIZE = 768
 @onready var gui: GameGui = $GUI
-@onready var worldMap: LevelLoader = $WorldMap
+@onready var world_map: LevelLoader = $WorldMap
 
 var total_collectables: int = 0
 var obtained_collectables: int = 0
@@ -13,7 +13,7 @@ var rooms_with_obtained_collectables: Array[String] = []
 var room_savedata := {}
 
 func is_room_at(pos: Vector2i) -> bool:
-	return worldMap.get_level_at(pos) != null
+	return world_map.get_level_at(pos) != null
 
 func store_savedata(room_path: String, data: Dictionary):
 	room_savedata[room_path] = data
@@ -21,7 +21,7 @@ func store_savedata(room_path: String, data: Dictionary):
 func _ready():
 	#calculate total collectables 
 	var unique_rooms: Array[PackedScene] = []
-	for room in worldMap.levels:
+	for room in world_map.levels:
 		if room not in unique_rooms:
 			unique_rooms.append(room)
 			total_collectables += 1
@@ -33,15 +33,15 @@ func record_obtained_collectable(room_path: String):
 		obtained_collectables += 1
 		gui.flash(gui.collectable_gui)
 
-func enqueue_level_change(exitDir: Vector2i, room: RoomTemplate):
-	get_tree().process_frame.connect(_level_change.bind(exitDir, room))
+func enqueue_level_change(exit_dir: Vector2i, room: RoomTemplate):
+	get_tree().process_frame.connect(_level_change.bind(exit_dir, room))
 	return
 
-func _level_change(exitDir: Vector2i, room: RoomTemplate):
+func _level_change(exit_dir: Vector2i, room: RoomTemplate):
 	# disconnect on call
 	get_tree().process_frame.disconnect(_level_change)
 	
-	if !worldMap.contains(room.current_scene):
+	if !world_map.contains(room.current_scene):
 		push_warning("current scene ", room.current_scene.resource_path, " is not registered in WorldMap")
 		room.respawn_player()
 		return
@@ -51,48 +51,50 @@ func _level_change(exitDir: Vector2i, room: RoomTemplate):
 	var old_player_velocity = old_player.velocity
 	var old_scene = room.current_scene
 	var old_playerPos = old_player.position
-	var old_grid_coords = worldMap.level_to_grid(old_scene, old_playerPos)
-	var old_local_grid_coords = worldMap.get_local_grid(old_grid_coords)
+	var old_grid_coords = world_map.level_to_grid(old_scene, old_playerPos)
+	var old_local_grid_coords = world_map.get_local_grid(old_grid_coords)
 	var old_player_local_grid_offset = old_playerPos - Vector2(old_local_grid_coords * WORLD_TILE_SIZE)
-	var next_grid_coords = old_grid_coords + exitDir
-	var next_scene = worldMap.get_level_at(next_grid_coords)
+	var next_grid_coords = old_grid_coords + exit_dir
+	var next_scene = world_map.get_level_at(next_grid_coords)
 	
 	if next_scene == null:
 		push_warning("player is at ", old_playerPos)
-		push_warning("there is no room ", exitDir, " in world map from ", old_scene.resource_path, " at ", next_grid_coords)
+		push_warning("there is no room ", exit_dir, " in world map from ", old_scene.resource_path, " at ", next_grid_coords)
 		room.respawn_player()
 		return
 	
-	var nextLocalGridCoords = worldMap.get_local_grid(next_grid_coords)
-	var newPlayerPos = Vector2(nextLocalGridCoords - exitDir) * WORLD_TILE_SIZE + old_player_local_grid_offset
+	var nextLocalGridCoords = world_map.get_local_grid(next_grid_coords)
+	var new_playerPos = Vector2(nextLocalGridCoords - exit_dir) * WORLD_TILE_SIZE + old_player_local_grid_offset
 	
 	# pause the level
 	room._set_child_processing(false) # pause everything
 	old_player.hide()
 	
 	# fade out
-	await gui.fade_out(exitDir)
+	await gui.fade_out(exit_dir)
 	
 	# unload level
 	room.cleanup()
 	get_tree().current_scene.free()
 	
+	#set flags for collectable removal
+	var new_room_path = next_scene.resource_path
+	obtained_current_room_collectable = new_room_path in rooms_with_obtained_collectables
+	
 	# load level
-	var newRoom = next_scene.instantiate() as RoomTemplate
-	get_tree().root.add_child(newRoom)
-	get_tree().current_scene = newRoom
+	var new_room = next_scene.instantiate() as RoomTemplate
+	get_tree().root.add_child(new_room)
+	get_tree().current_scene = new_room
 	
 	# set level params
-	var newRoomPath = next_scene.resource_path
-	obtained_current_room_collectable = newRoomPath in rooms_with_obtained_collectables
-	if room_savedata.has(newRoomPath):
-		newRoom.receive_savedata(room_savedata[newRoomPath])
-	var newPlayer = newRoom.player
-	newPlayer.position = newPlayerPos
-	match exitDir:
-		Vector2i.UP: newPlayer.velocity = Vector2.UP * newPlayer.jump_speed
+	if room_savedata.has(new_room_path):
+		new_room.receive_savedata(room_savedata[new_room_path])
+	var new_player = new_room.player
+	new_player.position = new_playerPos
+	match exit_dir:
+		Vector2i.UP: new_player.velocity = Vector2.UP * new_player.jump_speed
 		Vector2i.DOWN:
-			newPlayer.position += Vector2.UP * 96
-			newPlayer.velocity = old_player_velocity
-		_: newPlayer.velocity = Vector2(exitDir) * newPlayer.run_speed
+			new_player.position += Vector2.UP * 96
+			new_player.velocity = old_player_velocity
+		_: new_player.velocity = Vector2(exit_dir) * new_player.run_speed
 	gui.fade_in()

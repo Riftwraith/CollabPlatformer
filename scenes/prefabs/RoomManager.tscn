@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c36j5jvgrb4sv"]
 
-[ext_resource type="Script" uid="uid://b21mhaxjkjlnh" path="res://scripts/RoomManager.gd" id="1_67wb0"]
-[ext_resource type="PackedScene" uid="uid://c50mkncefk2aq" path="res://scenes/prefabs/Gui.tscn" id="2_v5o8e"]
+[ext_resource type="Script" uid="uid://b21mhaxjkjlnh" path="res://scripts/Level/RoomManager.gd" id="1_67wb0"]
+[ext_resource type="PackedScene" uid="uid://c50mkncefk2aq" path="res://scenes/prefabs/gui.tscn" id="2_v5o8e"]
 [ext_resource type="PackedScene" uid="uid://c75x52ojjomvo" path="res://scenes/levels/WorldMap.tscn" id="3_k36ra"]
 
 [node name="RoomManager" type="Node"]
