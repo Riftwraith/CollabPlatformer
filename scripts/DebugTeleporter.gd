@@ -6,7 +6,7 @@ class_name DebugTeleporter
 
 var parent: Node2D
 
-var prevKey: Key = KEY_NONE
+var prev_key: Key = KEY_NONE
 
 func _teleport_to(debugPoint: DebugPoint) -> void:
 	print_debug("teleporting to ", debugPoint.global_position)
@@ -27,11 +27,11 @@ func _process(_delta: float) -> void:
 		for n in range(teleport_locations.size()):
 			assert(n < 9, "debug tp only supports key_1 through key_9")
 			var key = KEY_1 + n as Key
-			if prevKey == key and !Input.is_key_pressed(prevKey):
+			if prev_key == key and !Input.is_key_pressed(prev_key):
 				# tp on key release
 				_teleport_to(teleport_locations[n])
-				prevKey = KEY_NONE
+				prev_key = KEY_NONE
 			if Input.is_key_pressed(key):
-				prevKey = key
+				prev_key = key
 				pass
 	pass
