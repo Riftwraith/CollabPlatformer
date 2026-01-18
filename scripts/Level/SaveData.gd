@@ -10,3 +10,4 @@ var savedata = {}
 
 func receive_savedata(data: Dictionary): # apply savedata to objects in room (eg remove enemies that were previously killed)
 	savedata = data
+	load_savedata()

@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=4 uid="uid://oif0gpmnef2v"]
+
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level/RoomTemplate.gd" id="1_m2jqj"]
+[ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_g18pg"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/player.tscn" id="3_8luox"]
+[ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="4_ekwi3"]
+[ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/tiles/platforms.png" id="5_siqlb"]
+[ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="7_siqlb"]
+
+[sub_resource type="Curve2D" id="Curve2D_m2jqj"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -312, 0)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4nl1t"]
+size = Vector2(96.000015, 24)
+
+[node name="ExampleLevel" type="Node2D"]
+script = ExtResource("1_m2jqj")
+exit_leeway = null
+room_name = "Example Level"
+creator_name = "FCP"
+
+[node name="BackgroundArt" type="Node2D" parent="."]
+
+[node name="CollisionTiles" type="TileMapLayer" parent="."]
+use_parent_material = true
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAAAAAAAgABAAAAAAACAAAAAgACAAMAAAABAAAAAgACAAMAAAAEAAAAAgACAAMAAAADAAAAAgACAAMAAAAHAAAAAgACAAMAAAAGAAAAAgACAAMAAAAFAAAAAgACAAMAAAAJAAAAAgACAAMAAAAIAAAAAgACAAMAAAAKAAAAAgACAAMAAAALAAAAAgACAAMAAAAMAAAAAgACAAMAAAANAAAAAgACAAMAAAAOAAAAAgACAAMAAAAPAAAAAgADAAAAAAAPAAEAAgAAAAEAAAAPAAIAAgAAAAEAAAAPAAMAAgAAAAEAAAAPAAQAAgAAAAEAAAAPAAUAAgAAAAEAAAAPAAYAAgAAAAEAAAAPAAcAAgAAAAEAAAAPAAgAAgAAAAEAAAAPAAkAAgAAAAEAAAAPAAoAAgAAAAEAAAAAAAEAAgAAAAEAAAAAAAIAAgAAAAEAAAAAAAMAAgAAAAEAAAAAAAUAAgAAAAEAAAAAAAQAAgAAAAEAAAAAAAYAAgAAAAEAAAAAAAcAAgAAAAEAAAAAAAgAAgAAAAEAAAAAAAkAAgAAAAEAAAAAAAsAAgAAAAEAAAAAAAoAAgAAAAEAAAAAAAwAAgAAAAEAAAAAAA0AAgAAAAEAAAAAAA4AAgAAAAEAAAAAAA8AAgABAAIAAAACAA8AAgACAAMAAAABAA8AAgACAAMAAAAEAA8AAgACAAMAAAADAA8AAgACAAMAAAAFAA8AAgACAAMAAAAGAA8AAgACAAMAAAAIAA8AAgACAAMAAAAHAA8AAgACAAMAAAAJAA8AAgACAAMAAAALAA8AAgACAAMAAAAKAA8AAgACAAMAAAAMAA8AAgACAAMAAAANAA8AAgACAAMAAAAOAA8AAgACAAMAAAAPAA8AAgADAAIAAAAPAA4AAgAAAAEAAAAPAA0AAgAAAAEAAAAPAAwAAgAAAAEAAAAPAAsAAgAAAAEAAAA=")
+tile_set = ExtResource("2_g18pg")
+
+[node name="ForegroundArt" type="Node2D" parent="."]
+
+[node name="GameObjects" type="Node2D" parent="."]
+position = Vector2(23, 410)
+
+[node name="MovingPlatforms" type="Node2D" parent="GameObjects"]
+
+[node name="Conveyor" parent="GameObjects/MovingPlatforms" node_paths=PackedStringArray("display_sprite") instance=ExtResource("4_ekwi3")]
+position = Vector2(529, 238)
+curve = SubResource("Curve2D_m2jqj")
+display_sprite = NodePath("RigidBody2D/Sprite2D")
+travel_time = 2.0
+wait_time = 0.0
+active = null
+
+[node name="RigidBody2D" type="RigidBody2D" parent="GameObjects/MovingPlatforms/Conveyor"]
+collision_layer = 16
+collision_mask = 2
+gravity_scale = 0.0
+freeze = true
+freeze_mode = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="GameObjects/MovingPlatforms/Conveyor/RigidBody2D"]
+scale = Vector2(3, 3)
+texture = ExtResource("5_siqlb")
+region_enabled = true
+region_rect = Rect2(16, 48, 32, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameObjects/MovingPlatforms/Conveyor/RigidBody2D"]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape2D_4nl1t")
+one_way_collision = true
+
+[node name="Player" parent="." instance=ExtResource("3_8luox")]
+position = Vector2(407.23514, 657.42)
+
+[node name="Collectables" type="Node2D" parent="."]
+
+[node name="Collectable" parent="Collectables" instance=ExtResource("7_siqlb")]
+position = Vector2(240, 552)
+
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="AudioPlayers" type="Node2D" parent="."]
+
+[node name="DebugPoints" type="Node2D" parent="."]
