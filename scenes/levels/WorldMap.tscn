@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c75x52ojjomvo"]
 
-[ext_resource type="Script" uid="uid://cvj8nx50e0i0m" path="res://scripts/LevelManagement/LevelLoader.gd" id="1_sy7l7"]
-[ext_resource type="Script" uid="uid://cmgjmhfrgu2mt" path="res://scripts/LevelManagement/LevelProxy.gd" id="3_6k55n"]
+[ext_resource type="Script" uid="uid://cvj8nx50e0i0m" path="res://scripts/World/LevelLoader.gd" id="1_sy7l7"]
+[ext_resource type="Script" uid="uid://cmgjmhfrgu2mt" path="res://scripts/World/LevelProxy.gd" id="3_6k55n"]
 [ext_resource type="PackedScene" uid="uid://cwwu4rl5lhgfg" path="res://scenes/levels/ExampleEast.tscn" id="3_8e116"]
 [ext_resource type="PackedScene" uid="uid://70sai727hpy7" path="res://scenes/levels/ExampleHub.tscn" id="4_8e116"]
 [ext_resource type="PackedScene" uid="uid://exe8wmfxkmwy" path="res://scenes/levels/ExampleSouth.tscn" id="4_dsyud"]

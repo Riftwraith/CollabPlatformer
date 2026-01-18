@@ -1,11 +1,11 @@
 [gd_scene load_steps=11 format=4 uid="uid://exe8wmfxkmwy"]
 
-[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_58v7c"]
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level/RoomTemplate.gd" id="1_58v7c"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_mtkli"]
 [ext_resource type="Texture2D" uid="uid://bvg8r4ogm41ky" path="res://sprites/props/lightbulb.png" id="3_58v7c"]
 [ext_resource type="Texture2D" uid="uid://k3l18u3copja" path="res://sprites/light_gradient.tres" id="4_mtkli"]
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="5_j5dps"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/Player.tscn" id="5_mnm8i"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/Player.tscn" id="5_mnm8i"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_inouo"]
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="8_8ygda"]
 [ext_resource type="AudioStream" uid="uid://0smmfn21b4ty" path="res://sounds/undergound_ambience.wav" id="8_mnm8i"]
