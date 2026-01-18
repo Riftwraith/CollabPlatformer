@@ -43,6 +43,7 @@ signal death_begin
 signal death_end
 signal spawn_begin
 signal spawn_end
+signal on_jump
 
 #region Public functions 
 func play_respawn_feedback() -> void: # play respawn animation and temporarily disable control
@@ -224,6 +225,9 @@ func _handle_jump() -> bool:
 	)
 	sounds["jump"].pitch_scale = randf_range(0.95, 1.05)
 	sounds["jump"].play()
+	
+	# emit jump signal
+	on_jump.emit()
 	return true
 
 func _drop_from_platform() -> void: # try to drop from a platform
