@@ -3,9 +3,9 @@ extends Node2D
 class_name LevelProxy
 
 @export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var scene: PackedScene
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var grid_size: Vector2i 
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var grid_size: Vector2i
 @onready var grid_pos: Vector2i = Vector2i(position / 768)
-var sprite: Sprite2D
+var _sprite: Sprite2D
 
 @export_tool_button("Edit Level") var edit_level = func():
 	EditorInterface.open_scene_from_path(scene.resource_path)
@@ -24,10 +24,6 @@ static func create_proxy(theScene: PackedScene, parent: Node):
 @export_tool_button("Refresh") var refresh = refresh_data
 func refresh_data() -> void:
 	_instantiate_scene()
-
-#func _ready() -> void:
-	#if !sprite:
-		#_instantiate_scene()
 
 func _instantiate_scene():
 	print("taking screenshot of ", scene.resource_path)
@@ -60,8 +56,8 @@ func _take_screenshot(scene_tree: RoomTemplate):
 	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	await RenderingServer.frame_post_draw
 
-	sprite = Sprite2D.new()
-	sprite.centered = false
-	add_child(sprite)
-	sprite.texture = ImageTexture.create_from_image(viewport.get_texture().get_image())	
+	_sprite = Sprite2D.new()
+	_sprite.centered = false
+	add_child(_sprite)
+	_sprite.texture = ImageTexture.create_from_image(viewport.get_texture().get_image())
 	viewport.queue_free()

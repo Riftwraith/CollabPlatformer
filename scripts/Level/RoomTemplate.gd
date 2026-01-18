@@ -20,12 +20,11 @@ const LEVEL_TILE_STEP: int = 16
 @onready var current_scene: PackedScene = load(scene_file_path) as PackedScene
 
 enum Direction {
-	Left,
-	Right,
-	Up,
-	Down
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
 }
-
 	
 const TILE_SIZE: int = 16 * 3
 
@@ -34,7 +33,7 @@ var boundaries: Array[int]:
 	
 var world_boundaries: Array[int]:
 	get: return [
-		0 * TILE_SIZE, 
+		0 * TILE_SIZE,
 		width * TILE_SIZE,
 		0 * TILE_SIZE,
 		height * TILE_SIZE
@@ -42,10 +41,10 @@ var world_boundaries: Array[int]:
 
 var world_rect: Rect2:
 	get: return Rect2(
-		boundaries[Direction.Left] * TILE_SIZE,
-		boundaries[Direction.Up] * TILE_SIZE,
-		(boundaries[Direction.Right] - boundaries[Direction.Left]) * TILE_SIZE,
-		(boundaries[Direction.Down] - boundaries[Direction.Up]) * TILE_SIZE,
+		boundaries[Direction.LEFT] * TILE_SIZE,
+		boundaries[Direction.UP] * TILE_SIZE,
+		(boundaries[Direction.RIGHT] - boundaries[Direction.LEFT]) * TILE_SIZE,
+		(boundaries[Direction.DOWN] - boundaries[Direction.UP]) * TILE_SIZE,
 	)
 
 @onready var player: Player = $Player
@@ -54,17 +53,17 @@ var world_rect: Rect2:
 #Dictionary that contains anything that needs to be remembered when the room is exited and re-entered
 #Eg what enemies have been killed, doors opened etc
 
-var current_checkpoint: Area2D = null 
+var current_checkpoint: Area2D = null
 var current_respawn_point: Vector2 = world_rect.get_center()
 
-func create_savedata() -> Dictionary: #store everything to be remembered in savedata dictionary
+func create_savedata() -> Dictionary: # store everything to be remembered in savedata dictionary
 	var data = {}
-	if save_data: 
+	if save_data:
 		data = save_data.create_savedata()
 	return data
 
-func receive_savedata(data: Dictionary): #overwrite savedata (called by RoomManager when room loaded)
-	if save_data: 
+func receive_savedata(data: Dictionary): # overwrite savedata (called by RoomManager when room loaded)
+	if save_data:
 		save_data.receive_savedata(data)
 
 func _create_boundary(pos: Vector2, normal: Vector2) -> Node2D:
@@ -85,22 +84,22 @@ func _ready():
 		return
 	
 	if camera:
-		camera.limit_left = world_boundaries[Direction.Left]
-		camera.limit_right = world_boundaries[Direction.Right]
-		camera.limit_top = world_boundaries[Direction.Up]
-		camera.limit_bottom = world_boundaries[Direction.Down]
+		camera.limit_left = world_boundaries[Direction.LEFT]
+		camera.limit_right = world_boundaries[Direction.RIGHT]
+		camera.limit_top = world_boundaries[Direction.UP]
+		camera.limit_bottom = world_boundaries[Direction.DOWN]
 
 	var positions: Array[Vector2] = [
-		Vector2(world_boundaries[Direction.Left] - exit_leeway, 0),  # Left
-		Vector2(world_boundaries[Direction.Right] + exit_leeway, 0), # Right
-		Vector2(0, world_boundaries[Direction.Up] - exit_leeway),    # Up
-		Vector2(0, world_boundaries[Direction.Down] + exit_leeway),  # Down
+		Vector2(world_boundaries[Direction.LEFT] - exit_leeway, 0), # Left
+		Vector2(world_boundaries[Direction.RIGHT] + exit_leeway, 0), # Right
+		Vector2(0, world_boundaries[Direction.UP] - exit_leeway), # Up
+		Vector2(0, world_boundaries[Direction.DOWN] + exit_leeway), # Down
 	]
 	var normals: Array[Vector2] = [
-		Vector2.RIGHT,  # Left
-		Vector2.LEFT,   # Right
-		Vector2.DOWN,   # Up
-		Vector2.UP      # Down
+		Vector2.RIGHT, # Left
+		Vector2.LEFT, # Right
+		Vector2.DOWN, # Up
+		Vector2.UP # Down
 	]
 	
 	for i in range(Direction.size()):
@@ -138,14 +137,14 @@ func _ready():
 	if player.is_safe_position_below():
 		current_respawn_point = player.get_safe_position_below()
 	else:
-		current_respawn_point = player.position #very hacky
+		current_respawn_point = player.position # very hacky
 		
 	#disable player control for a short delay
 	player.control_enabled = false
 	await get_tree().create_timer(enter_override_time).timeout
 	player.control_enabled = true
 
-func _on_checkpoint_entered(checkpoint: CheckpointArea, _body): 
+func _on_checkpoint_entered(checkpoint: CheckpointArea, _body):
 	current_checkpoint = checkpoint
 
 func _on_collectable_obtained(_collectable: Collectable, _body):
@@ -154,15 +153,15 @@ func _on_collectable_obtained(_collectable: Collectable, _body):
 func _player_died():
 	respawn_player(current_respawn_point)
 
-func _player_left_screen(_body): #receives signal from boundary areas when the player enters them
+func _player_left_screen(_body): # receives signal from boundary areas when the player enters them
 	if !player.control_enabled:
 		return
 		
 	var exitDir: Vector2i
-	if player.position.x < 0:                                   exitDir = Vector2i.LEFT
-	if player.position.x >= world_boundaries[Direction.Right]: exitDir = Vector2i.RIGHT
-	if player.position.y < 0:                                   exitDir = Vector2i.UP
-	if player.position.y >= world_boundaries[Direction.Down]:  exitDir = Vector2i.DOWN
+	if player.position.x < 0: exitDir = Vector2i.LEFT
+	if player.position.x >= world_boundaries[Direction.RIGHT]: exitDir = Vector2i.RIGHT
+	if player.position.y < 0: exitDir = Vector2i.UP
+	if player.position.y >= world_boundaries[Direction.DOWN]: exitDir = Vector2i.DOWN
 	RoomManager.enqueue_level_change(exitDir, self)
 
 # housekeeping on room unload
@@ -174,11 +173,11 @@ func cleanup():
 	# tween out audio
 	var audio_players = get_tree().get_nodes_in_group("ambient_audio")
 	if audio_players.size() > 0:
-		var tween = create_tween() #fade out all audio
+		var tween = create_tween() # fade out all audio
 		for audio_player in audio_players:
 			tween.parallel().tween_property(audio_player, "volume_linear", 0.0, 1.0)
 		
-func _set_child_processing(t_f: bool): #false: pauses everything in room, true: resumes
+func _set_child_processing(t_f: bool): # false: pauses everything in room, true: resumes
 	for child in get_children():
 		child.set_process(t_f)
 		child.set_physics_process(t_f)
@@ -188,11 +187,11 @@ func respawn_player(pos = current_respawn_point):
 	player.play_respawn_feedback()
 
 func _player_in_bounds():
-	return player.position.x > 0 and player.position.x < world_boundaries[Direction.Right] and player.position.y > 0 and player.position.y < world_boundaries[Direction.Down]
+	return player.position.x > 0 and player.position.x < world_boundaries[Direction.RIGHT] and player.position.y > 0 and player.position.y < world_boundaries[Direction.DOWN]
 
 func _draw():
 	if Engine.is_editor_hint():
-		draw_rect(world_rect, Color.DARK_BLUE * Color(1,1,1,0.2))
+		draw_rect(world_rect, Color.DARK_BLUE * Color(1, 1, 1, 0.2))
 
 func _process(_delta):
 	if Engine.is_editor_hint():

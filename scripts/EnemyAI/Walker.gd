@@ -2,25 +2,25 @@ extends CharacterBody2D
 class_name Walker
 
 enum Direction {
-	Right = 0,
-	Left = 1,
+	RIGHT = 0,
+	LEFT = 1,
 }
 
 enum AIMode {
-	Fall,
-	AvoidFalling,
+	FALL,
+	AVOID_FALLING,
 }
 
 # serialized state
 @export var speed: float = 100.0
-@export var initial_direction: Direction = Direction.Right
-@export var ai_mode: AIMode = AIMode.Fall
+@export var initial_direction: Direction = Direction.RIGHT
+@export var ai_mode: AIMode = AIMode.FALL
 
 # runtime state
 @onready var direction: Direction = initial_direction
 
 # components
-@onready var sensors: Array[Area2D] = [ $RightFloorSensor, $LeftFloorSensor ]
+@onready var sensors: Array[Area2D] = [$RightFloorSensor, $LeftFloorSensor]
 @onready var gravity: GravityController = $GravityController
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -31,9 +31,9 @@ var _initialized: bool = false
 var _horizontal_velocity: float:
 	get:
 		match direction:
-			Direction.Right:
+			Direction.RIGHT:
 				return speed
-			Direction.Left:
+			Direction.LEFT:
 				return -speed
 		assert(false, "invalid direction")
 		return 0
@@ -46,7 +46,7 @@ func turn() -> void:
 
 func _ready() -> void:
 	_update_graphics()
-	if ai_mode == AIMode.AvoidFalling:
+	if ai_mode == AIMode.AVOID_FALLING:
 		_setup_fall_signals()
 
 func _physics_process(delta: float) -> void:
@@ -82,12 +82,12 @@ func _first_proc() -> void:
 	
 func _update_ai() -> void:
 	match ai_mode:
-		AIMode.Fall, AIMode.AvoidFalling:
+		AIMode.FALL, AIMode.AVOID_FALLING:
 			if is_on_wall():
 				turn()
 
 func _update_graphics() -> void:
-	sprite.flip_h = direction != Direction.Right
+	sprite.flip_h = direction != Direction.RIGHT
 	if !_enabled:
 		sprite.stop()
 		return

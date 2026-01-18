@@ -4,20 +4,18 @@ class_name DebugTeleporter
 # todo: automatically get list of debug points?
 @export var teleport_locations: Array[DebugPoint]
 
-var parent: Node2D
+var _parent: Node2D
+var _prev_key: Key = KEY_NONE
 
-var prevKey: Key = KEY_NONE
-
-func _teleport_to(debugPoint: DebugPoint) -> void:
-	print_debug("teleporting to ", debugPoint.global_position)
-	parent.global_position = debugPoint.global_position
-	if parent.has_method("respawn"):
-		parent.play_respawn_feedback()
-	pass
+func _teleport_to(debug_point: DebugPoint) -> void:
+	print_debug("teleporting to ", debug_point.global_position)
+	_parent.global_position = debug_point.global_position
+	if _parent.has_method("play_respawn_feedback"):
+		_parent.play_respawn_feedback()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	parent = get_parent()
+	_parent = get_parent()
 	if teleport_locations.is_empty():
 		push_warning("teleport locations not assigned!")
 
@@ -27,11 +25,11 @@ func _process(_delta: float) -> void:
 		for n in range(teleport_locations.size()):
 			assert(n < 9, "debug tp only supports key_1 through key_9")
 			var key = KEY_1 + n as Key
-			if prevKey == key and !Input.is_key_pressed(prevKey):
+			if _prev_key == key and !Input.is_key_pressed(_prev_key):
 				# tp on key release
 				_teleport_to(teleport_locations[n])
-				prevKey = KEY_NONE
+				_prev_key = KEY_NONE
 			if Input.is_key_pressed(key):
-				prevKey = key
+				_prev_key = key
 				pass
 	pass
