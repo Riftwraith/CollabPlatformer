@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=4 uid="uid://cqprps27blrwt"]
 
-[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/RoomTemplate.gd" id="1_ry2mu"]
+[ext_resource type="Script" uid="uid://bcy5fk3v7skpu" path="res://scripts/Level/RoomTemplate.gd" id="1_ry2mu"]
 [ext_resource type="TileSet" uid="uid://p7ubbr2u30h6" path="res://sprites/platformer_tileset.tres" id="2_h8rci"]
 [ext_resource type="PackedScene" uid="uid://cij74mo168lav" path="res://scenes/prefabs/SlimeGreen.tscn" id="4_q8lf3"]
 [ext_resource type="PackedScene" uid="uid://7k613xbni0a1" path="res://scenes/prefabs/SlimePurple.tscn" id="5_5qruf"]
 [ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/CheckpointArea.tscn" id="6_2wtpf"]
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://scenes/prefabs/player.tscn" id="6_juv4i"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/player.tscn" id="6_juv4i"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="7_ry2mu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ry2mu"]
@@ -16,8 +16,6 @@ size = Vector2(85, 148)
 
 [node name="Room1" type="Node2D"]
 script = ExtResource("1_ry2mu")
-room_name = null
-creator_name = null
 
 [node name="Background Tiles" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -69,6 +67,7 @@ position = Vector2(489, 581)
 
 [node name="CheckpointArea" parent="Checkpoints" instance=ExtResource("6_2wtpf")]
 position = Vector2(377.39227, 594.92084)
+script = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea"]
 position = Vector2(145.60773, -42.420837)
@@ -77,6 +76,7 @@ debug_color = Color(0.6458469, 0.5194328, 0.15265414, 0.41960785)
 
 [node name="CheckpointArea2" parent="Checkpoints" instance=ExtResource("6_2wtpf")]
 position = Vector2(377.39227, 594.92084)
+script = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointArea2"]
 position = Vector2(-6.892273, 68.07916)

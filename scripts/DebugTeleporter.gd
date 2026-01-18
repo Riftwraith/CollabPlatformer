@@ -10,9 +10,8 @@ var _prev_key: Key = KEY_NONE
 func _teleport_to(debug_point: DebugPoint) -> void:
 	print_debug("teleporting to ", debug_point.global_position)
 	_parent.global_position = debug_point.global_position
-	if _parent.has_method("respawn"):
+	if _parent.has_method("play_respawn_feedback"):
 		_parent.play_respawn_feedback()
-	pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
