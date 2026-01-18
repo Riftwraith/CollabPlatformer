@@ -11,6 +11,7 @@ class_name Conveyor
 @export var wait_time: float = 2
 @export var easing_curve: Curve
 
+@export var active: bool = true
 
 enum {WAITING, MOVING}
 var _dir_forwards: bool = true
@@ -45,6 +46,7 @@ func _stop_moving():
 	_state = WAITING
 
 func _physics_process(delta):
+	if not active: return
 	if Engine.is_editor_hint():
 		if is_instance_valid(curve):
 			if curve.point_count > 0:
