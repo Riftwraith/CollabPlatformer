@@ -10,10 +10,6 @@ class_name ToggleButton
 @onready var focus_label = $FocusLabel
 @onready var audio_player = $AudioStreamPlayer2D
 
-@onready var sounds = {
-	"open": $Sounds/DoorOpen,
-	"close": $Sounds/DoorClose,
-}
 
 func _ready():
 	focus_label.hide()
