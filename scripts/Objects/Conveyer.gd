@@ -5,17 +5,18 @@ class_name Conveyor
 @onready var _follower = $PathFollow2D
 @onready var _sprite_layer = $DisplaySprites
 
-@export var display_sprite: Sprite2D
+@export var display_sprite: Node2D
 
 @export var travel_time: float = 4
 @export var wait_time: float = 2
 @export var easing_curve: Curve
 
 @export var active: bool = true
+@export_range(0.0, 1.0) var initial_progress: float = 0.0
 
 enum {WAITING, MOVING}
 var _dir_forwards: bool = true
-var _state = WAITING
+var _state = MOVING
 var _t: float = 0.0
 
 
@@ -29,6 +30,8 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 	_sprite_layer.queue_free()
+	
+	_t = initial_progress * travel_time
 	
 	# Reparent all children to the follower
 	for child in get_children():

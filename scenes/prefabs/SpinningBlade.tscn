@@ -1,0 +1,98 @@
+[gd_scene load_steps=10 format=3 uid="uid://6vsdrlmuwsjd"]
+
+[ext_resource type="Texture2D" uid="uid://iik41xi08ssp" path="res://sprites/objects/spinning_blade.png" id="1_1lg3d"]
+[ext_resource type="Script" uid="uid://baugx5yaugi8x" path="res://scripts/Objects/SpinningBlade.gd" id="1_v0fpc"]
+[ext_resource type="AudioStream" uid="uid://tsrg42ykv51s" path="res://sounds/circular_saw.wav" id="3_t8tl4"]
+
+[sub_resource type="Gradient" id="Gradient_srrt7"]
+colors = PackedColorArray(1, 1, 1, 1, 0.82204366, 0.70108455, 3.85046e-07, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0fpc"]
+atlas = ExtResource("1_1lg3d")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t8tl4"]
+atlas = ExtResource("1_1lg3d")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jojo"]
+atlas = ExtResource("1_1lg3d")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3lbaf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0fpc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t8tl4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jojo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 15.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t460s"]
+radius = 36.0
+
+[node name="SpinningBlade" type="Node2D"]
+script = ExtResource("1_v0fpc")
+particle_rot_speed = 3
+
+[node name="Particles" type="Node2D" parent="."]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Particles"]
+position = Vector2(0, 37.999996)
+emitting = false
+amount = 2
+lifetime = 0.13
+explosiveness = 0.3
+randomness = 0.1
+spread = 20.0
+initial_velocity_min = 300.0
+initial_velocity_max = 400.0
+damping_min = 1.0
+damping_max = 1.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_srrt7")
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Particles"]
+position = Vector2(0, -38)
+rotation = -3.1415925
+emitting = false
+amount = 2
+lifetime = 0.13
+explosiveness = 0.3
+randomness = 0.1
+spread = 20.0
+initial_velocity_min = 300.0
+initial_velocity_max = 400.0
+damping_min = 1.0
+damping_max = 1.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_srrt7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_3lbaf")
+frame_progress = 0.42386386
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_t460s")
+debug_color = Color(0.8728047, 0.30251482, 0.4522577, 0.41960785)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." groups=["ambient_audio"]]
+stream = ExtResource("3_t8tl4")
+autoplay = true
+max_distance = 1000.0
+attenuation = 2.378414
