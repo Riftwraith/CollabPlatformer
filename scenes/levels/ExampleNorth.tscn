@@ -63,6 +63,8 @@ size = Vector2(144.00003, 72.00003)
 
 [node name="ExampleNorth" type="Node2D"]
 script = ExtResource("1_iwank")
+room_name = "Example North"
+creator_name = "RW"
 width = 32
 height = 32
 
