@@ -3,7 +3,9 @@
 Every good game dev needs level design practice. 
 That's why we're launching CUBert's Adventure: a platformer in a world of connected, self-contained levels made by individual CUDevs members. 
 And we want YOU to contribute!
- 
+
+![CUBert_jumping](/readme_images/house.gif) 
+
 We have already made the basic platformer controls in Godot, which can be found here on GitHub: …..........
 
 If you have never used Godot before, now is a great time to learn it! 
@@ -52,7 +54,7 @@ We want them to demonstrate the mechanics included in the base game that you can
  
 ## Making a Level
  
-When you want to create a level, you should reserve its position in the World Map by marking the square(s) here: {Google sheets link}.
+When you want to create a level, you should reserve its position in the World Map by marking the square(s) on the [Google Sheets Document](https://docs.google.com/spreadsheets/d/1k-DdyBB9TbI8zVZoEIk8JGXsJKSu8uHuFYBxlndbqgU/edit?usp=sharing).
  
 Levels should join on from existing levels, and should have entrances/exits in all 4 directions (except for those on edge of the World Map boundary). 
 We ask that you reserve only 1 level at a time, and finish it before starting a new one.
