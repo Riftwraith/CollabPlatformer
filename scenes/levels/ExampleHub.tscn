@@ -144,7 +144,6 @@ curve = SubResource("Curve2D_b713g")
 display_sprite = NodePath("RigidBody2D/Sprite2D")
 travel_time = 2.0
 wait_time = 0.5
-active = null
 
 [node name="RigidBody2D" type="RigidBody2D" parent="GameObjects/Conveyor"]
 collision_layer = 16
