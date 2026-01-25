@@ -3,7 +3,9 @@
 Every good game dev needs level design practice. 
 That's why we're launching CUBert's Adventure: a platformer in a world of connected, self-contained levels made by individual CUDevs members. 
 And we want YOU to contribute!
- 
+
+![CUBert_jumping](/readme_images/house.gif) 
+
 We have already made the basic platformer controls in Godot, which can be found here on GitHub: …..........
 
 If you have never used Godot before, now is a great time to learn it! 
