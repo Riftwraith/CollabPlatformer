@@ -64,6 +64,7 @@ signal on_collide
 var current_focus: Interactable = null # current interactable object
 var prev_grounded = false
 var control_enabled: bool = false
+var immortal = false
 
 #region Public functions 
 func play_respawn_feedback() -> void: # play respawn animation and temporarily disable control
@@ -91,6 +92,19 @@ func get_safe_position_below() -> Vector2:
 	if not is_safe_position_below():
 		return Vector2.ZERO
 	return Vector2(position.x, front_ray.get_collision_point().y - player_height)
+
+func kill(death_velocity: Vector2) -> void:
+	if immortal:
+		return
+
+	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
+	gravity_controller.enabled = false
+	control_enabled = false
+	death_begin.emit()
+	
+	await death_logic(death_velocity)
+	
+	death_end.emit()
 #endregion
 
 #region Godot Intrinsics
@@ -154,15 +168,6 @@ func _handle_collisions(delta: float) -> void: # currently only does pushing of 
 			var push_strength = 0.01 * coll_speed
 			collider.apply_impulse(push_dir * push_strength, collision.get_position() - collider.global_position)
 
-func _die(death_velocity: Vector2) -> void:
-	disable_mode = CollisionObject2D.DISABLE_MODE_MAKE_STATIC
-	gravity_controller.enabled = false
-	control_enabled = false
-	death_begin.emit()
-	
-	await death_logic(death_velocity)
-	
-	death_end.emit()
 
 #endregion
 
@@ -184,9 +189,9 @@ func _get_closest_interactable() -> Interactable: # returns closest object in In
 
 #region Signals
 func _on_hurtbox_enter(_collider: Node2D):
-	_die(Vector2.ZERO)
+	kill(Vector2.ZERO)
 
 func _on_hurtbox_enter_area2D(_collider: Area2D):
-	_die(Vector2.ZERO)
+	kill(Vector2.ZERO)
 
 #endregion
