@@ -2,7 +2,7 @@ extends Node2D
 class_name WoodenDoor
 
 enum StatusEnum {OPEN, CLOSED}
-@export var status: StatusEnum = StatusEnum.CLOSED
+@export var status: StatusEnum = StatusEnum.CLOSED ##Whether door is open or closed
 
 @onready var collision_shape = $StaticBody2D/CollisionShape2D
 @onready var anim_sprite = $AnimatedSprite2D
