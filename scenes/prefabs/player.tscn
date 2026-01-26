@@ -1,6 +1,6 @@
 [gd_scene load_steps=45 format=3 uid="uid://btum1axrcj38k"]
 
-[ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/Player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://dh455q78utcp0" path="res://scripts/DefaultPlayer.gd" id="1_onrkg"]
 [ext_resource type="Texture2D" uid="uid://cso6ruht3iy36" path="res://sprites/characters/tellyface_spritesheet.png" id="2_n0leu"]
 [ext_resource type="AudioStream" uid="uid://basri1vkllti4" path="res://sounds/jump.wav" id="3_i3pqv"]
 [ext_resource type="AudioStream" uid="uid://bdp8pgdf8ar8m" path="res://sounds/hurt.wav" id="4_2ad00"]
