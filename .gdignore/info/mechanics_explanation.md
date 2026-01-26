@@ -56,6 +56,7 @@ which plays the waking up animation.
 
 Checkpoints exist in the form of `CheckpointArea.tscn`. 
 These are all in the group `checkpoint_areas`, which allows the Level to find them.
-When the player is within a 
+When the Player is within a `CheckpointArea`, the safe position underneath the Player is saved inside level to `current_respawn_point`.
+`current_respawn_point` is also automatically set to the safe position under the Player when entering a level.
 
 
