@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://c45th524x8nov" path="res://scenes/prefabs/WoodenDoor.tscn" id="15_1mnwl"]
 [ext_resource type="AudioStream" uid="uid://c5l6aox5yg0ka" path="res://sounds/motor_loop.wav" id="15_516m5"]
 [ext_resource type="PackedScene" uid="uid://75ru184f1rlh" path="res://scenes/prefabs/Signpost.tscn" id="16_427e6"]
-[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/player.tscn" id="17_sok87"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/Player.tscn" id="17_sok87"]
 [ext_resource type="Script" uid="uid://b8s22g74qlh6j" path="res://scripts/DebugTeleporter.gd" id="18_n452j"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="19_oace5"]
 [ext_resource type="Script" uid="uid://tq3f6llby3r" path="res://scripts/DebugPoint.gd" id="20_hhjo6"]

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="3_sv7r1"]
 [ext_resource type="Texture2D" uid="uid://cjhwtc8dmirvh" path="res://sprites/skyline.png" id="3_vrx5u"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/tiles/platforms.png" id="4_vrx5u"]
-[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/player.tscn" id="5_ff0e2"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/Player.tscn" id="5_ff0e2"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_fpnwm"]
 [ext_resource type="PackedScene" uid="uid://6vsdrlmuwsjd" path="res://scenes/prefabs/SpinningBlade.tscn" id="7_ff0e2"]
 [ext_resource type="PackedScene" uid="uid://x7yvijtf4o33" path="res://scenes/prefabs/CheckpointArea.tscn" id="7_ikvjk"]

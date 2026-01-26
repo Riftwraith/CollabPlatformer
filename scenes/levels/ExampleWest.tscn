@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://co8sxsjqgkti8" path="res://sprites/tiles/decoration_tiles.png" id="4_32o7j"]
 [ext_resource type="PackedScene" uid="uid://d3sm0hsss3mue" path="res://scenes/prefabs/Conveyor.tscn" id="4_kfpcb"]
 [ext_resource type="Texture2D" uid="uid://26tf543xsqno" path="res://sprites/tiles/platforms.png" id="5_2mn3j"]
-[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/player.tscn" id="5_5ojf5"]
+[ext_resource type="PackedScene" uid="uid://btum1axrcj38k" path="res://scenes/prefabs/Player.tscn" id="5_5ojf5"]
 [ext_resource type="Texture2D" uid="uid://ccsp856l75rwo" path="res://sprites/props/tree2.png" id="5_aw014"]
 [ext_resource type="Texture2D" uid="uid://c8thf8uilwgcn" path="res://sprites/props/tree.png" id="6_8x7u7"]
 [ext_resource type="PackedScene" uid="uid://blrkhaisjfeem" path="res://scenes/prefabs/Collectable.tscn" id="6_32o7j"]
