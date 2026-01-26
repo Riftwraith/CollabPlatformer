@@ -1,10 +1,57 @@
+# The base Player class is an implementation of the Non-Virtual Interface software engineering pattern
+# 
+# We wanted to give designers the opportunity to develop their own movement mechanics, but we also want
+# to have a consistent physics, interactable and death system between these implementations. Hence, we
+# apply the NVI idiom here to protect the core gameplay logic.
+#
+# We provide virtual injection points for designers to provide their own logic to handle movement.
+# These functions are suffixed with `_logic`.
+# We've gone against typical Godot convention and not prefixed the functions with _ for simplicity.
+#
+# If you would like to change this class, please make a pull request. We prioritized simplicity over
+# extensibility in the initial iteration of Cubert's character controller, but we're always happy to
+# accommodate more ambitious schemes if it doesn't break other people's levels.
+#
+# DO:
+# -	Refer to DefaultPlayer.gd for how to create your own player.
+# - Feel free to copy and paste DefaultPlayer to make your own Player implementation.
+# DO NOT:
+# - Override _ready, _process or _physics_process in a derived Player!
+
 @abstract
 class_name Player
 extends CharacterBody2D
 
-var current_focus: Interactable = null # current interactable object
-var prev_grounded = false
-var control_enabled: bool = false
+#region Player Logic Overrides
+
+# init_logic is called at ready time.
+@abstract func init_logic() -> void
+
+# input logic is called every logic frame, and is meant to collect input for the physics system
+@abstract func input_logic() -> void
+
+# movement logic is called every physics frame. after collecting input, apply the forces collected 
+# from the input here.
+@abstract func movement_logic(delta: float) -> void
+
+# animation logic responds to changes in the player state to inform the current animation state.
+@abstract func animation_logic(delta: float) -> void
+
+# respawn "logic" is the respawn animation.
+@abstract func respawn_logic() -> void
+
+# death "logic" is the death animation.
+@abstract func death_logic(death_velocity: Vector2) -> void
+
+#endregion
+
+signal death_begin
+signal death_end
+signal spawn_begin
+signal spawn_end
+signal on_jump
+signal on_land
+signal on_collide
 
 @export var impact_speed_threshold = 500 # impacts at higher speed than this made sound
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -14,20 +61,9 @@ var control_enabled: bool = false
 @onready var gravity_controller: GravityController = $GravityController
 @onready var player_height: float = 0.5 * collision_shape.shape.height + collision_shape.position.y
 
-signal death_begin
-signal death_end
-signal spawn_begin
-signal spawn_end
-signal on_jump
-signal on_land
-signal on_collide
-#
-@abstract func init_logic() -> void
-@abstract func input_logic() -> void
-@abstract func movement_logic(delta: float) -> void
-@abstract func animation_logic(delta: float) -> void
-@abstract func respawn_logic() -> void
-@abstract func death_logic(death_velocity: Vector2) -> void
+var current_focus: Interactable = null # current interactable object
+var prev_grounded = false
+var control_enabled: bool = false
 
 #region Public functions 
 func play_respawn_feedback() -> void: # play respawn animation and temporarily disable control
