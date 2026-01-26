@@ -58,6 +58,11 @@ When you want to create a level, you should reserve its position in the World Ma
  
 Levels should join on from existing levels, and should have entrances/exits in all 4 directions (except for those on edge of the World Map boundary). 
 We ask that you reserve only 1 level at a time, and finish it before starting a new one.
+
+The best way to start is to copy `ExampleLevel.tscn` and play around with it!
+
+![Screenshot of ExampleLevel.tscn](/.gdignore/readme_images/example_level_screenshot.png)
+
  
 ### What can/can't I change?
  
@@ -66,19 +71,18 @@ This is what you should submit to us as your finished level.
 Everything inside the level can be changed however you see fit (art style, mechanics, genre, etc).
  
 We ask that every level contains a collectable Keycap to be collected. 
-Entrances/exits to the level should include the central 2 tiles of eah 16-tile room boundary.
+Entrances/exits to the level should include the central 2 tiles of each 16-tile room boundary (extra wide exits should be discussed with the creators of your neighbouring levels).
  
 Each level inherits from the script `room_template.gd`, which communicates with autoloaded `RoomManager.tscn` to perform level transitions. 
 Feel free to extend this script, but be careful with the level transition logic as you may break your level. 
-Each level should also have a Player scene as a child (even if that scene is then immediately deleted), otherwise the transition logic will also break.
+Each level should also have a `Player.tscn` scene as a child (even if that scene is then immediately deleted), otherwise the transition logic will also break.
 Please do not do something like call `RoomManager.queue_free()` in a script in your level as it will break the whole game.
  
-Otherwise, go wild.
+Otherwise, go wild!
  
 ### How do I submit my level?
- 
-Your level scene, along with any other new scenes, assets, scripts, etc that you used (that aren't already in the Base Game's files) should be put into a folder and sent to the CUDevs committee as a `.zip` file. 
-Alternatively, the Base Game can be forked on GitHub if you'd prefer.
+
+Create a pull request on GitHub and let other people use the assets and objects you've added! Alternatively you can package your level scene, along with any other new scenes, assets, scripts, etc that you used into a `.zip` file and send it to the CUDevs committee. 
  
 ### Help! I have more questions!!
  
