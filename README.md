@@ -4,7 +4,7 @@ Every good game dev needs level design practice.
 That's why we're launching CUBert's Adventure: a platformer in a world of connected, self-contained levels made by individual CUDevs members. 
 And we want YOU to contribute!
 
-![CUBert_jumping](/readme_images/house.gif) 
+![CUBert_jumping](/.gdignore/readme_images/house.gif) 
 
 We have already made the basic platformer controls in Godot, which can be found here on GitHub: …..........
 
@@ -20,7 +20,7 @@ Or, you can avoid coding altogether and play with Godot's 2D graphics and physic
 CUBert's Adventure is an exploration-based 2D platformer. 
 There is one goal: collect the Keycap hidden in every level, exploring the creations of our CUDevs members along the way.
 
-![World Map illustration](/readme_images/world_map_demo.png)
+![World Map illustration](/.gdignore/readme_images/world_map_demo.png)
  
 The world of CUBert's Adventure is split into 16x16 tile levels (and larger multiples). 
 When leaving the bounds of a level, CUBert will transition to the neighbouring level in the World Map.
